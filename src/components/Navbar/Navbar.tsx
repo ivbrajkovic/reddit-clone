@@ -1,14 +1,14 @@
-import { Box, Flex } from "@mantine/core";
-import React from "react";
+import Logo from "@/components/Navbar/RightContent/Logo";
+import RightContent from "@/components/Navbar/RightContent/RightContent";
+import SearchInput from "@/components/Navbar/SearchInput";
+import { Flex } from "@mantine/core";
 
-type NavbarProps = {};
-
-const Navbar: React.FC<NavbarProps> = () => {
+export const Navbar = () => {
   return (
-    <Flex bg="gray.0">
-      <Box>Logo</Box>
-      <div>Logo</div>
+    <Flex p="6px 12px" bg="gray.0" align="center" gap="sm">
+      <Logo />
+      <SearchInput />
+      <RightContent />
     </Flex>
   );
 };
-export default Navbar;
