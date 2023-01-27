@@ -1,21 +1,28 @@
 import AuthInputs from "@/components/Modal/Auth/AuthInputs";
-import { useAuthModalState } from "@/hooks/useAuthModal";
+import { useAuthModalActor } from "@/hooks/useAuthModalActor";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { Flex, Modal, Text, useMantineTheme } from "@mantine/core";
 
 const AuthModal = () => {
-  const theme = useMantineTheme();
-  const { modalState, toggleModal } = useAuthModalState();
+  useRenderCount("AuthModal");
 
-  const modalTitle =
-    modalState.view === "login"
+  const theme = useMantineTheme();
+  const [state, setState] = useAuthModalActor();
+  const { view } = state.context;
+
+  const title =
+    view === "login"
       ? "Login"
-      : modalState.view === "signup"
+      : view === "signup"
       ? "Sign Up"
       : "Forgot Password";
 
+  const isOpen = state.matches("opened");
+  const toggleModal = () => setState("CLOSE_MODAL");
+
   return (
     <Modal
-      opened={modalState.open}
+      opened={isOpen}
       onClose={toggleModal}
       overlayColor={
         theme.colorScheme === "dark"
@@ -24,10 +31,9 @@ const AuthModal = () => {
       }
       overlayOpacity={0.55}
       overlayBlur={3}
-      // withCloseButton={false}
       title={
         <Text fw={700} tt="capitalize">
-          {modalTitle}
+          {title}
         </Text>
       }
     >

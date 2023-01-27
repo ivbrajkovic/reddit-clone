@@ -1,21 +1,21 @@
-import { authModalState } from "@/atoms/authModalAtom";
 import Login from "@/components/Modal/Auth/Login";
 import SignUp from "@/components/Modal/Auth/SignUp";
+import { useAuthModalContext } from "@/context/authModalContext";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { Flex } from "@mantine/core";
 import { FC } from "react";
-import { useRecoilValue } from "recoil";
 
 type AuthInputsProps = {};
 
 const AuthInputs: FC<AuthInputsProps> = () => {
-  const modalState = useRecoilValue(authModalState);
+  useRenderCount("AuthInputs");
+
+  const service = useAuthModalContext();
+  const { view } = service.machine.context;
+
   return (
     <Flex direction="column" align="center" w="100%" mt={16}>
-      {modalState.view === "login" ? (
-        <Login />
-      ) : modalState.view === "signup" ? (
-        <SignUp />
-      ) : null}
+      {view === "login" ? <Login /> : view === "signup" ? <SignUp /> : null}
     </Flex>
   );
 };
