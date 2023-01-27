@@ -1,14 +1,17 @@
 import AuthInputs from "@/components/Modal/Auth/AuthInputs";
-import { useAuthModalActor } from "@/hooks/useAuthModalActor";
+import { useAuthModal } from "@/components/Modal/Auth/hooks/useAuthModal";
 import { useRenderCount } from "@/hooks/useRenderCount";
+import { AuthModalMachineState } from "@/machines/authModalMachine";
 import { Flex, Modal, Text, useMantineTheme } from "@mantine/core";
+
+const isAuthModalOpenSelector = (state: AuthModalMachineState) =>
+  state.matches("opened");
 
 const AuthModal = () => {
   useRenderCount("AuthModal");
 
   const theme = useMantineTheme();
-  const [state, setState] = useAuthModalActor();
-  const { view } = state.context;
+  const { isOpen, view, closeModal } = useAuthModal();
 
   const title =
     view === "login"
@@ -17,13 +20,10 @@ const AuthModal = () => {
       ? "Sign Up"
       : "Forgot Password";
 
-  const isOpen = state.matches("opened");
-  const toggleModal = () => setState("CLOSE_MODAL");
-
   return (
     <Modal
       opened={isOpen}
-      onClose={toggleModal}
+      onClose={closeModal}
       overlayColor={
         theme.colorScheme === "dark"
           ? theme.colors.dark[9]

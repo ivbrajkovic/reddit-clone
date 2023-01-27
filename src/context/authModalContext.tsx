@@ -15,6 +15,9 @@ export const AuthModalMachineProvider: FC<{ children: ReactNode }> = (
   props,
 ) => {
   const service = useInterpret(authModalMachine, { devTools: true });
+
+  service.getSnapshot();
+
   return (
     <authModalContext.Provider value={service}>
       {props.children}
