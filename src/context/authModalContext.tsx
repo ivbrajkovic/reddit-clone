@@ -11,16 +11,13 @@ const authModalContext =
   createContext<InterpreterFrom<AuthModalMachine> | null>(null);
 authModalContext.displayName = authModalMachine.id;
 
-export const AuthModalMachineProvider: FC<{ children: ReactNode }> = (
-  props,
-) => {
+export const AuthModalMachineProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const service = useInterpret(authModalMachine, { devTools: true });
-
-  service.getSnapshot();
-
   return (
     <authModalContext.Provider value={service}>
-      {props.children}
+      {children}
     </authModalContext.Provider>
   );
 };

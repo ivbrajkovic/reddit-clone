@@ -13,21 +13,26 @@ export interface Typegen0 {
     services: never;
   };
   eventsCausingActions: {
-    assignEmail: "UPDATE_EMAIL";
-    assignLogin: "OPEN_LOGIN_MODAL";
-    assignPassword: "UPDATE_PASSWORD";
-    assignResetPassword: "OPEN_RESET_PASSWORD_MODAL";
-    assignSignup: "OPEN_SIGNUP_MODAL";
+    assignLoginView: "OPEN_LOGIN_MODAL";
+    assignResetPasswordView: "OPEN_RESET_PASSWORD_MODAL";
+    assignSignupView: "OPEN_SIGNUP_MODAL";
+    clearInputForm:
+      | "CLOSE_MODAL"
+      | "OPEN_LOGIN_MODAL"
+      | "OPEN_RESET_PASSWORD_MODAL"
+      | "OPEN_SIGNUP_MODAL"
+      | "xstate.init";
+    updateInputForm: "UPDATE_FORM_INPUT";
   };
   eventsCausingDelays: {};
   eventsCausingGuards: {};
   eventsCausingServices: {};
   matchesStates:
-    | "closed"
-    | "opened"
-    | "opened.login"
-    | "opened.resetPassword"
-    | "opened.signup"
-    | { opened?: "login" | "resetPassword" | "signup" };
+    | "close"
+    | "open"
+    | "open.login"
+    | "open.resetPassword"
+    | "open.signup"
+    | { open?: "login" | "resetPassword" | "signup" };
   tags: never;
 }

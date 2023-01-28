@@ -5,8 +5,8 @@ import { FC } from "react";
 
 const AuthButtons: FC = () => {
   useRenderCount("AuthButtons");
-
   const { send } = useAuthModalContext();
+
   return (
     <>
       <Button

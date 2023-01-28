@@ -1,4 +1,4 @@
-import AuthModal from "@/components/Modal/Auth/AuthModal";
+import { AuthModal } from "@/components/Modal/AuthModal";
 import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
 import { Flex } from "@mantine/core";
 import { FC } from "react";

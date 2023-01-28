@@ -21,8 +21,8 @@ export const mantineButton: MantineButton = {
       ...(params.variant === "filled"
         ? {
             color: theme.colors.gray[0],
-            backgroundColor: theme.colors.blue[4],
-            ["&:hover"]: { backgroundColor: theme.colors.blue[3] },
+            backgroundColor: theme.colors.blue[5],
+            ["&:hover"]: { backgroundColor: theme.colors.blue[4] },
           }
         : params.variant === "outline"
         ? {
@@ -32,7 +32,10 @@ export const mantineButton: MantineButton = {
         : params.variant === "oauth"
         ? {
             height: "34px",
-            border: `1px solid ${theme.colors.gray[2]}`,
+            color: theme.black,
+            backgroundColor: theme.white,
+            border: `1px solid ${theme.colors.gray[4]}`,
+
             ["&:hover"]: { backgroundColor: theme.colors.gray[1] },
           }
         : {}),
