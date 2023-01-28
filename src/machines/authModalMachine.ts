@@ -41,10 +41,11 @@ export const authModalMachine =
             signup: { entry: "assignSignupView" },
             resetPassword: { entry: "assignResetPasswordView" },
           },
+          // exit: "clearInputForm",
         },
 
         close: {
-          entry: "clearInputForm",
+          // entry: "clearInputForm",
         },
       },
       schema: {

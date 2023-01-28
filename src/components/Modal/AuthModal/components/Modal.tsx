@@ -1,23 +1,24 @@
-import { useAuthModalOpen } from "@/components/Modal/AuthModal/hooks/useAuthModalOpen";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { Modal as MantineModal, Text, useMantineTheme } from "@mantine/core";
 import { FC, ReactNode } from "react";
 
 type ModalProps = {
+  isOpen: boolean;
   title: string | null;
+  onClose: () => void;
   children: ReactNode;
 };
 
-const Modal: FC<ModalProps> = ({ title, children }) => {
+const Modal: FC<ModalProps> = (props) => {
   useRenderCount("AuthModal");
   const theme = useMantineTheme();
-  const { isOpen, closeModal } = useAuthModalOpen();
+  // const { isOpen, closeModal } = useAuthModalOpen();
 
   return (
     <MantineModal
       centered
-      opened={isOpen}
-      onClose={closeModal}
+      opened={props.isOpen}
+      onClose={props.onClose}
       // withCloseButton={false}
       overlayColor={
         theme.colorScheme === "dark"
@@ -28,12 +29,12 @@ const Modal: FC<ModalProps> = ({ title, children }) => {
       overlayBlur={3}
       title={
         <Text fz="lg" fw="bold" ta="center">
-          {title}
+          {props.title}
         </Text>
       }
       styles={{ title: { width: "100%" } }}
     >
-      {children}
+      {props.children}
     </MantineModal>
   );
 };

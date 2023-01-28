@@ -16,12 +16,6 @@ export interface Typegen0 {
     assignLoginView: "OPEN_LOGIN_MODAL";
     assignResetPasswordView: "OPEN_RESET_PASSWORD_MODAL";
     assignSignupView: "OPEN_SIGNUP_MODAL";
-    clearInputForm:
-      | "CLOSE_MODAL"
-      | "OPEN_LOGIN_MODAL"
-      | "OPEN_RESET_PASSWORD_MODAL"
-      | "OPEN_SIGNUP_MODAL"
-      | "xstate.init";
     updateInputForm: "UPDATE_FORM_INPUT";
   };
   eventsCausingDelays: {};

@@ -1,7 +1,7 @@
 import Inputs from "@/components/Modal/AuthModal/components/Inputs";
 import Modal from "@/components/Modal/AuthModal/components/Modal";
 import OAuthButtons from "@/components/Modal/AuthModal/components/OAuthButtons";
-import { useAuthModalView } from "@/components/Modal/AuthModal/hooks/useAuthModalView";
+import { useAuthModalOpen } from "@/components/Modal/AuthModal/hooks/useAuthModalOpen";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { AuthModalContext } from "@/machines/authModalMachine";
 import { Box } from "@mantine/core";
@@ -15,12 +15,12 @@ const formatTitle = (view: AuthModalContext["view"]) => {
 
 const AuthModal = () => {
   useRenderCount("AuthModal");
-  const { view } = useAuthModalView();
+  const { isOpen, closeModal, view } = useAuthModalOpen();
 
   const title = formatTitle(view);
 
   return (
-    <Modal title={title}>
+    <Modal isOpen={isOpen} onClose={closeModal} title={title}>
       <Box w="70%" mx="auto">
         <OAuthButtons />
         <Inputs view={view} />
