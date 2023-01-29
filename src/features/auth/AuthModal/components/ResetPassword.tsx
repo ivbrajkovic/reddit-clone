@@ -8,7 +8,7 @@ import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Box, Button, Flex, Text, TextInput } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
-import { useMemo } from "react";
+import { useMemo, useReducer } from "react";
 import { useSendPasswordResetEmail } from "react-firebase-hooks/auth";
 import { BsReddit } from "react-icons/bs";
 
@@ -20,6 +20,7 @@ const createFormProps = (): ResetPasswordFormProps => ({
 export const ResetPassword = () => {
   const { classes } = useStyles();
 
+  const [isSuccess, toggleSuccess] = useReducer((s) => !s, false);
   const { openLoginModal, openSignupModal } = useAuthModal();
 
   const formProps = useMemo(createFormProps, []);
@@ -30,7 +31,7 @@ export const ResetPassword = () => {
   useAuthErrorEffect(error);
 
   const resetPassword = ({ email }: ResetPasswordFormValues) =>
-    sendPasswordResetEmail(email);
+    sendPasswordResetEmail(email).then(toggleSuccess);
 
   return (
     <>
@@ -39,23 +40,31 @@ export const ResetPassword = () => {
         <Text mb={8} fz="md" fw="bold">
           Reset your password
         </Text>
-        <Text mb={8} fz="sm" c="gray.7">
-          Enter the email associated with your account and we'll send you a
-          reset link
-        </Text>
+        {isSuccess ? (
+          <Text>Check your email, we have sent you a reset link</Text>
+        ) : (
+          <Text mb={8} fz="sm" c="gray.7">
+            Enter the email associated with your account and we will send you a
+            reset link
+          </Text>
+        )}
       </Box>
-      <form onSubmit={form.onSubmit(resetPassword)}>
-        <TextInput
-          mb={16}
-          type="email"
-          placeholder="email"
-          styles={{ input: classes.input as any }}
-          {...form.getInputProps("email")}
-        />
-        <Button type="submit" w="100%" h="36px" mb={12} loading={loading}>
-          Reset password
-        </Button>
-      </form>
+
+      {isSuccess ? null : (
+        <form onSubmit={form.onSubmit(resetPassword)}>
+          <TextInput
+            mb={16}
+            type="email"
+            placeholder="email"
+            styles={{ input: classes.input as any }}
+            {...form.getInputProps("email")}
+          />
+          <Button type="submit" w="100%" h="36px" mb={12} loading={loading}>
+            Reset password
+          </Button>
+        </form>
+      )}
+
       <Flex fz="sm" c="gray.7" justify="center">
         <Anchor c="blue.5" fw="700" underline={false} onClick={openLoginModal}>
           LOGIN

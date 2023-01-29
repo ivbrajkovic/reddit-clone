@@ -1,6 +1,6 @@
 import { closeModal } from "@/components/Modal/modalSlice";
 import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
-import SignOutButton from "@/components/Navbar/RightContent/SignOutButton";
+import Icons from "@/components/Navbar/RightContent/Icons";
 import { AuthModal } from "@/features/auth/AuthModal";
 import { auth } from "@/firebase/clientApp";
 import { useAppDispatch } from "@/store/hooks";
@@ -20,7 +20,7 @@ const RightContent = () => {
     <>
       <AuthModal />
       <Flex justify="center" align="center">
-        {user ? <SignOutButton /> : <AuthButtons />}
+        {user ? <Icons /> : <AuthButtons />}
       </Flex>
     </>
   );

@@ -1,24 +1,34 @@
 import { createStyles, Input } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
 import React from "react";
+import { TbSearch } from "react-icons/tb";
 
 const useStyles = createStyles((theme) => ({
   search: {
     flex: 1,
 
     input: {
-      backgroundColor: theme.colors.gray[1],
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[1],
 
       "&:hover": {
-        backgroundColor: theme.colors.gray[0],
         border: "1px solid",
         borderColor: theme.colors.blue[4],
+        backgroundColor:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[5]
+            : theme.colors.gray[1],
       },
 
       "&:focus": {
         outline: "none",
         border: "1px solid",
         borderColor: theme.colors.blue[4],
+        backgroundColor:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[5]
+            : theme.colors.gray[1],
       },
     },
   },
@@ -34,7 +44,7 @@ const SearchInput: React.FC<SearchInputProps> = () => {
     <Input
       placeholder="Search Reddit"
       className={classes.search}
-      icon={<IconSearch size={16} stroke={1.5} />}
+      icon={<TbSearch size={16} strokeWidth={1.5} />}
     />
   );
 };
