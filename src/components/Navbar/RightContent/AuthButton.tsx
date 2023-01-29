@@ -1,11 +1,11 @@
-import { useAuthModalContext } from "@/context/authModalContext";
+import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { Button } from "@mantine/core";
 import { FC } from "react";
 
 const AuthButtons: FC = () => {
   useRenderCount("AuthButtons");
-  const { send } = useAuthModalContext();
+  const { openLoginModal, openSignupModal } = useAuthModal();
 
   return (
     <>
@@ -14,7 +14,7 @@ const AuthButtons: FC = () => {
         h="28px"
         mr={8}
         display={{ base: "none", md: "unset" }}
-        onClick={() => send("OPEN_LOGIN_MODAL")}
+        onClick={openLoginModal}
       >
         Log In
       </Button>
@@ -22,7 +22,7 @@ const AuthButtons: FC = () => {
         variant="filled"
         h="28px"
         display={{ base: "none", md: "unset" }}
-        onClick={() => send("OPEN_SIGNUP_MODAL")}
+        onClick={openSignupModal}
       >
         Sign Up
       </Button>

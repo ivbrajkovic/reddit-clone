@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["Mantine", "tabler", "typegen", "xstate"]
+  "cSpell.words": [
+    "Firestore",
+    "Mantine",
+    "recoilize",
+    "reduxjs",
+    "tabler",
+    "typegen",
+    "xstate"
+  ]
 }
