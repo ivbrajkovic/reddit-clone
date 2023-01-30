@@ -1,12 +1,12 @@
-import { closeModal } from "@/components/Modal/modalSlice";
-import { useIsUserSignedIn } from "@/hooks/useIsUserSignedIn";
-import { useAppDispatch } from "@/store/hooks";
+import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useSignedInUser } from "@/hooks/useIsUserSignedIn";
 import { useEffect } from "react";
 
 export const useCloseModalOnAuth = () => {
-  const dispatch = useAppDispatch();
-  const isSignedIn = useIsUserSignedIn();
+  const user = useSignedInUser();
+  const { closeModal } = useAuthModal();
   useEffect(() => {
-    isSignedIn && dispatch(closeModal());
-  }, [isSignedIn, dispatch]);
+    user && closeModal();
+  }, [user, closeModal]);
+  return { closeModal };
 };

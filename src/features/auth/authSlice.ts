@@ -1,28 +1,37 @@
 import { RootState } from "@/store/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type ModalView = "login" | "signup" | "resetPassword";
+type View = "login" | "signup" | "resetPassword" | null;
 
 export interface AuthState {
-  modalView: ModalView;
+  isAuthModalOpen: boolean;
+  authModalView: View;
 }
 
 const initialState: AuthState = {
-  modalView: "login",
+  isAuthModalOpen: false,
+  authModalView: "login",
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setModalView: (state, action: PayloadAction<ModalView>) => {
-      state.modalView = action.payload;
+    openAuthModal: (state, action: PayloadAction<View>) => {
+      state.isAuthModalOpen = true;
+      state.authModalView = action.payload;
+    },
+    closeAuthModal: (state) => {
+      state.isAuthModalOpen = false;
     },
   },
 });
 
-export const { setModalView } = authSlice.actions;
+export const { openAuthModal, closeAuthModal } = authSlice.actions;
 
-export const selectModalView = (state: RootState) => state.authSlice.modalView;
+export const selectAuthModalView = (state: RootState) =>
+  state.authSlice.authModalView;
+export const selectAuthModalIsOpen = (state: RootState) =>
+  state.authSlice.isAuthModalOpen;
 
 export default authSlice.reducer;

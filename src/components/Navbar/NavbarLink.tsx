@@ -4,9 +4,14 @@ import { FC } from "react";
 const useStyles = createStyles((theme) => ({
   icon: {
     cursor: "pointer",
-    padding: 8,
+    height: 32,
+    width: 32,
     lineHeight: 0,
-    borderRadius: "50%",
+    borderRadius: 2,
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
 
     color: theme.colorScheme === "dark" ? "inherit" : theme.colors.gray[7],
 
@@ -14,7 +19,7 @@ const useStyles = createStyles((theme) => ({
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.gray[7]
-          : theme.colors.gray[1],
+          : theme.colors.gray[2],
     },
 
     "&[data-hide=true]": {
@@ -23,33 +28,20 @@ const useStyles = createStyles((theme) => ({
       },
     },
   },
-  noPadding: {
-    padding: 0,
-  },
 }));
 
 type IconProps = {
   hideOnMobile?: boolean;
-  noPadding?: boolean;
   title: string;
-  icon: React.ReactNode;
+  children: React.ReactNode;
 };
-const NavbarIcon: FC<IconProps> = ({
-  hideOnMobile,
-  noPadding,
-  title,
-  icon,
-}) => {
-  const { cx, classes } = useStyles();
+const NavbarLink: FC<IconProps> = ({ hideOnMobile, title, children }) => {
+  const { classes } = useStyles();
   return (
-    <a
-      title={title}
-      className={cx(classes.icon, noPadding && classes.noPadding)}
-      data-hide={hideOnMobile}
-    >
-      {icon}
+    <a title={title} className={classes.icon} data-hide={hideOnMobile}>
+      {children}
     </a>
   );
 };
 
-export default NavbarIcon;
+export default NavbarLink;

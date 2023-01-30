@@ -1,4 +1,4 @@
-import NavbarIcon from "@/components/Navbar/RightContent/components/NavbarIcon";
+import NavbarLink from "@/components/Navbar/NavbarLink";
 import { Flex } from "@mantine/core";
 import {
   BsArrowUpRightCircle,
@@ -23,22 +23,21 @@ const links = [
     title: "notifications",
     icon: <IoNotificationsOutline fontSize={20} />,
   },
-  { hideOnMobile: true, title: "add", icon: <VscAdd fontSize={20} /> },
+  { title: "add", icon: <VscAdd fontSize={20} /> },
 ];
 
-const Icons = () => {
-  return (
-    <Flex gap={8} align="center">
-      {links.map((link) => (
-        <NavbarIcon
-          key={link.title}
-          title={link.title}
-          icon={link.icon}
-          hideOnMobile={link.hideOnMobile}
-        />
-      ))}
-    </Flex>
-  );
-};
+const UserLinks = () => (
+  <Flex gap={8} align="center">
+    {links.map((link) => (
+      <NavbarLink
+        key={link.title}
+        title={link.title}
+        hideOnMobile={link.hideOnMobile}
+      >
+        {link.icon}
+      </NavbarLink>
+    ))}
+  </Flex>
+);
 
-export default Icons;
+export default UserLinks;

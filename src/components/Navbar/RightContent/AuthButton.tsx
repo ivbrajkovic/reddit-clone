@@ -5,14 +5,14 @@ import { FC } from "react";
 
 const AuthButtons: FC = () => {
   useRenderCount("AuthButtons");
-  const { openLoginModal, openSignupModal } = useAuthModal();
+  const { openLogin, openSignup } = useAuthModal();
   return (
     <Flex gap={8} align="center">
       <Button
         variant="outline"
         h="28px"
         display={{ base: "none", md: "unset" }}
-        onClick={openLoginModal}
+        onClick={openLogin}
       >
         Log In
       </Button>
@@ -20,7 +20,7 @@ const AuthButtons: FC = () => {
         variant="filled"
         h="28px"
         display={{ base: "none", md: "unset" }}
-        onClick={openSignupModal}
+        onClick={openSignup}
       >
         Sign Up
       </Button>

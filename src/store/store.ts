@@ -1,5 +1,6 @@
 import modalSlice from "@/components/Modal/modalSlice";
 import authSlice from "@/features/auth/authSlice";
+import communitySlice from "@/features/communities/communitySlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
@@ -7,6 +8,7 @@ export const store = configureStore({
   reducer: {
     modalSlice: modalSlice,
     authSlice: authSlice,
+    communitySlice: communitySlice,
   },
 });
 

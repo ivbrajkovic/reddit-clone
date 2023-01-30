@@ -2,7 +2,7 @@ import { Flex, Image } from "@mantine/core";
 import React from "react";
 
 const Logo: React.FC = () => (
-  <Flex gap={4} align="center">
+  <Flex gap={2} align="center">
     <Image
       src="/images/redditFace.svg"
       height={30}

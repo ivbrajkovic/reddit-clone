@@ -34,7 +34,7 @@ const SignUp: FC<SignUpProps> = () => {
   // useRenderCount("SignUp");
 
   const { classes } = useStyles();
-  const { openLoginModal } = useAuthModal();
+  const { openLogin } = useAuthModal();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<SignUpFormValues>(formProps);
@@ -80,7 +80,7 @@ const SignUp: FC<SignUpProps> = () => {
       </Button>
       <Flex fz="sm" justify="center">
         <Text mr={4}>New here?</Text>
-        <Anchor c="blue.5" fw="700" underline={false} onClick={openLoginModal}>
+        <Anchor c="blue.5" fw="700" underline={false} onClick={openLogin}>
           LOG IN
         </Anchor>
       </Flex>

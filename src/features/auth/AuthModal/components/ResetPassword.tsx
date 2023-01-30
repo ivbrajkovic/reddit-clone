@@ -21,7 +21,7 @@ export const ResetPassword = () => {
   const { classes } = useStyles();
 
   const [isSuccess, toggleSuccess] = useReducer((s) => !s, false);
-  const { openLoginModal, openSignupModal } = useAuthModal();
+  const { openLogin, openSignup } = useAuthModal();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<ResetPasswordFormValues>(formProps);
@@ -66,11 +66,11 @@ export const ResetPassword = () => {
       )}
 
       <Flex fz="sm" c="gray.7" justify="center">
-        <Anchor c="blue.5" fw="700" underline={false} onClick={openLoginModal}>
+        <Anchor c="blue.5" fw="700" underline={false} onClick={openLogin}>
           LOGIN
         </Anchor>
         &nbsp;-&nbsp;
-        <Anchor c="blue.5" fw="700" underline={false} onClick={openSignupModal}>
+        <Anchor c="blue.5" fw="700" underline={false} onClick={openSignup}>
           SIGN UP
         </Anchor>
       </Flex>

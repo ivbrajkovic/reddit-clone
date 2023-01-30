@@ -26,7 +26,7 @@ const Login = () => {
   // useRenderCount("Login");
 
   const { classes } = useStyles();
-  const { openSignupModal, openResetPasswordModal } = useAuthModal();
+  const { openSignup, openResetPassword } = useAuthModal();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<LoginFormValues>(formProps);
@@ -63,14 +63,14 @@ const Login = () => {
           c="blue.5"
           fw="700"
           underline={false}
-          onClick={openResetPasswordModal}
+          onClick={openResetPassword}
         >
           Reset
         </Anchor>
       </Flex>
       <Flex fz="sm" c="gray.7" justify="center">
         <Text mr={4}>New here?</Text>
-        <Anchor c="blue.5" fw="700" underline={false} onClick={openSignupModal}>
+        <Anchor c="blue.5" fw="700" underline={false} onClick={openSignup}>
           SIGN UP
         </Anchor>
       </Flex>

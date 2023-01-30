@@ -1,6 +1,4 @@
-import { closeModal, selectModalState } from "@/components/Modal/modalSlice";
 import { useRenderCount } from "@/hooks/useRenderCount";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   Box,
   CloseButton,
@@ -9,22 +7,26 @@ import {
 } from "@mantine/core";
 import { FC, ReactNode } from "react";
 
-type ModalProps = { children: ReactNode };
+type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};
 
-const Modal: FC<ModalProps> = ({ children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
   useRenderCount("Modal");
 
   const theme = useMantineTheme();
-  const dispatch = useAppDispatch();
-  const { isOpen } = useAppSelector(selectModalState);
+  // const dispatch = useAppDispatch();
+  // const { isOpen } = useAppSelector(selectModalState);
 
-  const close = () => dispatch(closeModal());
+  // const close = () => dispatch(closeModal());
 
   return (
     <MantineModal
       centered
       opened={isOpen}
-      onClose={close}
+      onClose={onClose}
       withCloseButton={false}
       overlayColor={
         theme.colorScheme === "dark"
@@ -36,7 +38,7 @@ const Modal: FC<ModalProps> = ({ children }) => {
     >
       <>
         <Box pos="absolute" top={16} right={16}>
-          <CloseButton onClick={close} />
+          <CloseButton onClick={onClose} />
         </Box>
         {children}
       </>

@@ -1,16 +1,16 @@
-import AuthButtons from "@/components/Navbar/RightContent/components/AuthButton";
-import Icons from "@/components/Navbar/RightContent/components/Icons";
-import UserMenu from "@/components/Navbar/RightContent/components/UserMenu";
-import { AuthModal } from "@/features/auth/AuthModal";
-import { useIsUserSignedIn } from "@/hooks/useIsUserSignedIn";
+import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
+import UserLinks from "@/components/Navbar/RightContent/UserLinks";
+import UserMenu from "@/components/Navbar/UserMenu/UserMenu";
+import { AuthModal } from "@/features/auth";
+import { useSignedInUser } from "@/hooks/useIsUserSignedIn";
+import { Flex } from "@mantine/core";
 
-const UserActions = () => (useIsUserSignedIn() ? <Icons /> : <AuthButtons />);
+const UserActions = () => (useSignedInUser() ? <UserLinks /> : <AuthButtons />);
 const RightContent = () => (
-  <>
-    <AuthModal />
+  <Flex gap={8}>
     <UserActions />
     <UserMenu />
-  </>
+  </Flex>
 );
 
 export default RightContent;

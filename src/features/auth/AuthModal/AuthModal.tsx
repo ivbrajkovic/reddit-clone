@@ -3,12 +3,15 @@ import Login from "@/features/auth/AuthModal/components/Login";
 import OAuthButtons from "@/features/auth/AuthModal/components/OAuthButtons";
 import { ResetPassword } from "@/features/auth/AuthModal/components/ResetPassword";
 import SignUp from "@/features/auth/AuthModal/components/SignUp";
-import { selectModalView } from "@/features/auth/authSlice";
+import {
+  selectAuthModalIsOpen,
+  selectAuthModalView,
+} from "@/features/auth/authSlice";
 import { useCloseModalOnAuth } from "@/features/auth/hooks/useCloseModalOnAuth";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Text } from "@mantine/core";
 
-const formatTitle = (view: string) => {
+const formatTitle = (view: string | null) => {
   if (view === "login") return "Login";
   if (view === "signup") return "Sign Up";
   if (view === "resetPassword") return "Reset Password";
@@ -22,12 +25,10 @@ const Or = () => (
 );
 
 const AuthModal = () => {
-  const view = useAppSelector(selectModalView);
-  useCloseModalOnAuth();
-
+  const view = useAppSelector(selectAuthModalView);
   const title = formatTitle(view);
   return (
-    <Modal>
+    <>
       <Text mb={14} fz="lg" fw="bold" ta="center">
         {title}
       </Text>
@@ -38,8 +39,18 @@ const AuthModal = () => {
         {view === "signup" ? <SignUp /> : null}
         {view === "resetPassword" ? <ResetPassword /> : null}
       </Box>
+    </>
+  );
+};
+
+const AuthModalWrapper = () => {
+  const isOpen = useAppSelector(selectAuthModalIsOpen);
+  const { closeModal } = useCloseModalOnAuth();
+  return (
+    <Modal isOpen={isOpen} onClose={closeModal}>
+      <AuthModal />
     </Modal>
   );
 };
 
-export default AuthModal;
+export default AuthModalWrapper;

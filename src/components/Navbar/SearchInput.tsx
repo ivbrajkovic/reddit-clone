@@ -1,5 +1,4 @@
 import { createStyles, Input } from "@mantine/core";
-import { FC } from "react";
 import { TbSearch } from "react-icons/tb";
 
 const useStyles = createStyles((theme) => ({
@@ -16,9 +15,7 @@ const useStyles = createStyles((theme) => ({
         border: "1px solid",
         borderColor: theme.colors.blue[4],
         backgroundColor:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
+          theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.white,
       },
 
       "&:focus": {
@@ -26,22 +23,18 @@ const useStyles = createStyles((theme) => ({
         border: "1px solid",
         borderColor: theme.colors.blue[4],
         backgroundColor:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
+          theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.white,
       },
     },
   },
 }));
 
-type SearchInputProps = {
-  // user: User
-};
-
-const SearchInput: FC<SearchInputProps> = () => {
+const SearchInput = () => {
   const { classes } = useStyles();
   return (
     <Input
+      maw={{ base: "none", md: 960 }}
+      radius="xl"
       placeholder="Search Reddit"
       className={classes.search}
       icon={<TbSearch size={16} strokeWidth={1.5} />}
