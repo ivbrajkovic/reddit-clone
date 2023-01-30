@@ -1,28 +1,16 @@
-import { closeModal } from "@/components/Modal/modalSlice";
-import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
-import Icons from "@/components/Navbar/RightContent/Icons";
+import AuthButtons from "@/components/Navbar/RightContent/components/AuthButton";
+import Icons from "@/components/Navbar/RightContent/components/Icons";
+import UserMenu from "@/components/Navbar/RightContent/components/UserMenu";
 import { AuthModal } from "@/features/auth/AuthModal";
-import { auth } from "@/firebase/clientApp";
-import { useAppDispatch } from "@/store/hooks";
-import { Flex } from "@mantine/core";
-import { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useIsUserSignedIn } from "@/hooks/useIsUserSignedIn";
 
-const RightContent = () => {
-  const dispatch = useAppDispatch();
-  const [user] = useAuthState(auth);
+const UserActions = () => (useIsUserSignedIn() ? <Icons /> : <AuthButtons />);
+const RightContent = () => (
+  <>
+    <AuthModal />
+    <UserActions />
+    <UserMenu />
+  </>
+);
 
-  useEffect(() => {
-    user && dispatch(closeModal());
-  }, [user, dispatch]);
-
-  return (
-    <>
-      <AuthModal />
-      <Flex justify="center" align="center">
-        {user ? <Icons /> : <AuthButtons />}
-      </Flex>
-    </>
-  );
-};
 export default RightContent;

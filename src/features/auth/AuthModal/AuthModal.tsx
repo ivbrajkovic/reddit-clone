@@ -4,6 +4,7 @@ import OAuthButtons from "@/features/auth/AuthModal/components/OAuthButtons";
 import { ResetPassword } from "@/features/auth/AuthModal/components/ResetPassword";
 import SignUp from "@/features/auth/AuthModal/components/SignUp";
 import { selectModalView } from "@/features/auth/authSlice";
+import { useCloseModalOnAuth } from "@/features/auth/hooks/useCloseModalOnAuth";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Text } from "@mantine/core";
 
@@ -21,8 +22,9 @@ const Or = () => (
 );
 
 const AuthModal = () => {
-  // useRenderCount("AuthModal");
   const view = useAppSelector(selectModalView);
+  useCloseModalOnAuth();
+
   const title = formatTitle(view);
   return (
     <Modal>

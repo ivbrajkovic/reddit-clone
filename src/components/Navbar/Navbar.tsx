@@ -1,4 +1,4 @@
-import Logo from "@/components/Navbar/RightContent/Logo";
+import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
 import { createStyles, Header } from "@mantine/core";

@@ -1,5 +1,5 @@
 import { createStyles, Input } from "@mantine/core";
-import React from "react";
+import { FC } from "react";
 import { TbSearch } from "react-icons/tb";
 
 const useStyles = createStyles((theme) => ({
@@ -38,7 +38,7 @@ type SearchInputProps = {
   // user: User
 };
 
-const SearchInput: React.FC<SearchInputProps> = () => {
+const SearchInput: FC<SearchInputProps> = () => {
   const { classes } = useStyles();
   return (
     <Input
