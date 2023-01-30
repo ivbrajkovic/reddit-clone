@@ -77,13 +77,16 @@ const UserMenu = () => {
                 width={24}
                 height={24}
                 className={classes.userIcon}
-                style={{ fill: "red", color: "red", stroke: "red" }}
               />
-              <VscChevronDown />
             </>
           ) : (
-            <NavbarIcon title="account" icon={<VscAccount fontSize={20} />} />
+            <NavbarIcon
+              noPadding
+              title="account"
+              icon={<VscAccount fontSize={20} />}
+            />
           )}
+          <VscChevronDown />
         </div>
       </Menu.Target>
       <Menu.Dropdown style={{ padding: 0 }}>

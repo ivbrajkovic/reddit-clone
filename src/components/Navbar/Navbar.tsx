@@ -1,3 +1,4 @@
+import Directory from "@/components/Navbar/Directory/Directory";
 import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
@@ -21,6 +22,7 @@ export const Navbar = () => {
   return (
     <Header height={48} className={classes.header}>
       <Logo />
+      <Directory />
       <SearchInput />
       <RightContent />
     </Header>

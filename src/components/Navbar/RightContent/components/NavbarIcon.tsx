@@ -23,17 +23,30 @@ const useStyles = createStyles((theme) => ({
       },
     },
   },
+  noPadding: {
+    padding: 0,
+  },
 }));
 
 type IconProps = {
   hideOnMobile?: boolean;
+  noPadding?: boolean;
   title: string;
   icon: React.ReactNode;
 };
-const NavbarIcon: FC<IconProps> = ({ hideOnMobile, title, icon }) => {
-  const { classes } = useStyles();
+const NavbarIcon: FC<IconProps> = ({
+  hideOnMobile,
+  noPadding,
+  title,
+  icon,
+}) => {
+  const { cx, classes } = useStyles();
   return (
-    <a title={title} className={classes.icon} data-hide={hideOnMobile}>
+    <a
+      title={title}
+      className={cx(classes.icon, noPadding && classes.noPadding)}
+      data-hide={hideOnMobile}
+    >
       {icon}
     </a>
   );
