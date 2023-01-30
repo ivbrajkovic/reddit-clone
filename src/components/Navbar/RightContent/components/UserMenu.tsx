@@ -1,8 +1,14 @@
 import NavbarIcon from "@/components/Navbar/RightContent/components/NavbarIcon";
 import { useIsUserSignedIn } from "@/hooks/useIsUserSignedIn";
-import { createStyles, Flex, Menu } from "@mantine/core";
+import {
+  createStyles,
+  Menu,
+  Switch,
+  useMantineColorScheme,
+} from "@mantine/core";
 import Image from "next/image";
 import { CgProfile } from "react-icons/cg";
+import { MdOutlineDarkMode, MdOutlineLogin } from "react-icons/md";
 import { VscAccount, VscChevronDown } from "react-icons/vsc";
 
 const useStyles = createStyles((theme) => ({
@@ -34,18 +40,23 @@ const useStyles = createStyles((theme) => ({
 const UserMenu = () => {
   const { classes } = useStyles();
   const isUserSignedIn = useIsUserSignedIn();
+
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+  const toggleDarkMode = () => toggleColorScheme();
+
   return (
     <Menu
       shadow="md"
       width={200}
       styles={(theme) => ({
         item: {
-          // "&:hover": {
-          //   backgroundColor: theme.colorScheme === "dark" ? "#818384" : "#d7dfe2",
-          // },
+          color:
+            theme.colorScheme === "dark" ? "inherit" : theme.colors.gray[7],
         },
         itemIcon: {
-          width: 24,
+          width: 20,
+          fontSize: 20,
         },
       })}
     >
@@ -69,29 +80,30 @@ const UserMenu = () => {
         </div>
       </Menu.Target>
       <Menu.Dropdown style={{ padding: 0 }}>
-        <Menu.Item
-          disabled
-          icon={<CgProfile fontSize={20} />}
-          className={classes.itemLabel}
-        >
+        <Menu.Item disabled icon={<CgProfile />} className={classes.itemLabel}>
           My Stuff
         </Menu.Item>
         <Menu.Item icon=" ">Profile</Menu.Item>
         <Menu.Item icon=" ">User Settings</Menu.Item>
         <Menu.Divider />
-        <Menu.Item color="gray.6" icon={<CgProfile fontSize={20} />}>
-          My Stuff
+        <Menu.Item
+          disabled
+          icon={<MdOutlineDarkMode />}
+          className={classes.itemLabel}
+        >
+          View Options
         </Menu.Item>
-        <Menu.Label>
-          <Flex align="center">
-            <Flex w={24} mx={4}>
-              <CgProfile fontSize={20} />
-            </Flex>
-            My Stuff
-          </Flex>
-        </Menu.Label>
-        <Menu.Item icon=" ">Profile</Menu.Item>
-        <Menu.Item icon=" ">User Settings</Menu.Item>
+        <Menu.Item
+          icon=" "
+          closeMenuOnClick={false}
+          rightSection={
+            <Switch size="sm" checked={isDark} onChange={toggleDarkMode} />
+          }
+        >
+          Dark Mode
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item icon={<MdOutlineLogin />}>User Settings</Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
