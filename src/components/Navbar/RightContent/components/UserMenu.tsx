@@ -1,7 +1,9 @@
 import NavbarIcon from "@/components/Navbar/RightContent/components/NavbarIcon";
 import { useIsUserSignedIn } from "@/hooks/useIsUserSignedIn";
+import { useSignOut } from "@/hooks/useSignOut";
 import {
   createStyles,
+  CSSObject,
   Menu,
   Switch,
   useMantineColorScheme,
@@ -35,10 +37,21 @@ const useStyles = createStyles((theme) => ({
       color: theme.colors.gray[6],
     },
   },
+  switch: {
+    pointerEvents: "none",
+  },
+  item: {
+    color: theme.colorScheme === "dark" ? "inherit" : theme.colors.gray[7],
+  },
+  itemIcon: {
+    width: 20,
+    fontSize: 20,
+  },
 }));
 
 const UserMenu = () => {
   const { classes } = useStyles();
+  const signOutUser = useSignOut();
   const isUserSignedIn = useIsUserSignedIn();
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -49,16 +62,10 @@ const UserMenu = () => {
     <Menu
       shadow="md"
       width={200}
-      styles={(theme) => ({
-        item: {
-          color:
-            theme.colorScheme === "dark" ? "inherit" : theme.colors.gray[7],
-        },
-        itemIcon: {
-          width: 20,
-          fontSize: 20,
-        },
-      })}
+      styles={{
+        item: classes.item as unknown as CSSObject,
+        itemIcon: classes.itemIcon as unknown as CSSObject,
+      }}
     >
       <Menu.Target>
         <div className={classes.menuButton}>
@@ -97,13 +104,16 @@ const UserMenu = () => {
           icon=" "
           closeMenuOnClick={false}
           rightSection={
-            <Switch size="sm" checked={isDark} onChange={toggleDarkMode} />
+            <Switch size="sm" checked={isDark} className={classes.switch} />
           }
+          onClick={toggleDarkMode}
         >
           Dark Mode
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item icon={<MdOutlineLogin />}>User Settings</Menu.Item>
+        <Menu.Item icon={<MdOutlineLogin />} onClick={signOutUser}>
+          User Settings
+        </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
