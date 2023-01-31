@@ -5,15 +5,17 @@ import {
   Modal as MantineModal,
   useMantineTheme,
 } from "@mantine/core";
-import { FC, ReactNode } from "react";
+import { ComponentProps, FC, ReactNode } from "react";
 
-type ModalProps = {
+type MantineModalProps = Omit<ComponentProps<typeof MantineModal>, "opened">;
+
+type ModalProps = MantineModalProps & {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
 };
 
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children, ...rest }) => {
   useRenderCount("Modal");
 
   const theme = useMantineTheme();
@@ -24,6 +26,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <MantineModal
+      {...rest}
       centered
       opened={isOpen}
       onClose={onClose}
@@ -38,7 +41,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     >
       <>
         <Box pos="absolute" top={16} right={16}>
-          <CloseButton onClick={onClose} />
+          <CloseButton size="lg" onClick={onClose} />
         </Box>
         {children}
       </>
