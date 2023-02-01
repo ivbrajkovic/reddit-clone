@@ -7,7 +7,7 @@ import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 type OAuthButtonsProps = {};
 
 const OAuthButtons: FC<OAuthButtonsProps> = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, _user, loading, error] = useSignInWithGoogle(auth);
   useAuthErrorEffect(error);
 
   return (

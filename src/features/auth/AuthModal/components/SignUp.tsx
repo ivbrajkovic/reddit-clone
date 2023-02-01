@@ -31,8 +31,6 @@ const createFormProps = (): SignUpFormProps => ({
 type SignUpProps = {};
 
 const SignUp: FC<SignUpProps> = () => {
-  // useRenderCount("SignUp");
-
   const { classes } = useStyles();
   const { openLogin } = useAuthModal();
 

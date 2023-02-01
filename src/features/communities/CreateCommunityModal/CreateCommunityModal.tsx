@@ -1,14 +1,11 @@
-import { setFieldError } from "@/common/setFormFieldError";
+import { showNotificationError } from "@/common/showNotificationError";
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
+import RadioButtonWithIcon from "@/features/communities/CreateCommunityModal/RadioButtonWithIcon";
+import { useCreateCommunity } from "@/features/communities/hooks/useCreateCommunity";
 import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
+import { CreateCommunityFormValues } from "@/features/communities/types";
 import { validateCommunityName } from "@/features/communities/utils/validateCommunityName";
-import {
-  docFromFirestore,
-  isDocumentExists,
-  runTransactionAsync,
-} from "@/firebase/utility";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useAppSelector } from "@/store/hooks";
 import {
   Box,
@@ -23,19 +20,10 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  DocumentData,
-  DocumentReference,
-  serverTimestamp,
-  Transaction,
-} from "firebase/firestore";
-import { curry, ifElse, pipe } from "ramda";
-import { ComponentProps, FC, useReducer } from "react";
 import { CgInfo } from "react-icons/cg";
 import { HiUser } from "react-icons/hi";
 import { ImEye } from "react-icons/im";
 import { IoLockClosed } from "react-icons/io5";
-import { IconType } from "react-icons/lib";
 
 const NAME_MAX_LENGTH = 21;
 
@@ -49,49 +37,19 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.xs,
     fontWeight: 500,
   },
+  footer: {
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[6]
+        : theme.colors.gray[2],
+  },
 }));
-
-type RadioWithIconProps = ComponentProps<typeof Radio> & { Icon: IconType };
-const RadioWithIcon: FC<RadioWithIconProps> = ({ label, Icon, ...props }) => (
-  <Radio
-    size="sm"
-    label={
-      <Group spacing="xs">
-        <Icon fontSize={18} color="#868e96" />
-        <Text fw={500}>{label}</Text>
-      </Group>
-    }
-    styles={{
-      inner: {
-        alignSelf: "center",
-      },
-      labelWrapper: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-      },
-      description: {
-        marginTop: 0,
-        paddingLeft: 4,
-      },
-    }}
-    {...props}
-  />
-);
-
-type FormValues = {
-  communityName: string;
-  communityType: "public" | "private" | "restricted";
-  adultContent: boolean;
-};
 
 const CreateCommunityModal = () => {
   const { classes } = useStyles();
-  const user = useSignedInUser();
-  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
   const { closeCreateCommunityModal } = useCreateCommunityModal();
 
-  const form = useForm<FormValues>({
+  const form = useForm<CreateCommunityFormValues>({
     initialValues: {
       communityName: "",
       communityType: "public",
@@ -102,96 +60,22 @@ const CreateCommunityModal = () => {
     },
   });
 
-  // const setFieldError = (field: string, error: string) =>
-  //   form.setFieldError(field, error);
+  const { isLoading, handleCreateCommunity } = useCreateCommunity();
 
-  const handleCreateCommunity = () => {
-    const userId = user?.uid;
-    if (!userId) return;
-
-    const { communityName, communityType, adultContent } = form.values;
-    const communitySnippetsPath = `users/${userId}/communitySnippets`;
-
-    // const createCommunitySnippetDocument = (transaction: Transaction) =>
-    //   transaction.set(getDocumentRef(communitySnippetsPath, communityName), {
-    //     communityId: name,
-    //     isModerator: true,
-    //   });
-
-    // const transactionCallback = (transaction: Transaction) =>
-    //   getCommunityDocumentByRef(transaction)
-    //     .then(throwIfCommunityNameIsTaken(transaction))
-    //     .then(createCommunityDocument)
-    //     .then(createCommunitySnippetDocument)
-    //     .catch(setFieldError("communityName", "Community name is taken."));
-
-    toggleLoading();
-
-    runTransactionAsync(async (transaction) => {
-      const setCommunityNameFieldError = () =>
-        setFieldError(form, "communityName", "Community name is taken.");
-
-      const createCommunityDocument = curry(
-        (
-          communityDocRef: DocumentReference<DocumentData>,
-          transaction: Transaction,
-        ) =>
-          transaction.set(communityDocRef, {
-            creatorId: userId,
-            createdAt: serverTimestamp(),
-            numberOfMembers: 1,
-            privacyType: communityType,
-            adultContent,
-          }),
-      );
-
-      const createCommunitySnippetDocument = curry(
-        (
-          communityDocRef: DocumentReference<DocumentData>,
-          transaction: Transaction,
-        ) =>
-          transaction.set(communityDocRef, {
-            communityId: name,
-            isModerator: true,
-          }),
-      );
-
-      const communityRef = docFromFirestore("communities", communityName);
-      const communityDoc = await transaction.get(communityRef);
-
-      const createDocumentIfNotExists = ifElse(
-        isDocumentExists,
-        setCommunityNameFieldError,
-        pipe(
-          createCommunityDocument(communityRef),
-          createCommunitySnippetDocument(communityRef),
-        )(transaction),
-      );
-
-      createDocumentIfNotExists(communityDoc);
-
-      // const communityDocRef = getDocumentRef("communities", communityName);
-      // const communityDoc = await transaction.get(communityDocRef);
-      // const communityDoc = await getDocumentFromTransition(
-      //   communityDocRef,
-      //   transaction,
-      // );
-      // const createDocumentIfNotExists = ifElse(
-      //   isDocumentExists,
-      //   () => {},
-      //   () => {},
-      // );
-
-      // createDocumentIfNotExists(communityDoc);
-      // createCommunityDocument(transaction);
-      // createCommunitySnippetDocument(transaction);
-    })
-      // .then(closeCreateCommunityModal)
-      .catch(console.error);
+  const createCommunity = (values: CreateCommunityFormValues) => {
+    handleCreateCommunity(values)
+      .then(() => {
+        closeCreateCommunityModal();
+      })
+      .catch((error) => {
+        if (error?.message === "Document already exists.")
+          form.setFieldError("communityName", "Community name already taken.");
+        else showNotificationError("Error creating community")(error);
+      });
   };
 
   return (
-    <form onSubmit={form.onSubmit(console.log)}>
+    <form onSubmit={form.onSubmit(createCommunity)}>
       <Box p="md" mb="xs">
         <Text fw={500}>Create Community</Text>
         <Divider my="sm" />
@@ -226,19 +110,19 @@ const CreateCommunityModal = () => {
           withAsterisk
           {...form.getInputProps("communityType")}
         >
-          <RadioWithIcon
+          <RadioButtonWithIcon
             value="public"
             label="Public"
             description="Anyone can view, post, and comment to this community"
             Icon={HiUser}
           />
-          <RadioWithIcon
+          <RadioButtonWithIcon
             value="restricted"
             label="Restricted"
             description="Anyone can view this community, but only approved users can post"
             Icon={ImEye}
           />
-          <RadioWithIcon
+          <RadioButtonWithIcon
             value="private"
             label="Private"
             description="Anyone can view, post, and comment to this community"
@@ -260,11 +144,17 @@ const CreateCommunityModal = () => {
           }
         />
       </Box>
-      <Flex p="md" gap="xs" bg="gray.2" align="center" justify="flex-end">
+      <Flex
+        p="md"
+        gap="xs"
+        align="center"
+        justify="flex-end"
+        className={classes.footer}
+      >
         <Button variant="outline" h={32} onClick={closeCreateCommunityModal}>
           Cancel
         </Button>
-        <Button type="submit" h={32}>
+        <Button type="submit" h={32} loading={isLoading}>
           Create Community
         </Button>
       </Flex>

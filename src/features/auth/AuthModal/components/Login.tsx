@@ -23,8 +23,6 @@ const createFormProps = (): LoginFormProps => ({
 });
 
 const Login = () => {
-  // useRenderCount("Login");
-
   const { classes } = useStyles();
   const { openSignup, openResetPassword } = useAuthModal();
 

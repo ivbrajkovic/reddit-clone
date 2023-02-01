@@ -1,4 +1,3 @@
-import { useRenderCount } from "@/hooks/useRenderCount";
 import {
   Box,
   CloseButton,
@@ -16,14 +15,7 @@ type ModalProps = MantineModalProps & {
 };
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children, ...rest }) => {
-  useRenderCount("Modal");
-
   const theme = useMantineTheme();
-  // const dispatch = useAppDispatch();
-  // const { isOpen } = useAppSelector(selectModalState);
-
-  // const close = () => dispatch(closeModal());
-
   return (
     <MantineModal
       {...rest}
