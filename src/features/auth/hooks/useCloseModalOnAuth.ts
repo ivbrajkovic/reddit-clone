@@ -1,5 +1,5 @@
 import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
-import { useSignedInUser } from "@/hooks/useIsUserSignedIn";
+import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useEffect } from "react";
 
 export const useCloseModalOnAuth = () => {

@@ -1,4 +1,4 @@
-import { showNotification } from "@mantine/notifications";
+import { showNotificationError } from "@/common/showNotificationError";
 import { AuthError } from "firebase/auth";
 import { useEffect } from "react";
 
@@ -29,11 +29,7 @@ const formatError = (error: AuthError | Error) => {
 
 export const useAuthErrorEffect = (error: AuthError | Error | undefined) => {
   useEffect(() => {
-    error &&
-      showNotification({
-        color: "red",
-        title: "Authentication error",
-        message: formatError(error),
-      });
+    if (!error) return;
+    showNotificationError("Authentication error", formatError)(error);
   }, [error]);
 };

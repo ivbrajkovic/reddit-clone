@@ -1,8 +1,7 @@
 import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
 import UserLinks from "@/components/Navbar/RightContent/UserLinks";
 import UserMenu from "@/components/Navbar/UserMenu/UserMenu";
-import { AuthModal } from "@/features/auth";
-import { useSignedInUser } from "@/hooks/useIsUserSignedIn";
+import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { Flex } from "@mantine/core";
 
 const UserActions = () => (useSignedInUser() ? <UserLinks /> : <AuthButtons />);

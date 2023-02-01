@@ -1,6 +1,9 @@
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
 import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
+import { validateCommunityName } from "@/features/communities/utils/validateCommunityName";
+import { docRef, runTransactionAsync } from "@/firebase/utility";
+import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useAppSelector } from "@/store/hooks";
 import {
   Box,
@@ -12,10 +15,16 @@ import {
   Group,
   Radio,
   Text,
-  TextInput,
+  TextInput
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
-import { ComponentProps, FC } from "react";
+import { useForm } from "@mantine/form";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  serverTimestamp,
+  Transaction
+} from "firebase/firestore";
+import { ComponentProps, FC, useReducer } from "react";
 import { CgInfo } from "react-icons/cg";
 import { HiUser } from "react-icons/hi";
 import { ImEye } from "react-icons/im";
@@ -66,7 +75,10 @@ const RadioWithIcon: FC<RadioWithIconProps> = ({ label, Icon, ...props }) => (
 
 const CreateCommunityModal = () => {
   const { classes } = useStyles();
+  const user = useSignedInUser();
+  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
   const { closeCreateCommunityModal } = useCreateCommunityModal();
+
   const form = useForm({
     initialValues: {
       communityName: "",
@@ -74,9 +86,65 @@ const CreateCommunityModal = () => {
       adultContent: false,
     },
     validate: {
-      communityName: isNotEmpty("A community name is required"),
+      communityName: validateCommunityName,
     },
   });
+
+  const setFieldError = (field: string, error: string) => () =>
+    form.setFieldError(field, error);
+
+  const handleCreateCommunity = () => {
+    const userId = user?.uid;
+    if (!userId) return;
+
+    const { communityName, communityType, adultContent } = form.values;
+    const communitySnippetsPath = `users/${userId}/communitySnippets`;
+
+    const communityDocRef = docRef("communities", communityName);
+
+    const throwIfCommunityNameIsTaken =
+      (transaction: Transaction) => (doc: DocumentSnapshot<DocumentData>) =>
+        doc.exists() ? Promise.reject("name is unavailable") : Promise.resolve(transaction);
+
+    const getCommunityDocumentByRef = (transaction: Transaction) =>
+      transaction.get(communityDocRef);
+
+    const createCommunityDocument = (transaction: Transaction) =>
+      transaction.set(communityDocRef, {
+        creatorId: userId,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityType,
+        adultContent,
+      });
+
+    const createCommunitySnippetDocument = (transaction: Transaction) =>
+      transaction.set(docRef(communitySnippetsPath, communityName), {
+        communityId: name,
+        isModerator: true,
+      });
+
+    const handleCommunityNameTaken = setFieldError(
+      "communityName",
+      "Community name is taken.",
+    );
+
+    const transactionCallback = (transaction: Transaction) =>
+      getCommunityDocumentByRef(transaction)
+        .then(throwIfCommunityNameIsTaken(transaction))
+        .then(createCommunityDocument)
+        .then(createCommunitySnippetDocument)
+        // .catch(setFieldError("communityName", "Community name is taken."));
+        .catch(e => {
+          e === 
+        })
+
+    toggleLoading();
+    runTransactionAsync(transactionCallback)
+      // .then(closeCreateCommunityModal)
+      .catch(console.error);
+  };
+
   return (
     <form onSubmit={form.onSubmit(console.log)}>
       <Box p="md" mb="xs">
