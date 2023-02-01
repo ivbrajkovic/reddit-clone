@@ -1,8 +1,13 @@
+import { setFieldError } from "@/common/setFormFieldError";
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
 import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
 import { validateCommunityName } from "@/features/communities/utils/validateCommunityName";
-import { docRef, runTransactionAsync } from "@/firebase/utility";
+import {
+  docFromFirestore,
+  isDocumentExists,
+  runTransactionAsync,
+} from "@/firebase/utility";
 import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useAppSelector } from "@/store/hooks";
 import {
@@ -15,15 +20,16 @@ import {
   Group,
   Radio,
   Text,
-  TextInput
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   DocumentData,
-  DocumentSnapshot,
+  DocumentReference,
   serverTimestamp,
-  Transaction
+  Transaction,
 } from "firebase/firestore";
+import { curry, ifElse, pipe } from "ramda";
 import { ComponentProps, FC, useReducer } from "react";
 import { CgInfo } from "react-icons/cg";
 import { HiUser } from "react-icons/hi";
@@ -73,13 +79,19 @@ const RadioWithIcon: FC<RadioWithIconProps> = ({ label, Icon, ...props }) => (
   />
 );
 
+type FormValues = {
+  communityName: string;
+  communityType: "public" | "private" | "restricted";
+  adultContent: boolean;
+};
+
 const CreateCommunityModal = () => {
   const { classes } = useStyles();
   const user = useSignedInUser();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
   const { closeCreateCommunityModal } = useCreateCommunityModal();
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     initialValues: {
       communityName: "",
       communityType: "public",
@@ -90,8 +102,8 @@ const CreateCommunityModal = () => {
     },
   });
 
-  const setFieldError = (field: string, error: string) => () =>
-    form.setFieldError(field, error);
+  // const setFieldError = (field: string, error: string) =>
+  //   form.setFieldError(field, error);
 
   const handleCreateCommunity = () => {
     const userId = user?.uid;
@@ -100,47 +112,80 @@ const CreateCommunityModal = () => {
     const { communityName, communityType, adultContent } = form.values;
     const communitySnippetsPath = `users/${userId}/communitySnippets`;
 
-    const communityDocRef = docRef("communities", communityName);
+    // const createCommunitySnippetDocument = (transaction: Transaction) =>
+    //   transaction.set(getDocumentRef(communitySnippetsPath, communityName), {
+    //     communityId: name,
+    //     isModerator: true,
+    //   });
 
-    const throwIfCommunityNameIsTaken =
-      (transaction: Transaction) => (doc: DocumentSnapshot<DocumentData>) =>
-        doc.exists() ? Promise.reject("name is unavailable") : Promise.resolve(transaction);
-
-    const getCommunityDocumentByRef = (transaction: Transaction) =>
-      transaction.get(communityDocRef);
-
-    const createCommunityDocument = (transaction: Transaction) =>
-      transaction.set(communityDocRef, {
-        creatorId: userId,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
-        adultContent,
-      });
-
-    const createCommunitySnippetDocument = (transaction: Transaction) =>
-      transaction.set(docRef(communitySnippetsPath, communityName), {
-        communityId: name,
-        isModerator: true,
-      });
-
-    const handleCommunityNameTaken = setFieldError(
-      "communityName",
-      "Community name is taken.",
-    );
-
-    const transactionCallback = (transaction: Transaction) =>
-      getCommunityDocumentByRef(transaction)
-        .then(throwIfCommunityNameIsTaken(transaction))
-        .then(createCommunityDocument)
-        .then(createCommunitySnippetDocument)
-        // .catch(setFieldError("communityName", "Community name is taken."));
-        .catch(e => {
-          e === 
-        })
+    // const transactionCallback = (transaction: Transaction) =>
+    //   getCommunityDocumentByRef(transaction)
+    //     .then(throwIfCommunityNameIsTaken(transaction))
+    //     .then(createCommunityDocument)
+    //     .then(createCommunitySnippetDocument)
+    //     .catch(setFieldError("communityName", "Community name is taken."));
 
     toggleLoading();
-    runTransactionAsync(transactionCallback)
+
+    runTransactionAsync(async (transaction) => {
+      const setCommunityNameFieldError = () =>
+        setFieldError(form, "communityName", "Community name is taken.");
+
+      const createCommunityDocument = curry(
+        (
+          communityDocRef: DocumentReference<DocumentData>,
+          transaction: Transaction,
+        ) =>
+          transaction.set(communityDocRef, {
+            creatorId: userId,
+            createdAt: serverTimestamp(),
+            numberOfMembers: 1,
+            privacyType: communityType,
+            adultContent,
+          }),
+      );
+
+      const createCommunitySnippetDocument = curry(
+        (
+          communityDocRef: DocumentReference<DocumentData>,
+          transaction: Transaction,
+        ) =>
+          transaction.set(communityDocRef, {
+            communityId: name,
+            isModerator: true,
+          }),
+      );
+
+      const communityRef = docFromFirestore("communities", communityName);
+      const communityDoc = await transaction.get(communityRef);
+
+      const createDocumentIfNotExists = ifElse(
+        isDocumentExists,
+        setCommunityNameFieldError,
+        pipe(
+          createCommunityDocument(communityRef),
+          createCommunitySnippetDocument(communityRef),
+        )(transaction),
+      );
+
+      createDocumentIfNotExists(communityDoc);
+
+      // const communityDocRef = getDocumentRef("communities", communityName);
+      // const communityDoc = await transaction.get(communityDocRef);
+      // const communityDoc = await getDocumentFromTransition(
+      //   communityDocRef,
+      //   transaction,
+      // );
+      // const createDocumentIfNotExists = ifElse(
+      //   isDocumentExists,
+      //   () => {},
+      //   () => {},
+      // );
+
+      // createDocumentIfNotExists(communityDoc);
+      // createCommunityDocument(transaction);
+      // createCommunitySnippetDocument(transaction);
+    })
       // .then(closeCreateCommunityModal)
       .catch(console.error);
   };
