@@ -1,16 +1,15 @@
-import { isAuthError } from "@/common/isAuthError";
-import { isError } from "@/common/isError";
-import { logError } from "@/common/logError";
 import { showNotificationError } from "@/common/showNotificationError";
-import { AuthError } from "firebase/auth";
-import { always, ifElse, pipe } from "ramda";
+import { AppError } from "@/types";
+import { isFirebaseError, isNotNil } from "@/utility";
+import { cond } from "ramda";
 import { useEffect } from "react";
 
 // Firebase error codes:
 // https://firebase.google.com/docs/auth/admin/errors
 
-// const formatAuthError = (error: AuthError | Error) => {
-const formatAuthError = (error: AuthError) => {
+const formatAuthError = (error: AppError) => {
+  if (!isFirebaseError(error)) return error.message;
+
   switch (error.code) {
     case "auth/email-already-in-use":
     case "auth/email-already-exists":
@@ -26,29 +25,16 @@ const formatAuthError = (error: AuthError) => {
     case "auth/popup-closed-by-user":
       return "Popup closed by user";
     default:
-      return error.message;
+      return "Unknown authentication error";
   }
 };
 
-// return ifElse(isAuthError, formatError, always(error.message))(error);
-// };
+const showError = cond<AppError | undefined, AppError, void>([
+  [isNotNil, showNotificationError("Authentication error", formatAuthError)],
+]);
 
-const formatError = ifElse(
-  isAuthError,
-  formatAuthError,
-  (error: Error) => error.message,
-);
-
-const showAuthError = (errorMessage: string) =>
-  showNotificationError("Authentication error", errorMessage);
-
-export const useAuthErrorEffect = (error: AuthError | Error | undefined) => {
+export const useAuthErrorEffect = (error: AppError | undefined) => {
   useEffect(() => {
-    // ifElse(isError, pipe(logError, showAuthError), always(undefined))(error);
-    ifElse(
-      isError,
-      pipe(logError, formatError, showAuthError),
-      always(undefined),
-    )(error);
+    showError(error);
   }, [error]);
 };
