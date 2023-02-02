@@ -1,16 +1,15 @@
-import { closeAuthModal, openAuthModal } from "@/features/auth/authSlice";
-import { useAppDispatch } from "@/store/hooks";
-import { useMemo } from "react";
+import { selectAuthModalIsOpen } from "@/features/auth/authSlice";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
+import { useSignedInUser } from "@/hooks/useSignedInUser";
+import { useAppSelector } from "@/store/hooks";
+import { useEffect } from "react";
 
 export const useAuthModal = () => {
-  const dispatch = useAppDispatch();
-  return useMemo(
-    () => ({
-      closeModal: () => dispatch(closeAuthModal()),
-      openLogin: () => dispatch(openAuthModal("login")),
-      openSignup: () => dispatch(openAuthModal("signup")),
-      openResetPassword: () => dispatch(openAuthModal("resetPassword")),
-    }),
-    [dispatch],
-  );
+  const user = useSignedInUser();
+  const isOpen = useAppSelector(selectAuthModalIsOpen);
+  const { closeModal } = useAuthModalHandlers();
+  useEffect(() => {
+    user && closeModal();
+  }, [user, closeModal]);
+  return { isOpen, closeModal };
 };

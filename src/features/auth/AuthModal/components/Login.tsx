@@ -4,7 +4,7 @@ import {
   LoginFormValues,
 } from "@/features/auth/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
-import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Button, Flex, Text, TextInput } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
@@ -24,7 +24,7 @@ const createFormProps = (): LoginFormProps => ({
 
 const Login = () => {
   const { classes } = useStyles();
-  const { openSignup, openResetPassword } = useAuthModal();
+  const { openSignup, openResetPassword } = useAuthModalHandlers();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<LoginFormValues>(formProps);

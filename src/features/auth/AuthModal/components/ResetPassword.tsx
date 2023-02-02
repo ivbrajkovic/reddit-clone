@@ -4,7 +4,7 @@ import {
   ResetPasswordFormValues,
 } from "@/features/auth/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
-import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Box, Button, Flex, Text, TextInput } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
@@ -21,7 +21,7 @@ export const ResetPassword = () => {
   const { classes } = useStyles();
 
   const [isSuccess, toggleSuccess] = useReducer((s) => !s, false);
-  const { openLogin, openSignup } = useAuthModal();
+  const { openLogin, openSignup } = useAuthModalHandlers();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<ResetPasswordFormValues>(formProps);

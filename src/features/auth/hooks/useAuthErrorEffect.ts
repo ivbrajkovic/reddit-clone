@@ -33,7 +33,7 @@ const showError = cond<AppError | undefined, AppError, void>([
   [isNotNil, showNotificationError("Authentication error", formatAuthError)],
 ]);
 
-export const useAuthErrorEffect = (error: AppError | undefined) => {
+export const useAuthErrorEffect = (error?: AppError) => {
   useEffect(() => {
     showError(error);
   }, [error]);

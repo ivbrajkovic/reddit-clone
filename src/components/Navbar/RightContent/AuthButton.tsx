@@ -1,9 +1,9 @@
-import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { Button, Flex } from "@mantine/core";
 import { FC } from "react";
 
 const AuthButtons: FC = () => {
-  const { openLogin, openSignup } = useAuthModal();
+  const { openLogin, openSignup } = useAuthModalHandlers();
   return (
     <Flex gap={8} align="center">
       <Button

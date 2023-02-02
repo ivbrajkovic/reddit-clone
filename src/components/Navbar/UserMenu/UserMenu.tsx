@@ -1,5 +1,5 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
-import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useSignOut } from "@/hooks/useSignOut";
 import {
@@ -88,17 +88,23 @@ const LoggedInUserMenuItems = () => {
   );
 };
 
-const LoginMenuItem = () => (
-  <Menu.Item icon={<MdOutlineLogin />} onClick={useAuthModal().openLogin}>
-    Log In / Sign Up
-  </Menu.Item>
-);
+const LoginMenuItem = () => {
+  const { openLogin } = useAuthModalHandlers();
+  return (
+    <Menu.Item icon={<MdOutlineLogin />} onClick={openLogin}>
+      Log In / Sign Up
+    </Menu.Item>
+  );
+};
 
-const LogoutMenuItem = () => (
-  <Menu.Item icon={<MdOutlineLogin />} onClick={useSignOut()}>
-    Log Out
-  </Menu.Item>
-);
+const LogoutMenuItem = () => {
+  const signOut = useSignOut();
+  return (
+    <Menu.Item icon={<MdOutlineLogin />} onClick={signOut}>
+      Log Out
+    </Menu.Item>
+  );
+};
 
 const formatDisplayName = (user: User) =>
   user.displayName ?? user.email?.split("@")[0];

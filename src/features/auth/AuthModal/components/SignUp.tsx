@@ -5,7 +5,7 @@ import {
   SignUpFormValues,
 } from "@/features/auth/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
-import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { createUserInFirestore } from "@/features/auth/utility";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Button, Flex, Text, TextInput } from "@mantine/core";
@@ -34,7 +34,7 @@ type SignUpProps = {};
 
 const SignUp: FC<SignUpProps> = () => {
   const { classes } = useStyles();
-  const { openLogin } = useAuthModal();
+  const { openLogin } = useAuthModalHandlers();
 
   const formProps = useMemo(createFormProps, []);
   const form = useForm<SignUpFormValues>(formProps);

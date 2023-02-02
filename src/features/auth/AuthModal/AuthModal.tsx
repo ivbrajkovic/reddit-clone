@@ -3,11 +3,8 @@ import Login from "@/features/auth/AuthModal/components/Login";
 import OAuthButtons from "@/features/auth/AuthModal/components/OAuthButtons";
 import { ResetPassword } from "@/features/auth/AuthModal/components/ResetPassword";
 import SignUp from "@/features/auth/AuthModal/components/SignUp";
-import {
-  selectAuthModalIsOpen,
-  selectAuthModalView,
-} from "@/features/auth/authSlice";
-import { useCloseModalOnAuth } from "@/features/auth/hooks/useCloseModalOnAuth";
+import { selectAuthModalView } from "@/features/auth/authSlice";
+import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Text } from "@mantine/core";
 
@@ -44,8 +41,7 @@ const AuthModal = () => {
 };
 
 const AuthModalWrapper = () => {
-  const isOpen = useAppSelector(selectAuthModalIsOpen);
-  const { closeModal } = useCloseModalOnAuth();
+  const { isOpen, closeModal } = useAuthModal();
   return (
     <Modal isOpen={isOpen} onClose={closeModal}>
       <AuthModal />
