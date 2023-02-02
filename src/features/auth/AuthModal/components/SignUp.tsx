@@ -1,3 +1,4 @@
+import { showNotificationError } from "@/common/showNotificationError";
 import { useStyles } from "@/features/auth/AuthModal/components/styles";
 import {
   SignUpFormProps,
@@ -5,6 +6,7 @@ import {
 } from "@/features/auth/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
 import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
+import { createUserInFirestore } from "@/features/auth/utility";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Button, Flex, Text, TextInput } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
@@ -37,19 +39,14 @@ const SignUp: FC<SignUpProps> = () => {
   const formProps = useMemo(createFormProps, []);
   const form = useForm<SignUpFormValues>(formProps);
 
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, _user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-
   useAuthErrorEffect(error);
 
   const signIn = ({ email, password }: SignUpFormValues) =>
     createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        console.log("userCredential", userCredential);
-      })
-      .catch((er) => {
-        console.log("catch", er);
-      });
+      .then(createUserInFirestore)
+      .catch(showNotificationError("Error creating user"));
 
   return (
     <form onSubmit={form.onSubmit(signIn)}>

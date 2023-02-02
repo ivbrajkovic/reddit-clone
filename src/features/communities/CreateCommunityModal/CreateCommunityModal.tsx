@@ -20,6 +20,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { ifElse } from "ramda";
 import { CgInfo } from "react-icons/cg";
 import { HiUser } from "react-icons/hi";
 import { ImEye } from "react-icons/im";
@@ -63,15 +64,22 @@ const CreateCommunityModal = () => {
   const { isLoading, handleCreateCommunity } = useCreateCommunity();
 
   const createCommunity = (values: CreateCommunityFormValues) => {
+    const setFormFieldError =
+      (field: keyof CreateCommunityFormValues, message: string) => () =>
+        form.setFieldError(field, message);
+
+    const isCommunityNameTaken = (error: Error) =>
+      error.message === "Document already exists.";
+
     handleCreateCommunity(values)
-      .then(() => {
-        closeCreateCommunityModal();
-      })
-      .catch((error) => {
-        if (error?.message === "Document already exists.")
-          form.setFieldError("communityName", "Community name already taken.");
-        else showNotificationError("Error creating community")(error);
-      });
+      .then(closeCreateCommunityModal)
+      .catch(
+        ifElse(
+          isCommunityNameTaken,
+          setFormFieldError("communityName", "Community name already taken."),
+          showNotificationError("Error creating community"),
+        ),
+      );
   };
 
   return (

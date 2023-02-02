@@ -1,3 +1,4 @@
+import { logError } from "@/common/logError";
 import { showNotification } from "@mantine/notifications";
 import { AuthError } from "firebase/auth";
 
@@ -5,6 +6,8 @@ type E = AuthError | Error;
 
 export const showNotificationError =
   (title: string, message?: string | ((e: E) => string)) => (error: E) => {
+    logError(error);
+
     const errorMessage =
       typeof message === "function"
         ? message(error)
