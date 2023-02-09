@@ -2,8 +2,6 @@ import { firestore } from "@/firebase/clientApp";
 import { User, UserCredential } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
-NonNullable<null>
-
 const throwError = (message: string) => {
   throw new Error(message);
 };

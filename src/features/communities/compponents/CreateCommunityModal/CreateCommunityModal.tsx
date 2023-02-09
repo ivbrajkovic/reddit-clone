@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
-import RadioButtonWithIcon from "@/features/communities/CreateCommunityModal/RadioButtonWithIcon";
+import RadioButtonWithIcon from "@/features/communities/compponents/CreateCommunityModal/RadioButtonWithIcon";
 import { useCreateCommunity } from "@/features/communities/hooks/useCreateCommunity";
 import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
 import { CreateCommunityFormValues } from "@/features/communities/types";
@@ -53,7 +53,7 @@ const CreateCommunityModal = () => {
   const form = useForm<CreateCommunityFormValues>({
     initialValues: {
       communityName: "",
-      communityType: "public",
+      privacyType: "public",
       adultContent: false,
     },
     validate: {

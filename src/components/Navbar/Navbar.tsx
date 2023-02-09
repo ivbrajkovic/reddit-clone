@@ -3,7 +3,7 @@ import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
 import { AuthModal } from "@/features/auth";
-import CreateCommunityModal from "@/features/communities/CreateCommunityModal/CreateCommunityModal";
+import CreateCommunityModal from "@/features/communities/compponents/CreateCommunityModal/CreateCommunityModal";
 import { createStyles, Header } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({

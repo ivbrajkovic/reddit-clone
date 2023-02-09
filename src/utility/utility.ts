@@ -13,3 +13,10 @@ export const isNotNil = <T>(value: T | null | undefined): value is T =>
 
 export const isNotUndefined = <T>(value: T | undefined): value is T =>
   value !== undefined;
+
+export const jsonParseStringify = <T>(props: T): T =>
+  JSON.parse(JSON.stringify(props));
+
+export const pipeLog = <T>(x: T, label: string = "x ->"): T => (
+  console.log(label, x), x
+);

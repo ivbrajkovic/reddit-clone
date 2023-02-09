@@ -13,7 +13,7 @@ export const useCreateCommunity = () => {
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
   const handleCreateCommunity = (values: CreateCommunityFormValues) => {
-    const { communityName, communityType, adultContent } = values;
+    const { communityName, privacyType: communityType, adultContent } = values;
 
     // const userId = getUserIdOrThrow(user); // This should never throw an error.
     toggleLoading();
