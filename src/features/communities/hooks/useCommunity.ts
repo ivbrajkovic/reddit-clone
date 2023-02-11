@@ -4,7 +4,7 @@ import { useCommunityData } from "@/features/communities/hooks/useCommunityData"
 import { useIsUserJoinedInCommunity } from "@/features/communities/hooks/useIsUserJoinedInCommunity";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
 import { useLeaveCommunity } from "@/features/communities/hooks/useLeaveCommunity";
-import { useMemo } from "react";
+import { useEventCallback } from "@/hooks/useEventCallback";
 import { useSelector } from "react-redux";
 
 export const useCommunity = () => {
@@ -17,22 +17,16 @@ export const useCommunity = () => {
   const isLoadingSnippets = useSelector(selectIsLoadingSnippets);
   const isUserJoinedInCommunity = useIsUserJoinedInCommunity();
 
-  const handlers = useMemo(() => {
-    return {
-      joinOrLeaveCommunity: () => {
-        if (!user) return;
-        isUserJoinedInCommunity
-          ? leaveCommunity(user, communityData)
-          : joinCommunity(user, communityData);
-      },
-    };
-  }, [
-    communityData,
-    isUserJoinedInCommunity,
-    joinCommunity,
-    leaveCommunity,
-    user,
-  ]);
+  const joinOrLeaveCommunity = useEventCallback(() => {
+    if (!user) return;
+    isUserJoinedInCommunity
+      ? leaveCommunity(user, communityData)
+      : joinCommunity(user, communityData);
+  });
 
-  return { isUserJoinedInCommunity, isLoading: isLoadingSnippets, ...handlers };
+  return {
+    isLoading: isLoadingSnippets,
+    isUserJoinedInCommunity,
+    joinOrLeaveCommunity,
+  };
 };

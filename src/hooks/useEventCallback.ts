@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export function useEventCallback<T, K>(
-  handler?: (value: T, event: K) => void,
-): (value: T, event: K) => void {
-  const callbackRef = useRef(handler);
+type Fn<A extends any[], R> = (...args: A) => R;
+
+export function useEventCallback<A extends any[], R>(fn: Fn<A, R>): Fn<A, R> {
+  const callbackRef = useRef(fn);
 
   useEffect(() => {
-    callbackRef.current = handler;
+    callbackRef.current = fn;
   });
 
   return useCallback(
-    (value: T, event: K) =>
-      callbackRef.current && callbackRef.current(value, event),
+    (...args: A) => callbackRef.current && callbackRef.current(...args),
     [],
   );
 }
