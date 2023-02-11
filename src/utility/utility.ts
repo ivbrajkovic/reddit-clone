@@ -20,3 +20,6 @@ export const jsonParseStringify = <T>(props: T): T =>
 export const pipeLog = <T>(x: T, label: string = "x ->"): T => (
   console.log(label, x), x
 );
+
+export const isNullOrUndefined = <T>(value: T): boolean =>
+  value === null || value === undefined;
