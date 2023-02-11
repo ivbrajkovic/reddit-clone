@@ -5,13 +5,13 @@ import { FC } from "react";
 type JoinCommunityButtonProps = ButtonProps;
 
 const JoinCommunityButton: FC<JoinCommunityButtonProps> = (props) => {
-  const { isLoadingSnippets, isUserJoinedInCommunity, joinOrLeaveCommunity } =
+  const { isLoading, isUserJoinedInCommunity, joinOrLeaveCommunity } =
     useCommunity();
 
   return (
     <Button
       {...props}
-      loading={isLoadingSnippets}
+      loading={isLoading}
       variant={isUserJoinedInCommunity ? "outline" : "filled"}
       onClick={joinOrLeaveCommunity}
     >

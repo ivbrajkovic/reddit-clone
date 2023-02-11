@@ -13,8 +13,8 @@ export type Community = {
   creatorId: string;
   numberOfMembers: number;
   privacyType: PrivacyType;
-  createdAt?: Timestamp;
-  imageUrl?: string;
+  createdAt: Timestamp | null;
+  imageUrl: string | null;
 };
 
 export type WithCommunityId = Pick<Community, "communityId">;
@@ -22,7 +22,7 @@ export type WithCommunityId = Pick<Community, "communityId">;
 export type CommunitySnippet = {
   communityId: string;
   isModerator?: boolean;
-  imageUrl?: string;
+  imageUrl: string | null;
 };
 
 export type CommunityState = {

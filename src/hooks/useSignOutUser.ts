@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { signOut } from "firebase/auth";
 import { useCallback } from "react";
 
-export const useSignOut = () => {
+export const useSignOutUser = () => {
   const dispatch = useAppDispatch();
   const handleSignOut = useCallback(() => {
     const dispatchLogout = () => dispatch(logout());

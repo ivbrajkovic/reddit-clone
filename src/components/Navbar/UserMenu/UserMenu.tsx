@@ -1,7 +1,7 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/hooks/useSignedInUser";
-import { useSignOut } from "@/hooks/useSignOut";
+import { useSignOutUser } from "@/hooks/useSignOutUser";
 import {
   Box,
   createStyles,
@@ -98,7 +98,7 @@ const LoginMenuItem = () => {
 };
 
 const LogoutMenuItem = () => {
-  const signOut = useSignOut();
+  const signOut = useSignOutUser();
   return (
     <Menu.Item icon={<MdOutlineLogin />} onClick={signOut}>
       Log Out

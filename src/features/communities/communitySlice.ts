@@ -4,7 +4,8 @@ import {
   CommunityState,
 } from "@/features/communities/types";
 import { RootState } from "@/store/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 import { any, complement, filter, propEq } from "ramda";
 
 const filterByCommunityId = (communityId: string) =>
@@ -23,8 +24,8 @@ const initialCommunityData: Community = {
   creatorId: "",
   numberOfMembers: 0,
   privacyType: "public",
-  createdAt: undefined,
-  imageUrl: undefined,
+  createdAt: null,
+  imageUrl: null,
 };
 
 const initialState: CommunityState = {
@@ -39,12 +40,16 @@ const communitySlice = createSlice({
   name: "community",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase("auth/logout", (state) => {
-      state.communitySnippets = [];
-      state.isLoadingSnippets = false;
-      state.isCreateCommunityModalOpen = false;
-      state.isUserJoinedInCurrentCommunity = false;
-    });
+    builder
+      .addCase("auth/logout", (state) => {
+        state.communitySnippets = [];
+        state.isLoadingSnippets = false;
+        state.isCreateCommunityModalOpen = false;
+        state.isUserJoinedInCurrentCommunity = false;
+      })
+      .addCase(HYDRATE, (state, action: AnyAction) => {
+        state.communityData = action.payload.communitySlice.communityData;
+      });
   },
   reducers: {
     openCommunityCreateModal: (state) => {
