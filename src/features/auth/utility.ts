@@ -6,8 +6,11 @@ const throwError = (message: string) => {
   throw new Error(message);
 };
 
+export const isUser = (value: any): value is User =>
+  value !== null && value !== undefined && "uid" in value;
+
 export const throwIfNotSignedIn = (user?: User | null) =>
-  user ? user : throwError("User is not signed in.");
+  isUser(user) ? user : throwError("User is not signed in.");
 
 export const getUserIdOrThrow = (user?: User | null) =>
   throwIfNotSignedIn(user).uid;

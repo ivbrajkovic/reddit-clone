@@ -1,8 +1,8 @@
-import { useStyles } from "@/features/auth/AuthModal/components/styles";
+import { useStyles } from "@/features/auth/components/AuthModal/components/styles";
 import {
   LoginFormProps,
   LoginFormValues,
-} from "@/features/auth/AuthModal/components/types";
+} from "@/features/auth/components/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { auth } from "@/firebase/clientApp";

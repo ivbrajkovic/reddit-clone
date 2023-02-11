@@ -1,8 +1,8 @@
-import { useStyles } from "@/features/auth/AuthModal/components/styles";
+import { useStyles } from "@/features/auth/components/AuthModal/components/styles";
 import {
   ResetPasswordFormProps,
   ResetPasswordFormValues,
-} from "@/features/auth/AuthModal/components/types";
+} from "@/features/auth/components/AuthModal/components/types";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { auth } from "@/firebase/clientApp";
@@ -17,7 +17,7 @@ const createFormProps = (): ResetPasswordFormProps => ({
   validate: { email: isEmail("Invalid email") },
 });
 
-export const ResetPassword = () => {
+const ResetPassword = () => {
   const { classes } = useStyles();
 
   const [isSuccess, toggleSuccess] = useReducer((s) => !s, false);
@@ -77,3 +77,5 @@ export const ResetPassword = () => {
     </>
   );
 };
+
+export default ResetPassword;

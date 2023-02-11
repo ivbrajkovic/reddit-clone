@@ -1,9 +1,10 @@
 import { Modal } from "@/components/Modal";
-import Login from "@/features/auth/AuthModal/components/Login";
-import OAuthButtons from "@/features/auth/AuthModal/components/OAuthButtons";
-import { ResetPassword } from "@/features/auth/AuthModal/components/ResetPassword";
-import SignUp from "@/features/auth/AuthModal/components/SignUp";
+
 import { selectAuthModalView } from "@/features/auth/authSlice";
+import Login from "@/features/auth/components/AuthModal/components/Login";
+import OAuthButtons from "@/features/auth/components/AuthModal/components/OAuthButtons";
+import ResetPassword from "@/features/auth/components/AuthModal/components/ResetPassword";
+import SignUp from "@/features/auth/components/AuthModal/components/SignUp";
 import { useAuthModal } from "@/features/auth/hooks/useAuthModal";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Text } from "@mantine/core";

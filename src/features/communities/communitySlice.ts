@@ -20,17 +20,17 @@ const checkIfUserJoinedInCurrentCommunity = (
 ) => (communityId ? hasCommunityId(communityId)(communitySnippets) : false);
 
 const initialCommunityData: Community = {
+  adultContent: false,
   communityId: "",
   creatorId: "",
-  numberOfMembers: 0,
   privacyType: "public",
   createdAt: null,
   imageUrl: null,
+  membersCount: 0,
 };
 
 const initialState: CommunityState = {
   isCreateCommunityModalOpen: false,
-  isUserJoinedInCurrentCommunity: false,
   isLoadingSnippets: false,
   communitySnippets: [],
   communityData: { ...initialCommunityData },
@@ -45,7 +45,6 @@ const communitySlice = createSlice({
         state.communitySnippets = [];
         state.isLoadingSnippets = false;
         state.isCreateCommunityModalOpen = false;
-        state.isUserJoinedInCurrentCommunity = false;
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
         state.communityData = action.payload.communitySlice.communityData;
@@ -64,13 +63,11 @@ const communitySlice = createSlice({
       { payload: communitySnippet }: PayloadAction<CommunitySnippet>,
     ) => {
       state.communitySnippets.push(communitySnippet);
-      state.isUserJoinedInCurrentCommunity = true;
     },
     leaveCommunity: (
       state,
       { payload: communityId }: PayloadAction<string>,
     ) => {
-      state.isUserJoinedInCurrentCommunity = false;
       state.communitySnippets = filterByCommunityId(communityId)(
         state.communitySnippets,
       );
@@ -78,12 +75,8 @@ const communitySlice = createSlice({
 
     setCommunityData: (state, { payload }: PayloadAction<Community>) => {
       state.communityData = payload;
-      state.isUserJoinedInCurrentCommunity =
-        checkIfUserJoinedInCurrentCommunity(
-          payload?.communityId,
-          state.communitySnippets,
-        );
     },
+
     resetCommunityData: (state) => {
       state.communityData = { ...initialCommunityData };
     },
@@ -96,11 +89,9 @@ const communitySlice = createSlice({
       { payload: communitySnippets }: PayloadAction<CommunitySnippet[]>,
     ) => {
       state.communitySnippets = communitySnippets;
-      state.isUserJoinedInCurrentCommunity =
-        checkIfUserJoinedInCurrentCommunity(
-          state.communityData?.communityId,
-          communitySnippets,
-        );
+    },
+    clearCommunitySnippets: (state) => {
+      state.communitySnippets = [];
     },
   },
 });
@@ -114,6 +105,7 @@ export const {
   resetCommunityData,
   toggleIsLoadingSnippets,
   setCommunitySnippets,
+  clearCommunitySnippets,
 } = communitySlice.actions;
 
 export const selectIsCreateCommunityModalOpen = (state: RootState) =>
@@ -124,9 +116,6 @@ export const selectCommunitySnippets = (state: RootState) =>
 
 export const selectIsLoadingSnippets = (state: RootState) =>
   state.communitySlice.isLoadingSnippets;
-
-export const selectIsUserJoinedInCurrentCommunity = (state: RootState) =>
-  state.communitySlice.isUserJoinedInCurrentCommunity;
 
 export const selectCommunityData = (state: RootState) =>
   state.communitySlice.communityData;

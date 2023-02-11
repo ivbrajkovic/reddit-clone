@@ -1,6 +1,6 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { useSignOutUser } from "@/hooks/useSignOutUser";
 import {
   Box,

@@ -1,50 +1,54 @@
 import { logError } from "@/common/logError";
 import {
+  clearCommunitySnippets,
   setCommunitySnippets,
   toggleIsLoadingSnippets,
 } from "@/features/communities/communitySlice";
+import { CommunitySnippet } from "@/features/communities/types";
 import { firestore } from "@/firebase/clientApp";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { useAppDispatch } from "@/store/hooks";
+import { User } from "firebase/auth";
 import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
 import { andThen, map, otherwise, pipe, prop, tap } from "ramda";
-import { useEffect } from "react";
+import { useMemo } from "react";
 
-const formatSnippetPath = (userId: string) =>
-  `users/${userId}/communitySnippets`;
+const formatSnippetPath = (user: User) => `users/${user.uid}/communitySnippets`;
 
 const getSnippetCollection = (path: string) => collection(firestore, path);
 
-const formatSnippets = (doc: QueryDocumentSnapshot) => ({
-  communityId: doc.id,
-  ...doc.data(),
-});
+const formatSnippets = (doc: QueryDocumentSnapshot) =>
+  ({
+    communityId: doc.id,
+    ...doc.data(),
+  } as CommunitySnippet);
 
 const handleError = (error: Error) => {
   logError(error, "useCommunitySnippets -> getCommunitySnippets");
   return { props: {} };
 };
 
-export const useCommunitySnippets = () => {
+export const useUserCommunitySnippets = () => {
   const dispatch = useAppDispatch();
-  const signedInUser = useSignedInUser();
-  useEffect(() => {
-    if (!signedInUser) return;
+  return useMemo(() => {
     const toggleLoading = () => dispatch(toggleIsLoadingSnippets());
-    pipe(
-      tap(toggleLoading),
-      formatSnippetPath,
-      getSnippetCollection,
-      getDocs,
-      andThen(
-        pipe(
-          prop("docs"),
-          map(formatSnippets),
-          pipe(setCommunitySnippets, dispatch),
-          toggleLoading,
+    return {
+      clearUserCommunitySnippets: async () =>
+        dispatch(clearCommunitySnippets()),
+      getUserCommunitySnippets: pipe(
+        formatSnippetPath,
+        getSnippetCollection,
+        tap(toggleLoading),
+        getDocs,
+        andThen(
+          pipe(
+            prop("docs"),
+            map(formatSnippets),
+            pipe(setCommunitySnippets, dispatch),
+            toggleLoading,
+          ),
         ),
+        otherwise(pipe(handleError, toggleLoading)),
       ),
-      otherwise(pipe(handleError, toggleLoading)),
-    )(signedInUser.uid);
-  }, [dispatch, signedInUser]);
+    };
+  }, [dispatch]);
 };

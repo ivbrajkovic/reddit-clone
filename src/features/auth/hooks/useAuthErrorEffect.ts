@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { AppError } from "@/types";
-import { isFirebaseError, isNotNil } from "@/utility";
-import { cond } from "ramda";
+import { isError, isFirebaseError } from "@/utility";
+import { when } from "ramda";
 import { useEffect } from "react";
 
 // Firebase error codes:
@@ -29,12 +29,11 @@ const formatAuthError = (error: AppError) => {
   }
 };
 
-const showError = cond<AppError | undefined, AppError, void>([
-  [isNotNil, showNotificationError("Authentication error", formatAuthError)],
-]);
-
 export const useAuthErrorEffect = (error?: AppError) => {
   useEffect(() => {
-    showError(error);
+    when(
+      isError,
+      showNotificationError("Authentication error", formatAuthError),
+    )(error);
   }, [error]);
 };

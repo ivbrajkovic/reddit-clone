@@ -1,11 +1,18 @@
-import { CreateCommunityFormValues } from "@/features/communities/types";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { getUserIdOrThrow } from "@/features/auth/utility";
 import {
-  docFromFirestore,
-  runTransactionAsync,
-  throwIfDocExists,
-} from "@/firebase/utility";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
-import { DocumentReference, serverTimestamp } from "firebase/firestore";
+  CommunitySnippet,
+  CreateCommunityFormValues,
+  NewCommunity,
+} from "@/features/communities/types";
+import { firestore } from "@/firebase/clientApp";
+import { runTransactionAsync, throwIfDocumentExists } from "@/firebase/utility";
+import {
+  doc,
+  DocumentReference,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
 import { useReducer } from "react";
 
 export const useCommunityCreate = () => {
@@ -15,37 +22,40 @@ export const useCommunityCreate = () => {
   const handleCreateCommunity = (values: CreateCommunityFormValues) => {
     const { communityName, privacyType: communityType, adultContent } = values;
 
-    // const userId = getUserIdOrThrow(user); // This should never throw an error.
     toggleLoading();
 
     return runTransactionAsync(async (transaction) => {
-      const createCommunityDocument = (documentRef: DocumentReference) => {
-        const newDocument = {
-          creatorId: user?.uid,
-          createdAt: serverTimestamp(),
-          numberOfMembers: 1,
+      const userId = getUserIdOrThrow(user); // This should never throw an error.
+
+      const setCommunityData = (documentRef: DocumentReference) => {
+        const newCommunity: NewCommunity = {
+          creatorId: userId,
+          createdAt: serverTimestamp() as Timestamp,
+          membersCount: 1,
           privacyType: communityType,
           adultContent,
+          imageUrl: null,
         };
-        return transaction.set(documentRef, newDocument);
+        transaction.set(documentRef, newCommunity);
       };
 
-      const createCommunitySnippet = () => {
-        const documentPath = `users/${user?.uid}/communitySnippets`;
-        const newDocument = {
+      const setCommunitySnippetData = () => {
+        const communitySnippet: CommunitySnippet = {
           communityId: communityName,
           isModerator: true,
+          imageUrl: null,
         };
-        const documentRef = docFromFirestore(documentPath, communityName);
-        return transaction.set(documentRef, newDocument);
+        const documentPath = `users/${userId}/communitySnippets`;
+        const documentRef = doc(firestore, documentPath, communityName);
+        transaction.set(documentRef, communitySnippet);
       };
 
-      const communityRef = docFromFirestore("communities", communityName);
+      const communityRef = doc(firestore, "communities", communityName);
       const communityDoc = await transaction.get(communityRef);
 
-      throwIfDocExists(communityDoc);
-      createCommunityDocument(communityRef);
-      createCommunitySnippet();
+      throwIfDocumentExists(communityDoc);
+      setCommunityData(communityRef);
+      setCommunitySnippetData();
     }).finally(toggleLoading);
   };
 

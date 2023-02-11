@@ -8,7 +8,7 @@ export const isError = (value: unknown): value is Error =>
 export const isFirebaseError = (value: unknown): value is FirebaseError =>
   isError(value) && "code" in value;
 
-export const isNotNil = <T>(value: T | null | undefined): value is T =>
+export const isNotNil = <T>(value: T): boolean =>
   value !== null && value !== undefined;
 
 export const isNotUndefined = <T>(value: T | undefined): value is T =>

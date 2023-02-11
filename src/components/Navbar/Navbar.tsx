@@ -2,7 +2,6 @@ import Directory from "@/components/Navbar/Directory/Directory";
 import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
-import { AuthModal } from "@/features/auth";
 import CreateCommunityModal from "@/features/communities/compponents/CreateCommunityModal/CreateCommunityModal";
 import { createStyles, Header } from "@mantine/core";
 
@@ -23,7 +22,6 @@ export const Navbar = () => {
   const { classes } = useStyles();
   return (
     <Header height={48} className={classes.header}>
-      <AuthModal />
       <CreateCommunityModal />
       <Logo />
       <Directory />

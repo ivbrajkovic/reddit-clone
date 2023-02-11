@@ -1,6 +1,6 @@
 import { selectAuthModalIsOpen } from "@/features/auth/authSlice";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { useAppSelector } from "@/store/hooks";
 import { useEffect } from "react";
 

@@ -26,6 +26,6 @@ export const checkIfDocExists = async (docRef: DocumentReference) => {
   return docSnap.exists();
 };
 
-export const throwIfDocExists = (doc: DocumentSnapshot) => {
+export const throwIfDocumentExists = (doc: DocumentSnapshot) => {
   if (isDocumentExists(doc)) throw new Error("Document already exists.");
 };

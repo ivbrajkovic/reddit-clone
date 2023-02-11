@@ -1,6 +1,6 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
-import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { Box, createStyles, CSSObject, Flex, Menu, Text } from "@mantine/core";
 import { TiHome } from "react-icons/ti";
 import { VscAdd } from "react-icons/vsc";
