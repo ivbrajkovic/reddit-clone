@@ -8,7 +8,7 @@ import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { DocumentReference, serverTimestamp } from "firebase/firestore";
 import { useReducer } from "react";
 
-export const useCreateCommunity = () => {
+export const useCommunityCreate = () => {
   const user = useSignedInUser();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 

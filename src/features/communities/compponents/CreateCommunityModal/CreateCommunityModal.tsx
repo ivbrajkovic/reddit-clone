@@ -2,8 +2,8 @@ import { showNotificationError } from "@/common/showNotificationError";
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
 import RadioButtonWithIcon from "@/features/communities/compponents/CreateCommunityModal/RadioButtonWithIcon";
-import { useCreateCommunity } from "@/features/communities/hooks/useCreateCommunity";
-import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
+import { useCommunityCreate } from "@/features/communities/hooks/useCommunityCreate";
+import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
 import { CreateCommunityFormValues } from "@/features/communities/types";
 import { validateCommunityName } from "@/features/communities/utils/validateCommunityName";
 import { useAppSelector } from "@/store/hooks";
@@ -48,7 +48,8 @@ const useStyles = createStyles((theme) => ({
 
 const CreateCommunityModal = () => {
   const { classes } = useStyles();
-  const { closeCreateCommunityModal } = useCreateCommunityModal();
+  const { closeCommunityCreateModal: closeCreateCommunityModal } =
+    useCommunityCreateModal();
 
   const form = useForm<CreateCommunityFormValues>({
     initialValues: {
@@ -61,7 +62,7 @@ const CreateCommunityModal = () => {
     },
   });
 
-  const { isLoading, handleCreateCommunity } = useCreateCommunity();
+  const { isLoading, handleCreateCommunity } = useCommunityCreate();
 
   const createCommunity = (values: CreateCommunityFormValues) => {
     const setFormFieldError =
@@ -172,7 +173,7 @@ const CreateCommunityModal = () => {
 
 const CreateCommunityModalWrapper = () => {
   const isOpen = useAppSelector(selectIsCreateCommunityModalOpen);
-  const { closeCreateCommunityModal: closeModal } = useCreateCommunityModal();
+  const { closeCommunityCreateModal: closeModal } = useCommunityCreateModal();
   return (
     <Modal padding={0} size="auto" isOpen={isOpen} onClose={closeModal}>
       <CreateCommunityModal />

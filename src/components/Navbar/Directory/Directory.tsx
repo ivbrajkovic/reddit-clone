@@ -1,5 +1,5 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
-import { useCreateCommunityModal } from "@/features/communities/hooks/useCreateCommunityModal";
+import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
 import { useSignedInUser } from "@/hooks/useSignedInUser";
 import { Box, createStyles, CSSObject, Flex, Menu, Text } from "@mantine/core";
 import { TiHome } from "react-icons/ti";
@@ -18,7 +18,8 @@ const useStyles = createStyles((theme) => ({
 const Directory = () => {
   const { classes } = useStyles();
   const user = useSignedInUser();
-  const { openCreateCommunityModal } = useCreateCommunityModal();
+  const { openCommunityCreateModal: openCreateCommunityModal } =
+    useCommunityCreateModal();
 
   if (!user) return null;
   return (

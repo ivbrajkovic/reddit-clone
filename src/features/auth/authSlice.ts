@@ -24,10 +24,13 @@ export const authSlice = createSlice({
     closeAuthModal: (state) => {
       state.isAuthModalOpen = false;
     },
+    logout: (state) => {
+      state.isAuthModalOpen = false;
+    },
   },
 });
 
-export const { openAuthModal, closeAuthModal } = authSlice.actions;
+export const { openAuthModal, closeAuthModal, logout } = authSlice.actions;
 
 export const selectAuthModalView = (state: RootState) =>
   state.authSlice.authModalView;

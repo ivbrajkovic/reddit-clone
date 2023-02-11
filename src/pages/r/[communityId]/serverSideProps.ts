@@ -19,7 +19,7 @@ const throwIfCommunityNotFound = <T extends DocumentSnapshot>(
 };
 
 const formatCommunityData = (docSnap: DocumentSnapshot) => ({
-  id: docSnap.id,
+  communityId: docSnap.id,
   ...docSnap.data(),
 });
 
@@ -47,20 +47,3 @@ export const getServerSideProps: GetServerSideProps = pipe(
   ),
   otherwise(handleError),
 );
-
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   try {
-//     const communityId = query.communityId as string;
-//     const docRef = doc(firestore, "communities", communityId);
-//     const docSnap = await getDoc(docRef);
-//     if (!docSnap.exists()) throw new Error("Community not found");
-//     const communityData = jsonParseStringify({
-//       id: docSnap.id,
-//       ...docSnap.data(),
-//     });
-//     return { props: { communityData } };
-//   } catch (error) {
-//     logError(error as Error, "CommunityPage -> getServerSideProps");
-//     return { props: {} };
-//   }
-// };
