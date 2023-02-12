@@ -3,7 +3,7 @@ import { createFormContext } from "@mantine/form";
 
 export type NewPostFormValues = {
   title: string;
-  text: string;
+  body: string;
   files: FileWithPath[];
 };
 

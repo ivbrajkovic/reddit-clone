@@ -1,5 +1,5 @@
 import { TextInput } from "@/components/FormControls";
-import { useNewPostFormContext } from "@/features/communities/components/Posts/formContext";
+import { useNewPostFormContext } from "@/features/posts/formContext";
 import { useRenderCount } from "@/hooks/useRenderCount";
 
 const TitleInput = () => {

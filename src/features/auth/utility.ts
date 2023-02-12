@@ -26,3 +26,6 @@ export const createUserInFirestore = async (
   const parsedUser = parseUserForFirestore(userCredential.user);
   await setDoc(userDocRef, parsedUser);
 };
+
+export const formatDisplayName = (user: User) =>
+  user.displayName ?? user.email?.split("@")[0] ?? "Anonymous";

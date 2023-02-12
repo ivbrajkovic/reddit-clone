@@ -1,4 +1,4 @@
-import { Tab } from "@/features/communities/components/Posts/types";
+import { Tab } from "@/features/posts/types";
 import { Tabs } from "@mantine/core";
 import { FC } from "react";
 import {

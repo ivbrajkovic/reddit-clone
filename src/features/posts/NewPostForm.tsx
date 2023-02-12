@@ -1,17 +1,18 @@
-import ImageAndVideo from "@/features/communities/components/Posts/components/ImageAndVideo";
-import Link from "@/features/communities/components/Posts/components/Link";
-import Post from "@/features/communities/components/Posts/components/Post";
-import PreviewImages from "@/features/communities/components/Posts/components/PreviewImages";
-import SubmitButton from "@/features/communities/components/Posts/components/SubmitButton";
-import TabList from "@/features/communities/components/Posts/components/TabList";
-import TitleInput from "@/features/communities/components/Posts/components/TitleInput";
+import ImageAndVideo from "@/features/posts/components/ImageAndVideo";
+import Link from "@/features/posts/components/Link";
+import Post from "@/features/posts/components/Post";
+import PreviewImages from "@/features/posts/components/PreviewImages";
+import SubmitButton from "@/features/posts/components/SubmitButton";
+import TabList from "@/features/posts/components/TabList";
+import TitleInput from "@/features/posts/components/TitleInput";
 import {
   NewPostFormProvider,
   NewPostFormValues,
   useNewPostForm,
-} from "@/features/communities/components/Posts/formContext";
-import { useStyles } from "@/features/communities/components/Posts/styles";
-import { Tab } from "@/features/communities/components/Posts/types";
+} from "@/features/posts/formContext";
+import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
+import { useStyles } from "@/features/posts/styles";
+import { Tab } from "@/features/posts/types";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { Box, Paper, Tabs } from "@mantine/core";
 import { FileWithPath } from "@mantine/dropzone";
@@ -24,8 +25,10 @@ const NewPostForm: FC<NewPostFormProps> = () => {
   const { classes } = useStyles();
   const [activeTab, setActiveTab] = useState<string | null>(Tab.Post);
 
+  const { createPost } = useCreatePost();
+
   const form = useNewPostForm({
-    initialValues: { title: "", text: "", files: [] },
+    initialValues: { title: "", body: "", files: [] },
     validate: { title: isNotEmpty("Title cannot be empty") },
   });
 

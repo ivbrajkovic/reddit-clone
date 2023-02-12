@@ -1,6 +1,7 @@
 import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { formatDisplayName } from "@/features/auth/utility";
 import { useSignOutUser } from "@/hooks/useSignOutUser";
 import {
   Box,
@@ -106,11 +107,9 @@ const LogoutMenuItem = () => {
   );
 };
 
-const formatDisplayName = (user: User) =>
-  user.displayName ?? user.email?.split("@")[0];
-
 const UserMenuButton = ({ user }: { user: User }) => {
   const { classes } = useStyles();
+  const displayName = formatDisplayName(user);
   return (
     <>
       <Image
@@ -121,7 +120,7 @@ const UserMenuButton = ({ user }: { user: User }) => {
         className={classes.userIcon}
       />
       <Box className={classes.userInfo}>
-        <Text fw={700}>{formatDisplayName(user)}</Text>
+        <Text fw={700}>{displayName}</Text>
         <Flex align="center">
           <IoSparkles fontSize={12} color="red" />
           <Text color="gray.5">1 karma</Text>s
