@@ -1,9 +1,9 @@
-import { Input } from "@/components/Input";
+import { TextInput } from "@/components/FormControls";
 import { TbSearch } from "react-icons/tb";
 
 const SearchInput = () => {
   return (
-    <Input
+    <TextInput
       maw={{ base: "none", md: 960 }}
       radius="xl"
       placeholder="Search Reddit"

@@ -12,7 +12,7 @@ export const showNotificationError =
         ? message(error)
         : typeof message === "string"
         ? message
-        : typeof error.message === "string"
+        : error instanceof Error
         ? error.message
         : "Unknown error";
 

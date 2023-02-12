@@ -1,4 +1,4 @@
-import { Input } from "@/components/Input";
+import { TextInput } from "@/components/FormControls";
 import { createStyles, Flex, Image, Paper } from "@mantine/core";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -62,7 +62,7 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
           onClick={goToSubmit}
         />
 
-        <Input mr="xs" placeholder="Search Reddit" onClick={goToSubmit} />
+        <TextInput mr="xs" placeholder="Search Reddit" onClick={goToSubmit} />
         <div className={classes.iconContainer} onClick={goToSubmit}>
           <IoImageOutline className={classes.icon} fontSize={24} />
         </div>
