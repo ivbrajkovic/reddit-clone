@@ -50,7 +50,7 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
     }
   };
   return (
-    <Paper p={8} lh={0}>
+    <Paper withBorder p={8} shadow="sm">
       <Flex align="center">
         <Image
           src="/images/reddit-user.svg"
