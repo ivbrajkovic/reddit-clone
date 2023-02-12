@@ -1,4 +1,4 @@
-import { JoinCommunityButton } from "@/features/communities/compponents/JoinCommunityButton";
+import { JoinCommunityButton } from "@/features/communities/components/JoinCommunityButton";
 import { useCommunityData } from "@/features/communities/hooks/useCommunityData";
 import { Box, Container, createStyles, Flex, Image, Text } from "@mantine/core";
 import { FaReddit } from "react-icons/fa";

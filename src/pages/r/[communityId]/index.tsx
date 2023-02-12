@@ -1,7 +1,7 @@
 import PageContent from "@/components/Layout/PageContent";
-import { CreatePostBar } from "@/features/communities/compponents/CreatePostBar";
-import { Header } from "@/features/communities/compponents/Header";
-import { CommunityNotFound } from "@/features/communities/compponents/NotFound.tsx";
+import { CreatePostBar } from "@/features/communities/components/CreatePostBar";
+import { Header } from "@/features/communities/components/Header";
+import { CommunityNotFound } from "@/features/communities/components/NotFound.tsx";
 import { FC } from "react";
 export { getServerSideProps } from "@/ssr/communityPageProps";
 

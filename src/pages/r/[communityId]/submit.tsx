@@ -1,5 +1,5 @@
 import PageContent from "@/components/Layout/PageContent";
-import NewPostForm from "@/features/communities/compponents/Posts/NewPostForm";
+import { NewPostForm } from "@/features/communities/components/Posts";
 import { Flex, Text } from "@mantine/core";
 import { FC } from "react";
 

@@ -2,7 +2,7 @@ import Directory from "@/components/Navbar/Directory/Directory";
 import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
-import CreateCommunityModal from "@/features/communities/compponents/CreateCommunityModal/CreateCommunityModal";
+import CreateCommunityModal from "@/features/communities/components/CreateCommunityModal/CreateCommunityModal";
 import { createStyles, Header } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
