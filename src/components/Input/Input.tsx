@@ -1,4 +1,4 @@
-import { createStyles, Input as MantineInput } from "@mantine/core";
+import { createStyles, TextInput as MantineTextInput } from "@mantine/core";
 import { FC } from "react";
 
 const useStyles = createStyles((theme) => ({
@@ -29,10 +29,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type TextInputProps = typeof MantineInput["defaultProps"] & {};
+type TextInputProps = typeof MantineTextInput["defaultProps"] & {};
 
 const Input: FC<TextInputProps> = (props) => {
   const { classes } = useStyles();
-  return <MantineInput className={classes.textInput} {...props} />;
+  return <MantineTextInput className={classes.textInput} {...props} />;
 };
 export default Input;
