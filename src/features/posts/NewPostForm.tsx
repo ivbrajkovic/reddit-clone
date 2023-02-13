@@ -14,6 +14,7 @@ import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
 import { useStyles } from "@/features/posts/styles";
 import { Tab } from "@/features/posts/types";
 import { useEventCallback } from "@/hooks/useEventCallback";
+import mergeArrays from "@/utility/mergeArrays";
 import { Box, Paper, Tabs } from "@mantine/core";
 import { FileWithPath } from "@mantine/dropzone";
 import { isNotEmpty } from "@mantine/form";
@@ -32,28 +33,14 @@ const NewPostForm: FC<NewPostFormProps> = () => {
     validate: { title: isNotEmpty("Title cannot be empty") },
   });
 
-  const readFiles = (files: FileWithPath[]) => {
-    // TODO: Read all files
-    // For now read only first file
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onload = (readerEvent) => {
-      if (readerEvent.target?.result) {
-        console.log(
-          "🚀 ~ file: NewPostForm.tsx:41 ~ reader.onload ~ readerEvent.target.result",
-          readerEvent.target.result,
-        );
-      }
-    };
-  };
-
   const onSubmit = (values: NewPostFormValues) => {
     console.log("🚀 ~ file: NewPostForm.tsx:49 ~ onSubmit ~ values", values);
   };
 
-  const onDrop = useEventCallback((files: FileWithPath[]) => {
-    console.log("🚀 ~ file: NewPostForm.tsx:52 ~ onDrop ~ files", files);
-    form.setFieldValue("files", [...form.values.files, ...files]);
+  const onFileSelect = useEventCallback((files: FileWithPath[]) => {
+    if (!files.length) return;
+    const newFiles = mergeArrays("name", form.values.files, files);
+    form.setFieldValue("files", newFiles);
   });
 
   return (
@@ -68,7 +55,7 @@ const NewPostForm: FC<NewPostFormProps> = () => {
               <Post />
             </Tabs.Panel>
             <Tabs.Panel value={Tab.ImageAndVideo}>
-              <ImageAndVideo onDrop={onDrop} />
+              <ImageAndVideo onDrop={onFileSelect} />
               <PreviewImages />
             </Tabs.Panel>
             <Tabs.Panel value={Tab.Link}>

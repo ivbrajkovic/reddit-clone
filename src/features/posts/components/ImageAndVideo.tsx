@@ -12,16 +12,29 @@ type ImageAndVideoProps = {
 };
 
 const ImageAndVideo: FC<ImageAndVideoProps> = memo(({ onDrop }) => {
-  useRenderCount("ImageAndVideoPanel");
+  useRenderCount("ImageAndVideo");
   const theme = useMantineTheme();
+
+  // const onDrop = (files: FileWithPath[]) => {
+  // const reader = new FileReader();
+  // reader.onload = ({ target }) => {
+  //   typeof target?.result === "string" && onFileSelect(target.result);
+  // };
+  // reader.onerror = () =>
+  //   showNotificationError("Error reading file")(new Error());
+  // reader.onloadstart = toggleLoading;
+  // reader.onloadend = toggleLoading;
+  // reader.readAsDataURL(files[0]);
+  // };
+
+  const onReject = () =>
+    showNotificationError("Error uploading image")(new Error());
 
   return (
     <Dropzone
       mt="md"
       onDrop={onDrop}
-      onReject={() =>
-        showNotificationError("Error uploading image")(new Error())
-      }
+      onReject={onReject}
       maxSize={3 * 1024 ** 2}
       accept={IMAGE_MIME_TYPE}
     >
