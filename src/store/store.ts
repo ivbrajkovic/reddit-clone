@@ -1,4 +1,5 @@
 import modalSlice from "@/components/Modal/modalSlice";
+
 import authSlice from "@/features/auth/authSlice";
 import communitySlice from "@/features/communities/communitySlice";
 import postsSlice from "@/features/posts/postsSlice";
@@ -14,6 +15,12 @@ export const makeStore = () =>
       communitySlice: communitySlice,
       postSlice: postsSlice,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        // TODO: Remove this line when the issue is fixed
+        // serverTimestamp from firestore is not serializable
+        serializableCheck: false,
+      }),
   });
 
 export type AppStore = ReturnType<typeof makeStore>;

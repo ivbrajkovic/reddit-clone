@@ -1,4 +1,5 @@
 import { useCommunityData } from "@/features/communities/hooks/useCommunityData";
+import PostItem from "@/features/posts/components/PostItem";
 import { usePostsEffect } from "@/features/posts/hooks/usePostsEffect";
 
 const Posts = () => {
@@ -6,6 +7,10 @@ const Posts = () => {
 
   usePostsEffect();
 
-  return <div>Posts</div>;
+  return (
+    <>
+      <PostItem />
+    </>
+  );
 };
 export default Posts;

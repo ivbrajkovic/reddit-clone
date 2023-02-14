@@ -7,8 +7,8 @@ const initialPostState: PostState = {
   posts: [],
 };
 
-const postSlice = createSlice({
-  name: "post",
+const postsSlice = createSlice({
+  name: "posts",
   initialState: initialPostState,
   reducers: {
     setSelectedPost: (state, action: PayloadAction<Post>) => {
@@ -17,14 +17,25 @@ const postSlice = createSlice({
     setPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
     },
+    // setPosts: {
+    //   reducer: (state, action: PayloadAction<Post[]>) => {
+    //     state.posts = action.payload;
+    //   },
+    //   prepare: (posts: Post[]) => ({
+    //     payload: posts.map((post) => ({
+    //       ...post,
+    //       createdAt: post.createdAt.toJSON(),
+    //     })),
+    //   }),
+    // },
   },
 });
 
-export const { setSelectedPost, setPosts } = postSlice.actions;
+export const { setSelectedPost, setPosts } = postsSlice.actions;
 
 export const selectSelectedPost = (state: RootState) =>
   state.postSlice.selectedPost;
 
 export const selectPosts = (state: RootState) => state.postSlice.posts;
 
-export default postSlice.reducer;
+export default postsSlice.reducer;

@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export enum Tab {
   Post = "Post",
   ImageAndVideo = "Image & Video",
@@ -7,6 +5,11 @@ export enum Tab {
   Poll = "Poll",
   Talk = "Talk",
 }
+
+type Timestamp = {
+  seconds: number;
+  nanoseconds: number;
+};
 
 export type Post = {
   id: string;

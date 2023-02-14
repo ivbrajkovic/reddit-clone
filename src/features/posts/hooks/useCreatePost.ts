@@ -1,6 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
+import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { formatDisplayName } from "@/features/auth/utility";
+import { formatDisplayName, isUser } from "@/features/auth/utility";
 import { NewPostFormValues } from "@/features/posts/context/formContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
@@ -25,15 +26,14 @@ import { useRouter } from "next/router";
 import {
   andThen,
   head,
+  ifElse,
   isEmpty,
-  isNil,
   otherwise,
   pipe,
   tap,
   unless,
 } from "ramda";
 import { useReducer } from "react";
-
 type NewPost = Omit<Post, "id">;
 
 const errorReadingFiles = showNotificationError("Error reading files");
@@ -126,23 +126,27 @@ const formatNewPost = (
 export const useCreatePost = () => {
   const router = useRouter();
   const user = useSignedInUser();
+  const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);
 
   const createPost = async (formValues: NewPostFormValues) => {
-    if (isNil(user)) return;
-
-    const communityId = router.query.communityId as string;
-    const newPost = formatNewPost(user, communityId, formValues);
-    const uploadFilesByPostId = uploadFiles(formValues.files);
-
-    pipe(
-      tap(toggleIsLoading),
-      getPostDocumentRef,
-      andThen(uploadFilesByPostId),
-      andThen(router.back),
-      otherwise(errorCreatingPost),
-      toggleIsLoading,
-    )(newPost);
+    ifElse(
+      isUser,
+      (user) => {
+        const communityId = router.query.communityId as string;
+        const newPost = formatNewPost(user, communityId, formValues);
+        const uploadFilesByPostId = uploadFiles(formValues.files);
+        pipe(
+          tap(toggleIsLoading),
+          getPostDocumentRef,
+          andThen(uploadFilesByPostId),
+          andThen(router.back),
+          otherwise(errorCreatingPost),
+          toggleIsLoading,
+        )(newPost);
+      },
+      openLogin,
+    )(user);
   };
 
   return { isLoading, createPost };
