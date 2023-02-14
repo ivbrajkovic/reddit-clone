@@ -1,4 +1,4 @@
-import { useNewPostFormContext } from "@/features/posts/formContext";
+import { useNewPostFormContext } from "@/features/posts/context/formContext";
 import { createStyles, Image, SimpleGrid } from "@mantine/core";
 import { IoMdCloseCircle } from "react-icons/io";
 

@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { formatDisplayName } from "@/features/auth/utility";
-import { NewPostFormValues } from "@/features/posts/formContext";
+import { NewPostFormValues } from "@/features/posts/context/formContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { readFiles } from "@/utility/readFiles";

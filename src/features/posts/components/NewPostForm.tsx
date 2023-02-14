@@ -8,7 +8,7 @@ import TitleInput from "@/features/posts/components/TitleInput";
 import {
   NewPostFormProvider,
   useNewPostForm,
-} from "@/features/posts/formContext";
+} from "@/features/posts/context/formContext";
 import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
 import { useStyles } from "@/features/posts/styles";
 import { Tab } from "@/features/posts/types";

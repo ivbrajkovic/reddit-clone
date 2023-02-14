@@ -1,1 +1,1 @@
-export { default as NewPostForm } from "./NewPostForm";
+export { default as Posts } from "./components/Posts";

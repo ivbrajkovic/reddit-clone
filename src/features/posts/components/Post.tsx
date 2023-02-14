@@ -1,5 +1,5 @@
 import { Textarea } from "@/components/FormControls";
-import { useNewPostFormContext } from "@/features/posts/formContext";
+import { useNewPostFormContext } from "@/features/posts/context/formContext";
 
 const Post = () => {
   const form = useNewPostFormContext();
