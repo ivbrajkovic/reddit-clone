@@ -6,10 +6,13 @@ import { IoImageOutline } from "react-icons/io5";
 import { TfiLink } from "react-icons/tfi";
 
 const useStyles = createStyles((theme) => ({
-  userIcon: {
+  userImageWrapper: {
     cursor: "pointer",
     borderRadius: "50%",
     backgroundColor: theme.colorScheme === "dark" ? "#818384" : "#d7dfe2",
+  },
+  userImage: {
+    filter: `brightness(${theme.colorScheme === "dark" ? "15%" : "100%"})`,
   },
   iconContainer: {
     cursor: "pointer",
@@ -58,8 +61,11 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
           width={38}
           height={38}
           mr="xs"
-          className={classes.userIcon}
           onClick={goToSubmit}
+          styles={{
+            root: classes.userImageWrapper as any,
+            image: classes.userImage as any,
+          }}
         />
 
         <TextInput mr="xs" placeholder="Search Reddit" onClick={goToSubmit} />

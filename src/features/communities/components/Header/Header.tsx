@@ -9,12 +9,14 @@ const useStyles = createStyles((theme) => ({
 
     "& > div:first-child": {
       height: "50%",
-      backgroundColor: theme.colors.blue[4],
+      backgroundColor:
+        theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 4 : 6],
     },
 
     "& > div:first-child + div": {
       height: "50%",
-      backgroundColor: theme.white,
+      backgroundColor:
+        theme.colorScheme === "dark" ? theme.colors.dark[5] : "white",
       // paddingInline: 24,
     },
   },
@@ -22,7 +24,9 @@ const useStyles = createStyles((theme) => ({
     marginTop: -12,
     fontSize: 72,
     color: theme.colors.blue[4],
-    border: "4px solid white",
+    border: `4px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : "white"
+    }`,
     borderRadius: "50%",
   },
 }));
