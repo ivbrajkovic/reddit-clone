@@ -2,6 +2,9 @@ import { FirebaseError } from "firebase/app";
 
 export const isDevEnv = () => process.env.NODE_ENV === "development";
 
+export const isString = (value: unknown): value is string =>
+  typeof value === "string";
+
 export const isError = (value: unknown): value is Error =>
   value instanceof Error;
 

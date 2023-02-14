@@ -1,3 +1,6 @@
-export const logError = (error: Error, message?: string) =>
-  process.env.NODE_ENV === "development" &&
-  console.error(`[DEVELOPMENT${message ? " -> " + message : ""}] ->`, error);
+import { isDevEnv } from "@/utility";
+
+export const logError = (error: unknown, message = "Unknown error") => {
+  if (!isDevEnv()) return;
+  console.error(`[DEVELOPMENT: ${message}] ->`, error);
+};

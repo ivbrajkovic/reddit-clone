@@ -1,21 +1,17 @@
 import { logError } from "@/common/logError";
+import { isError, isString } from "@/utility";
 import { showNotification } from "@mantine/notifications";
-import { AuthError } from "firebase/auth";
-
-type E = AuthError | Error;
-type C = string | ((error: E) => string);
 
 export const showNotificationError =
-  (title: string, message?: C) => (error: E) => {
-    const errorMessage =
-      typeof message === "function"
-        ? message(error)
-        : typeof message === "string"
-        ? message
-        : error instanceof Error
-        ? error.message
-        : "Unknown error";
+  (title: string, message?: string) => (error: unknown) => {
+    const errorMessage = isString(message)
+      ? message
+      : isError(error)
+      ? error.message
+      : isString(error)
+      ? error
+      : "Unknown error";
 
     showNotification({ color: "red", title, message: errorMessage });
-    logError(error);
+    logError(error, title);
   };

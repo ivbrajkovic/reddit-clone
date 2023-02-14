@@ -7,7 +7,6 @@ import TabList from "@/features/posts/components/TabList";
 import TitleInput from "@/features/posts/components/TitleInput";
 import {
   NewPostFormProvider,
-  NewPostFormValues,
   useNewPostForm,
 } from "@/features/posts/formContext";
 import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
@@ -26,17 +25,14 @@ const NewPostForm: FC<NewPostFormProps> = () => {
   const { classes } = useStyles();
   const [activeTab, setActiveTab] = useState<string | null>(Tab.Post);
 
-  const { createPost } = useCreatePost();
+  const { isLoading, createPost } = useCreatePost();
 
   const form = useNewPostForm({
     initialValues: { title: "", body: "", files: [] },
     validate: { title: isNotEmpty("Title cannot be empty") },
   });
 
-  const onSubmit = (values: NewPostFormValues) => {
-    console.log("🚀 ~ file: NewPostForm.tsx:49 ~ onSubmit ~ values", values);
-  };
-
+  // Extracted this function from the component to prevent re-rendering dropzone
   const onFileSelect = useEventCallback((files: FileWithPath[]) => {
     if (!files.length) return;
     const newFiles = mergeArrays("name", form.values.files, files);
@@ -49,8 +45,9 @@ const NewPostForm: FC<NewPostFormProps> = () => {
         <TabList activeTab={activeTab as Tab} />
 
         <NewPostFormProvider form={form}>
-          <Box component="form" px="md" onSubmit={form.onSubmit(onSubmit)}>
+          <Box component="form" px="md" onSubmit={form.onSubmit(createPost)}>
             <TitleInput />
+
             <Tabs.Panel value={Tab.Post}>
               <Post />
             </Tabs.Panel>
@@ -61,7 +58,8 @@ const NewPostForm: FC<NewPostFormProps> = () => {
             <Tabs.Panel value={Tab.Link}>
               <Link />
             </Tabs.Panel>
-            <SubmitButton />
+
+            <SubmitButton isLoading={isLoading} />
           </Box>
         </NewPostFormProvider>
       </Tabs>

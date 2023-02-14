@@ -1,15 +1,13 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { AppError } from "@/types";
-import { isError, isFirebaseError } from "@/utility";
-import { when } from "ramda";
+import { isError, isFirebaseError, isString } from "@/utility";
+import { FirebaseError } from "firebase/app";
 import { useEffect } from "react";
 
 // Firebase error codes:
 // https://firebase.google.com/docs/auth/admin/errors
 
-const formatAuthError = (error: AppError) => {
-  if (!isFirebaseError(error)) return error.message;
-
+const formatAuthError = (error: FirebaseError) => {
   switch (error.code) {
     case "auth/email-already-in-use":
     case "auth/email-already-exists":
@@ -31,9 +29,16 @@ const formatAuthError = (error: AppError) => {
 
 export const useAuthErrorEffect = (error?: AppError) => {
   useEffect(() => {
-    when(
-      isError,
-      showNotificationError("Authentication error", formatAuthError),
-    )(error);
+    if (!error) return;
+
+    const errorMessage = isFirebaseError(error)
+      ? formatAuthError(error)
+      : isError(error)
+      ? error.message
+      : isString(error)
+      ? error
+      : "Unknown error";
+
+    showNotificationError("Authentication error", errorMessage)(error);
   }, [error]);
 };

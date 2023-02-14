@@ -1,4 +1,4 @@
-import { logError } from "@/common/logError";
+import { showNotificationError } from "@/common/showNotificationError";
 import {
   clearCommunitySnippets,
   setCommunitySnippets,
@@ -13,7 +13,6 @@ import { andThen, map, otherwise, pipe, prop, tap } from "ramda";
 import { useMemo } from "react";
 
 const formatSnippetPath = (user: User) => `users/${user.uid}/communitySnippets`;
-
 const getSnippetCollection = (path: string) => collection(firestore, path);
 
 const formatSnippets = (doc: QueryDocumentSnapshot) =>
@@ -22,18 +21,16 @@ const formatSnippets = (doc: QueryDocumentSnapshot) =>
     ...doc.data(),
   } as CommunitySnippet);
 
-const handleError = (error: Error) => {
-  logError(error, "useCommunitySnippets -> getCommunitySnippets");
-  return { props: {} };
-};
-
 export const useUserCommunitySnippets = () => {
   const dispatch = useAppDispatch();
+
   return useMemo(() => {
     const toggleLoading = () => dispatch(toggleIsLoadingSnippets());
+
     return {
       clearUserCommunitySnippets: async () =>
         dispatch(clearCommunitySnippets()),
+
       getUserCommunitySnippets: pipe(
         formatSnippetPath,
         getSnippetCollection,
@@ -47,7 +44,12 @@ export const useUserCommunitySnippets = () => {
             toggleLoading,
           ),
         ),
-        otherwise(pipe(handleError, toggleLoading)),
+        otherwise(
+          pipe(
+            showNotificationError("Error getting community snippets"),
+            toggleLoading,
+          ),
+        ),
       ),
     };
   }, [dispatch]);

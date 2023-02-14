@@ -22,10 +22,7 @@ const throwIfCommunityNotFound = <T extends DocumentSnapshot>(
 };
 
 const formatCommunityData = (docSnap: DocumentSnapshot) =>
-  ({
-    communityId: docSnap.id,
-    ...docSnap.data(),
-  } as Community);
+  ({ communityId: docSnap.id, ...docSnap.data() } as Community);
 
 const dispatchCommunityData = (store: AppStore) => (community: Community) => {
   store.dispatch(setCommunityData(community));
@@ -37,7 +34,7 @@ const returnCommunityExists = (community: Community) => ({
 });
 
 const logErrorIfDevelopment = (error: Error) =>
-  logError(error, "CommunityPage -> getServerSideProps");
+  logError(error, "Community page SSR error: community not found");
 
 const returnCommunityNotExists = () => ({
   props: { isCommunityExists: false },
