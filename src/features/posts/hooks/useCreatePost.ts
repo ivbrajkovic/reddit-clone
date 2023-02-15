@@ -5,6 +5,7 @@ import { formatDisplayName, isUser } from "@/features/auth/utility";
 import { NewPostFormValues } from "@/features/posts/components/CreatePost/newPostFormContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
+import { useDebounceCallback } from "@/hooks/useDebounceCallback";
 import { readFiles } from "@/utility/readFiles";
 import { FileWithPath } from "@mantine/dropzone";
 import { User } from "firebase/auth";
@@ -23,7 +24,16 @@ import {
   uploadString,
 } from "firebase/storage";
 import { useRouter } from "next/router";
-import { andThen, head, ifElse, isEmpty, otherwise, pipe, unless } from "ramda";
+import {
+  andThen,
+  head,
+  ifElse,
+  isEmpty,
+  otherwise,
+  pipe,
+  tap,
+  unless,
+} from "ramda";
 import { useReducer } from "react";
 type NewPost = Omit<Post, "id">;
 
@@ -120,16 +130,15 @@ export const useCreatePost = () => {
   const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);
 
-  const createPost = (formValues: NewPostFormValues) => {
+  const createPost = useDebounceCallback((formValues: NewPostFormValues) => {
     ifElse(
       isUser,
       (user) => {
-        toggleIsLoading();
         const communityId = router.query.communityId as string;
         const newPost = formatNewPost(user, communityId, formValues);
         const uploadFilesByPostId = uploadFiles(formValues.files);
         pipe(
-          // tap(toggleIsLoading),
+          tap(toggleIsLoading),
           getPostDocumentRef,
           andThen(uploadFilesByPostId),
           andThen(router.back),
@@ -139,7 +148,7 @@ export const useCreatePost = () => {
       },
       openLogin,
     )(user);
-  };
+  });
 
   return { isLoading, createPost };
 };

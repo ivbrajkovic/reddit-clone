@@ -1,4 +1,5 @@
 import { FirebaseError } from "firebase/app";
+import { MouseEventHandler } from "react";
 
 export const isDevEnv = () => process.env.NODE_ENV === "development";
 
@@ -26,3 +27,6 @@ export const pipeLog = <T>(x: T, label: string = "x ->"): T => (
 
 export const isNullOrUndefined = <T>(value: T): boolean =>
   value === null || value === undefined;
+
+export const stopPropagation: MouseEventHandler<any> = (e) =>
+  e.stopPropagation();

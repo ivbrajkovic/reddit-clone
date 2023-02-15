@@ -1,4 +1,5 @@
 import { PostItemProps } from "@/features/posts/components/PostList/components/PostItem";
+import { stopPropagation } from "@/utility";
 import { ActionIcon, Box, Flex, Text } from "@mantine/core";
 import { FC, MouseEventHandler } from "react";
 import {
@@ -11,15 +12,11 @@ import {
 type VoteButtonsProps = Pick<PostItemProps, "userVoteValue" | "onVotePost">;
 
 const VoteButtons: FC<VoteButtonsProps> = (props) => {
-  const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
+  const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
     props.onVotePost(1);
-  };
 
-  const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
+  const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
     props.onVotePost(-1);
-  };
 
   const upArrow =
     props.userVoteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
@@ -36,6 +33,7 @@ const VoteButtons: FC<VoteButtonsProps> = (props) => {
       direction="column"
       align="center"
       justify="center"
+      onClick={stopPropagation}
     >
       <ActionIcon onClick={incrementVote}>
         <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>

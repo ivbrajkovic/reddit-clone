@@ -1,4 +1,5 @@
 import FooterButton from "@/features/posts/components/PostList/components/FooterButton";
+import { stopPropagation } from "@/utility";
 import { Group } from "@mantine/core";
 import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
@@ -12,14 +13,8 @@ type PostItemFooterProps = {};
 
 const PostItemFooter: FC<PostItemFooterProps> = () => {
   return (
-    <Group spacing={4} pb={2}>
-      <FooterButton
-        title="Comments"
-        icon={<VscComment fontSize={24} />}
-        onClick={() => {
-          console.log("clicked");
-        }}
-      />
+    <Group spacing={4} pb={2} onClick={stopPropagation}>
+      <FooterButton title="Comments" icon={<VscComment fontSize={24} />} />
       <FooterButton title="Awards" icon={<HiOutlineGift fontSize={24} />} />
       <FooterButton title="Share" icon={<RiShareForwardLine fontSize={24} />} />
       <FooterButton title="Save" icon={<IoBookmarkOutline fontSize={24} />} />
