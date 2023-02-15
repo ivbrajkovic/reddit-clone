@@ -1,27 +1,38 @@
-import FooterButton from "@/features/posts/components/PostItem/FooterButton";
+import PostItemFooter from "@/features/posts/components/PostItem/PostItemFooter";
 import VoteButtons from "@/features/posts/components/PostItem/VoteButton";
 import { Post } from "@/features/posts/types";
-import { Box, createStyles, Flex, Group, Paper } from "@mantine/core";
+import {
+  Box,
+  createStyles,
+  Flex,
+  Group,
+  Image,
+  Paper,
+  Stack,
+  Text,
+} from "@mantine/core";
+import dayjs from "dayjs";
 import { FC } from "react";
-import { BsThreeDots } from "react-icons/bs";
-import { HiOutlineGift } from "react-icons/hi";
-import { IoBookmarkOutline } from "react-icons/io5";
-
-import { RiShareForwardLine } from "react-icons/ri";
-import { VscComment } from "react-icons/vsc";
 
 const useStyles = createStyles((theme) => ({
-  leftColumn: {
-    alignItems: "center",
+  postItem: {
+    cursor: "pointer",
+    "&:hover": {
+      borderColor: theme.colors.blue[5],
+    },
   },
-  voteButtons: {},
+  leftSide: {
+    alignSelf: "stretch",
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : "white",
+  },
 }));
 
 export type PostItemProps = {
   post: Post;
   userIsCreator: boolean;
-  userVoteValue?: number;
-  onVote: (value: number) => void;
+  userVoteValue: number;
+  onVotePost: (value: number) => void;
   onDeletePost: () => void;
   onSelectPost: () => void;
 };
@@ -30,51 +41,50 @@ const PostItem: FC<PostItemProps> = ({
   post,
   userIsCreator,
   userVoteValue,
-  onVote,
+  onVotePost,
   onDeletePost,
   onSelectPost,
 }) => {
   const { classes } = useStyles();
+  const formatCreatedAt = dayjs(post.createdAt.seconds * 1000).fromNow();
+
   return (
-    <Paper shadow="lg">
-      <Flex align="flex-start">
-        <Box>
-          <VoteButtons userVoteValue={userVoteValue} onVote={onVote} />
+    <Paper
+      withBorder
+      shadow="lg"
+      className={classes.postItem}
+      onClick={onSelectPost}
+    >
+      <Flex>
+        <Box className={classes.leftSide}>
+          <VoteButtons userVoteValue={userVoteValue} onVotePost={onVotePost} />
         </Box>
-        <Box pt={8}>
-          <Group spacing="sm">
+
+        <Stack pt={8} pl={4} spacing={4} w="100%">
+          <Group mb={4} spacing="sm" fz="9pt">
             <div>pic</div>
-            <div>communityId</div>
-            <div>creator</div>
-            <div>time</div>
+            <Text>Posted by u/{post.creatorDisplayName}</Text>
+            <Text>{formatCreatedAt}</Text>
           </Group>
-          <div>Title</div>
-          <div>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis
-            sapiente velit excepturi labore at ut quia voluptates quis ipsam
-            cupiditate, modi molestiae, dolorum recusandae. Aspernatur tempore
-            voluptatem quo aut dolorum.
-          </div>
-          <Group spacing={4} pb={2}>
-            <FooterButton
-              title="Comments"
-              icon={<VscComment fontSize={24} />}
+          <Text mb={4} fz="12pt" fw={600}>
+            Title
+          </Text>
+
+          {post.imageUrl ? (
+            <Image
+              src={post.imageUrl}
+              alt="post"
+              fit="contain"
+              styles={{
+                image: {
+                  maxHeight: 460,
+                },
+              }}
             />
-            <FooterButton
-              title="Awards"
-              icon={<HiOutlineGift fontSize={24} />}
-            />
-            <FooterButton
-              title="Share"
-              icon={<RiShareForwardLine fontSize={24} />}
-            />
-            <FooterButton
-              title="Save"
-              icon={<IoBookmarkOutline fontSize={24} />}
-            />
-            <FooterButton icon={<BsThreeDots fontSize={24} />} py={0} />
-          </Group>
-        </Box>
+          ) : null}
+
+          <PostItemFooter />
+        </Stack>
       </Flex>
     </Paper>
   );

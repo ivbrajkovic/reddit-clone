@@ -1,32 +1,54 @@
 import { PostItemProps } from "@/features/posts/components/PostItem/PostItem";
-import { ActionIcon, Flex, Text } from "@mantine/core";
-import { FC } from "react";
-import { RxThickArrowDown, RxThickArrowUp } from "react-icons/rx";
+import { ActionIcon, Box, Flex, Text } from "@mantine/core";
+import { FC, MouseEventHandler } from "react";
+import {
+  IoArrowDownCircle,
+  IoArrowDownCircleOutline,
+  IoArrowUpCircle,
+  IoArrowUpCircleOutline,
+} from "react-icons/io5";
 
-type VoteButtonsProps = Pick<PostItemProps, "userVoteValue" | "onVote">;
+type VoteButtonsProps = Pick<PostItemProps, "userVoteValue" | "onVotePost">;
 
 const VoteButtons: FC<VoteButtonsProps> = (props) => {
-  const incrementVote = () => props.onVote(1);
-  const decrementVote = () => props.onVote(-1);
+  const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    props.onVotePost(1);
+  };
+
+  const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    props.onVotePost(-1);
+  };
+
+  const upArrow =
+    props.userVoteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
+  const upArrowFill = props.userVoteValue > 0 ? "#FF4500" : "inherit";
+
+  const downArrow =
+    props.userVoteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
+  const downArrowFill = props.userVoteValue > 0 ? "#7193FF" : "inherit";
+
   return (
     <Flex
+      m={8}
+      w="fit-content"
       direction="column"
       align="center"
       justify="center"
-      w="fit-content"
-      my={8}
-      mx={8}
     >
-      <ActionIcon>
-        <RxThickArrowUp fontSize={24} onClick={incrementVote} />
+      <ActionIcon onClick={incrementVote}>
+        <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>
       </ActionIcon>
-      {props.userVoteValue ?? (
-        <Text fz="sm" fw="bolder">
-          Vote
-        </Text>
-      )}
-      <ActionIcon>
-        <RxThickArrowDown fontSize={24} onClick={decrementVote} />
+      <Box my={2}>
+        {props.userVoteValue || (
+          <Text fz="xs" fw="bolder">
+            Vote
+          </Text>
+        )}
+      </Box>
+      <ActionIcon onClick={decrementVote}>
+        <Box component={downArrow} fontSize={24} fill={downArrowFill}></Box>
       </ActionIcon>
     </Flex>
   );

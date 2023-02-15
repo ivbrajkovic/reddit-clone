@@ -1,1 +1,1 @@
-export { default as Posts } from "./components/PostItem/Posts";
+export { default as PostList } from "./components/PostItem/PostList";

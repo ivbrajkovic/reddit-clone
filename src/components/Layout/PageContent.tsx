@@ -10,12 +10,12 @@ const PageContent: FC<PageContentProps> = ({ children }) => {
   return (
     <Container>
       <Grid p="xl">
-        <Grid.Col md={8} xs={12}>
+        <Grid.Col md={9} xs={12}>
           <Flex direction="column" gap="md">
             {children[0 as keyof typeof children]}
           </Flex>
         </Grid.Col>
-        <Grid.Col md={4} xs={0} display={{ base: "none", md: "unset" }}>
+        <Grid.Col md={3} xs={0} display={{ base: "none", md: "unset" }}>
           {children[1 as keyof typeof children]}
         </Grid.Col>
       </Grid>

@@ -30,18 +30,15 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type FooterButtonProps = BoxProps & {
+type FooterButtonProps = import("@mantine/utils").PolymorphicComponentProps<
+  "div",
+  BoxProps
+> & {
   title?: string;
   icon: JSX.Element;
-  onClick?: () => void;
 };
 
-const FooterButton: FC<FooterButtonProps> = ({
-  title,
-  icon,
-  onClick,
-  ...props
-}) => {
+const FooterButton: FC<FooterButtonProps> = ({ title, icon, ...props }) => {
   const { classes } = useStyles();
   return (
     <Box className={classes.button} {...props}>

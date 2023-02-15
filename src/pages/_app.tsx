@@ -5,6 +5,11 @@ import { wrapper } from "@/store/store";
 import { NotificationsProvider } from "@mantine/notifications";
 import type { AppProps } from "next/app";
 
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
 const App = ({ Component, pageProps }: AppProps) => (
   <MantineThemeProvider>
     <NotificationsProvider>
