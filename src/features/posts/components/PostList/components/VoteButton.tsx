@@ -1,4 +1,4 @@
-import { PostItemProps } from "@/features/posts/components/PostItem/PostItem";
+import { PostItemProps } from "@/features/posts/components/PostList/components/PostItem";
 import { ActionIcon, Box, Flex, Text } from "@mantine/core";
 import { FC, MouseEventHandler } from "react";
 import {

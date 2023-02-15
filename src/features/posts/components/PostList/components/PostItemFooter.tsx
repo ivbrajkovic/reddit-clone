@@ -1,4 +1,4 @@
-import FooterButton from "@/features/posts/components/PostItem/FooterButton";
+import FooterButton from "@/features/posts/components/PostList/components/FooterButton";
 import { Group } from "@mantine/core";
 import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";

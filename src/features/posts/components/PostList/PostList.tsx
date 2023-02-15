@@ -1,5 +1,5 @@
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import PostItem from "@/features/posts/components/PostItem/PostItem";
+import PostItem from "@/features/posts/components/PostList/components/PostItem";
 import { useFetchPosts } from "@/features/posts/hooks/useFetchPosts";
 import { usePosts } from "@/features/posts/hooks/usePosts";
 import { Stack } from "@mantine/core";

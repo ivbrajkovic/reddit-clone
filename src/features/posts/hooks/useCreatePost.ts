@@ -2,7 +2,7 @@ import { showNotificationError } from "@/common/showNotificationError";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { formatDisplayName, isUser } from "@/features/auth/utility";
-import { NewPostFormValues } from "@/features/posts/context/formContext";
+import { NewPostFormValues } from "@/features/posts/components/CreatePost/newPostFormContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { readFiles } from "@/utility/readFiles";
@@ -23,16 +23,7 @@ import {
   uploadString,
 } from "firebase/storage";
 import { useRouter } from "next/router";
-import {
-  andThen,
-  head,
-  ifElse,
-  isEmpty,
-  otherwise,
-  pipe,
-  tap,
-  unless,
-} from "ramda";
+import { andThen, head, ifElse, isEmpty, otherwise, pipe, unless } from "ramda";
 import { useReducer } from "react";
 type NewPost = Omit<Post, "id">;
 
@@ -129,15 +120,16 @@ export const useCreatePost = () => {
   const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);
 
-  const createPost = async (formValues: NewPostFormValues) => {
+  const createPost = (formValues: NewPostFormValues) => {
     ifElse(
       isUser,
       (user) => {
+        toggleIsLoading();
         const communityId = router.query.communityId as string;
         const newPost = formatNewPost(user, communityId, formValues);
         const uploadFilesByPostId = uploadFiles(formValues.files);
         pipe(
-          tap(toggleIsLoading),
+          // tap(toggleIsLoading),
           getPostDocumentRef,
           andThen(uploadFilesByPostId),
           andThen(router.back),

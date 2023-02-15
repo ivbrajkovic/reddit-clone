@@ -2,7 +2,7 @@ import PageContent from "@/components/Layout/PageContent";
 import { CreatePostBar } from "@/features/communities/components/CreatePostBar";
 import { Header } from "@/features/communities/components/Header";
 import { CommunityNotFound } from "@/features/communities/components/NotFound.tsx";
-import PostList from "@/features/posts/components/PostItem/PostList";
+import PostList from "@/features/posts/components/PostList/PostList";
 import { FC } from "react";
 export { getServerSideProps } from "@/ssr/communityPageProps";
 

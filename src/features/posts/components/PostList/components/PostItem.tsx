@@ -1,5 +1,5 @@
-import PostItemFooter from "@/features/posts/components/PostItem/PostItemFooter";
-import VoteButtons from "@/features/posts/components/PostItem/VoteButton";
+import PostItemFooter from "@/features/posts/components/PostList/components/PostItemFooter";
+import VoteButtons from "@/features/posts/components/PostList/components/VoteButton";
 import { Post } from "@/features/posts/types";
 import {
   Box,
@@ -67,8 +67,9 @@ const PostItem: FC<PostItemProps> = ({
             <Text>{formatCreatedAt}</Text>
           </Group>
           <Text mb={4} fz="12pt" fw={600}>
-            Title
+            {post.title}
           </Text>
+          <Text>{post.body}</Text>
 
           {post.imageUrl ? (
             <Image

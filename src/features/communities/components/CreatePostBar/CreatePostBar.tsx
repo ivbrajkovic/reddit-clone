@@ -43,15 +43,12 @@ type CreatePostBarProps = {};
 const CreatePostBar: FC<CreatePostBarProps> = () => {
   const { classes } = useStyles();
   const router = useRouter();
-  const goToSubmit = () => {
-    console.log("router.query.community", router.query.communityId);
 
+  const goToSubmit = () => {
     const { communityId } = router.query;
-    if (communityId) {
-      router.push(`/r/${router.query.communityId}/submit`);
-      return;
-    }
+    if (communityId) router.push(`/r/${communityId}/submit`);
   };
+
   return (
     <Paper withBorder p={8} shadow="sm">
       <Flex align="center">
@@ -67,7 +64,6 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
             image: classes.userImage as any,
           }}
         />
-
         <TextInput mr="xs" placeholder="Search Reddit" onClick={goToSubmit} />
         <div className={classes.iconContainer} onClick={goToSubmit}>
           <IoImageOutline className={classes.icon} fontSize={24} />

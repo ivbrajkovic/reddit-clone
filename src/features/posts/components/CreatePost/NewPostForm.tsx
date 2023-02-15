@@ -1,14 +1,14 @@
-import ImageAndVideo from "@/features/posts/components/ImageAndVideo";
-import Link from "@/features/posts/components/Link";
-import Post from "@/features/posts/components/Post";
-import PreviewImages from "@/features/posts/components/PreviewImages";
-import SubmitButton from "@/features/posts/components/SubmitButton";
-import TabList from "@/features/posts/components/TabList";
-import TitleInput from "@/features/posts/components/TitleInput";
+import { Textarea, TextInput } from "@/components/FormControls";
+import ImageAndVideo from "@/features/posts/components/CreatePost/components/ImageAndVideo";
+import Link from "@/features/posts/components/CreatePost/components/Link";
+import PreviewImages from "@/features/posts/components/CreatePost/components/PreviewImages";
+import SubmitButton from "@/features/posts/components/CreatePost/components/SubmitButton";
+import TabList from "@/features/posts/components/CreatePost/components/TabList";
 import {
   NewPostFormProvider,
   useNewPostForm,
-} from "@/features/posts/context/formContext";
+} from "@/features/posts/components/CreatePost/newPostFormContext";
+
 import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
 import { useStyles } from "@/features/posts/styles";
 import { Tab } from "@/features/posts/types";
@@ -46,15 +46,25 @@ const NewPostForm: FC<NewPostFormProps> = () => {
 
         <NewPostFormProvider form={form}>
           <Box component="form" px="md" onSubmit={form.onSubmit(createPost)}>
-            <TitleInput />
+            <TextInput
+              mt="md"
+              placeholder="Title"
+              {...form.getInputProps("title")}
+            />
 
             <Tabs.Panel value={Tab.Post}>
-              <Post />
+              <Textarea
+                mt="md"
+                placeholder="Text (optional)"
+                {...form.getInputProps("body")}
+              />
             </Tabs.Panel>
+
             <Tabs.Panel value={Tab.ImageAndVideo}>
               <ImageAndVideo onDrop={onFileSelect} />
               <PreviewImages />
             </Tabs.Panel>
+
             <Tabs.Panel value={Tab.Link}>
               <Link />
             </Tabs.Panel>
