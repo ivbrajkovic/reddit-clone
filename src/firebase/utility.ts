@@ -7,7 +7,11 @@ import {
   runTransaction,
   Transaction,
 } from "firebase/firestore";
-import { curryN } from "ramda";
+import { ref } from "firebase/storage";
+import { curry, curryN } from "ramda";
+
+export const refV = curry(ref);
+export const docV = curryN(3, doc);
 
 export const isDocumentExists = (doc: DocumentSnapshot) => doc.exists();
 

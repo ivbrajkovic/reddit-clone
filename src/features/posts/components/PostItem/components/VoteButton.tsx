@@ -10,7 +10,7 @@ import {
 } from "react-icons/io5";
 
 const VoteButtons = () => {
-  const { userVoteValue, onVotePost } = usePostItemContext();
+  const { voteStatus, onVotePost } = usePostItemContext();
 
   const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
     onVotePost(1);
@@ -18,12 +18,12 @@ const VoteButtons = () => {
   const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
     onVotePost(-1);
 
-  const upArrow = userVoteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
-  const upArrowFill = userVoteValue > 0 ? "#FF4500" : "inherit";
+  const upArrow = voteStatus > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
+  const upArrowFill = voteStatus > 0 ? "#FF4500" : "inherit";
 
   const downArrow =
-    userVoteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
-  const downArrowFill = userVoteValue > 0 ? "#7193FF" : "inherit";
+    voteStatus < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
+  const downArrowFill = voteStatus > 0 ? "#7193FF" : "inherit";
 
   return (
     <Flex
@@ -38,7 +38,7 @@ const VoteButtons = () => {
         <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>
       </ActionIcon>
       <Box my={2}>
-        {userVoteValue || (
+        {voteStatus || (
           <Text fz="xs" fw="bolder">
             Vote
           </Text>

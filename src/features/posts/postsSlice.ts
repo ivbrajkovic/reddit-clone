@@ -28,10 +28,13 @@ const postsSlice = createSlice({
     //     })),
     //   }),
     // },
+    deletePostById: (state, action: PayloadAction<string>) => {
+      state.posts = state.posts.filter((post) => post.id !== action.payload);
+    },
   },
 });
 
-export const { setSelectedPost, setPosts } = postsSlice.actions;
+export const { setSelectedPost, setPosts, deletePostById } = postsSlice.actions;
 
 export const selectSelectedPost = (state: RootState) =>
   state.postSlice.selectedPost;

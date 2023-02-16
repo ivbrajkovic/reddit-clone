@@ -10,8 +10,10 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { VscComment, VscTrash } from "react-icons/vsc";
 
 const PostItemFooter = () => {
-  const { post, userIsCreator } = usePostItemContext();
-  const { commentCount } = post;
+  const { id, commentCount, userIsCreator, imageUrl, onDeletePost } =
+    usePostItemContext();
+
+  const handleDeletePost = () => onDeletePost(id, !!imageUrl);
 
   return (
     <Group spacing={4} pb={2} onClick={stopPropagation}>
@@ -35,6 +37,7 @@ const PostItemFooter = () => {
             color="red"
             icon={<VscTrash fontSize={20} />}
             disabled={!userIsCreator}
+            onClick={handleDeletePost}
           >
             Delete post
           </Menu.Item>

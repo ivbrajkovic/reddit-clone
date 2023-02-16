@@ -3,9 +3,7 @@ import { usePostItemContext } from "@/features/posts/components/PostItem/compone
 import { Stack, Text } from "@mantine/core";
 
 const PostItemBody = () => {
-  const { post } = usePostItemContext();
-  const { body, imageUrl } = post;
-
+  const { body, imageUrl } = usePostItemContext();
   return (
     <Stack spacing="sm">
       <Text>{body}</Text>

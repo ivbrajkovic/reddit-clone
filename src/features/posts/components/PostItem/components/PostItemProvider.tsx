@@ -1,11 +1,18 @@
+import { PostItemProps } from "@/features/posts/components/PostItem/PostItem";
+import { usePostsHandlers } from "@/features/posts/hooks/usePostHandlers";
 import { FC } from "react";
-import { postItemContext, PostItemProps } from "./postItemContext";
+import { postItemContext } from "./postItemContext";
 
 type PostItemProviderProps = { children: React.ReactNode } & PostItemProps;
 
 const PostItemProvider: FC<PostItemProviderProps> = ({ children, ...rest }) => {
+  const postHandlers = usePostsHandlers();
+  const value = { ...rest, ...postHandlers };
+
   return (
-    <postItemContext.Provider value={rest}>{children}</postItemContext.Provider>
+    <postItemContext.Provider value={value}>
+      {children}
+    </postItemContext.Provider>
   );
 };
 

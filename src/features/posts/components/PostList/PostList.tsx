@@ -8,8 +8,7 @@ import { Stack } from "@mantine/core";
 const PostList = () => {
   const user = useSignedInUser();
   const { isLoading } = useFetchPosts({ fetchOnMount: true });
-  console.log("🚀 ~ file: PostList.tsx:11 ~ PostList ~ isLoading", isLoading);
-  const { posts, onSelectedPost, onVotePost, onDeletePost } = usePosts();
+  const posts = usePosts();
 
   if (isLoading) return <PostLoader />;
 
@@ -18,12 +17,8 @@ const PostList = () => {
       {posts.map((post) => (
         <PostItem
           key={post.id}
-          post={post}
           userIsCreator={user?.uid === post.creatorId}
-          userVoteValue={post.voteStatus}
-          onVotePost={onVotePost}
-          onDeletePost={onDeletePost}
-          onSelectPost={onSelectedPost}
+          {...post}
         />
       ))}
     </Stack>

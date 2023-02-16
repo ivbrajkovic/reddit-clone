@@ -3,9 +3,7 @@ import { Box, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 
 const PostItemHeader = () => {
-  const { post } = usePostItemContext();
-
-  const { title, creatorDisplayName, createdAt } = post;
+  const { title, creatorDisplayName, createdAt } = usePostItemContext();
   const formatCreatedAt = dayjs(createdAt.seconds * 1000).fromNow();
 
   return (

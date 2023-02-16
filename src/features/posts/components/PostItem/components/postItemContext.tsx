@@ -1,16 +1,10 @@
-import { Post } from "@/features/posts/types";
+import { PostItemProps } from "@/features/posts/components/PostItem/PostItem";
+import { usePostsHandlers } from "@/features/posts/hooks/usePostHandlers";
 import { createContext, useContext } from "react";
 
-export type PostItemProps = {
-  post: Post;
-  userIsCreator: boolean;
-  userVoteValue: number;
-  onVotePost: (value: number) => void;
-  onDeletePost: () => void;
-  onSelectPost: () => void;
-};
-
-export const postItemContext = createContext({} as PostItemProps);
+export const postItemContext = createContext(
+  {} as PostItemProps & ReturnType<typeof usePostsHandlers>,
+);
 
 export const usePostItemContext = () => {
   const context = useContext(postItemContext);
