@@ -1,4 +1,4 @@
-import { useNewPostFormContext } from "@/features/posts/components/CreatePost/newPostFormContext";
+import { useCreatePostFormContext } from "@/features/posts/components/CreatePost/createPostFormContext";
 import { createStyles, Image, SimpleGrid } from "@mantine/core";
 import { IoMdCloseCircle } from "react-icons/io";
 
@@ -37,7 +37,7 @@ const filterByName = (name: string) => (file: File) => file.name !== name;
 
 const PreviewImages = () => {
   const { classes } = useStyles();
-  const form = useNewPostFormContext();
+  const form = useCreatePostFormContext();
 
   const { files } = form.values;
   if (!files.length) return null;

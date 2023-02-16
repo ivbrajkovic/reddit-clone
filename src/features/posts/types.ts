@@ -18,7 +18,7 @@ export type Post = {
   creatorDisplayName: string;
   title: string;
   body: string;
-  commentsCount: number;
+  commentCount: number;
   voteStatus: number;
   createdAt: Timestamp;
   imageUrl: string | null;

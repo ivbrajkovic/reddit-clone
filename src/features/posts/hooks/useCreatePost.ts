@@ -2,7 +2,7 @@ import { showNotificationError } from "@/common/showNotificationError";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { formatDisplayName, isUser } from "@/features/auth/utility";
-import { NewPostFormValues } from "@/features/posts/components/CreatePost/newPostFormContext";
+import { CreatePostFormValues } from "@/features/posts/components/CreatePost/createPostFormContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { useDebounceCallback } from "@/hooks/useDebounceCallback";
@@ -82,19 +82,20 @@ const updatePostImageUrl =
  * @param files files to upload
  * @returns function that take document ref uploads files and updates post image url
  */
-const uploadFiles = (files: FileWithPath[]) => (docRef: DocumentReference) => {
-  const uploadFilesByPostId = uploadFile(docRef.id);
-  const updatePostImageUrlByPostId = updatePostImageUrl(docRef);
-  unless(
-    isEmpty,
-    pipe(
-      readFilesADataUrlAsync,
-      andThen(pipe(head, uploadFilesByPostId)),
-      andThen(updatePostImageUrlByPostId),
-      otherwise(errorReadingFiles),
-    ),
-  )(files);
-};
+const uploadFiles =
+  (files: FileWithPath[]) => async (docRef: DocumentReference) => {
+    const uploadFilesByPostId = uploadFile(docRef.id);
+    const updatePostImageUrlByPostId = updatePostImageUrl(docRef);
+    return unless(
+      isEmpty,
+      pipe(
+        readFilesADataUrlAsync,
+        andThen(pipe(head, uploadFilesByPostId)),
+        andThen(updatePostImageUrlByPostId),
+        otherwise(errorReadingFiles),
+      ),
+    )(files);
+  };
 
 /**
  * Format new post
@@ -106,7 +107,7 @@ const uploadFiles = (files: FileWithPath[]) => (docRef: DocumentReference) => {
 const formatNewPost = (
   user: User,
   communityId: string,
-  formValues: NewPostFormValues,
+  formValues: CreatePostFormValues,
 ) => {
   const creatorDisplayName = formatDisplayName(user);
   const newPost: NewPost = {
@@ -115,7 +116,7 @@ const formatNewPost = (
     creatorDisplayName,
     title: formValues.title,
     body: formValues.body,
-    commentsCount: 0,
+    commentCount: 0,
     voteStatus: 0,
     communityImageUrl: null,
     imageUrl: null,
@@ -130,7 +131,7 @@ export const useCreatePost = () => {
   const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);
 
-  const createPost = useDebounceCallback((formValues: NewPostFormValues) => {
+  const createPost = useDebounceCallback((formValues: CreatePostFormValues) => {
     ifElse(
       isUser,
       (user) => {
@@ -142,8 +143,7 @@ export const useCreatePost = () => {
           getPostDocumentRef,
           andThen(uploadFilesByPostId),
           andThen(router.back),
-          otherwise(errorCreatingPost),
-          toggleIsLoading,
+          otherwise(pipe(errorCreatingPost, toggleIsLoading)),
         )(newPost);
       },
       openLogin,

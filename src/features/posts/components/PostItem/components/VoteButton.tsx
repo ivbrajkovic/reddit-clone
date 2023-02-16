@@ -1,7 +1,7 @@
-import { PostItemProps } from "@/features/posts/components/PostList/components/PostItem";
+import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
 import { stopPropagation } from "@/utility";
 import { ActionIcon, Box, Flex, Text } from "@mantine/core";
-import { FC, MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import {
   IoArrowDownCircle,
   IoArrowDownCircleOutline,
@@ -9,22 +9,21 @@ import {
   IoArrowUpCircleOutline,
 } from "react-icons/io5";
 
-type VoteButtonsProps = Pick<PostItemProps, "userVoteValue" | "onVotePost">;
+const VoteButtons = () => {
+  const { userVoteValue, onVotePost } = usePostItemContext();
 
-const VoteButtons: FC<VoteButtonsProps> = (props) => {
   const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    props.onVotePost(1);
+    onVotePost(1);
 
   const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    props.onVotePost(-1);
+    onVotePost(-1);
 
-  const upArrow =
-    props.userVoteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
-  const upArrowFill = props.userVoteValue > 0 ? "#FF4500" : "inherit";
+  const upArrow = userVoteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
+  const upArrowFill = userVoteValue > 0 ? "#FF4500" : "inherit";
 
   const downArrow =
-    props.userVoteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
-  const downArrowFill = props.userVoteValue > 0 ? "#7193FF" : "inherit";
+    userVoteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
+  const downArrowFill = userVoteValue > 0 ? "#7193FF" : "inherit";
 
   return (
     <Flex
@@ -39,7 +38,7 @@ const VoteButtons: FC<VoteButtonsProps> = (props) => {
         <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>
       </ActionIcon>
       <Box my={2}>
-        {props.userVoteValue || (
+        {userVoteValue || (
           <Text fz="xs" fw="bolder">
             Vote
           </Text>

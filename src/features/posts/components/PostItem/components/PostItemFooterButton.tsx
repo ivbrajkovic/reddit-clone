@@ -1,5 +1,5 @@
 import { Box, BoxProps, createStyles, Text } from "@mantine/core";
-import { FC } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -33,18 +33,23 @@ const useStyles = createStyles((theme) => ({
 type FooterButtonProps = import("@mantine/utils").PolymorphicComponentProps<
   "div",
   BoxProps
-> & {
-  title?: string;
-  icon: JSX.Element;
-};
+> &
+  ComponentPropsWithoutRef<"div"> & {
+    title?: string;
+    icon: JSX.Element;
+  };
 
-const FooterButton: FC<FooterButtonProps> = ({ title, icon, ...props }) => {
-  const { classes } = useStyles();
-  return (
-    <Box className={classes.button} {...props}>
-      {icon}
-      {title ? <Text className={classes.title}>{title}</Text> : null}
-    </Box>
-  );
-};
+const FooterButton = forwardRef<HTMLDivElement, FooterButtonProps>(
+  ({ title, icon, ...props }: FooterButtonProps, ref) => {
+    const { classes } = useStyles();
+    return (
+      <Box ref={ref} className={classes.button} {...props}>
+        {icon}
+        {title ? <Text className={classes.title}>{title}</Text> : null}
+      </Box>
+    );
+  },
+);
+
+FooterButton.displayName = "FooterButton";
 export default FooterButton;

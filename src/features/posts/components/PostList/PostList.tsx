@@ -1,13 +1,17 @@
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import PostItem from "@/features/posts/components/PostList/components/PostItem";
+import PostItem from "@/features/posts/components/PostItem/PostItem";
+import { PostLoader } from "@/features/posts/components/PostLoader";
 import { useFetchPosts } from "@/features/posts/hooks/useFetchPosts";
 import { usePosts } from "@/features/posts/hooks/usePosts";
 import { Stack } from "@mantine/core";
 
 const PostList = () => {
   const user = useSignedInUser();
-  useFetchPosts({ fetchOnMount: true, loadingNotification: false });
+  const { isLoading } = useFetchPosts({ fetchOnMount: true });
+  console.log("🚀 ~ file: PostList.tsx:11 ~ PostList ~ isLoading", isLoading);
   const { posts, onSelectedPost, onVotePost, onDeletePost } = usePosts();
+
+  if (isLoading) return <PostLoader />;
 
   return (
     <Stack>

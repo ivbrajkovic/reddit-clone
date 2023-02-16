@@ -49,17 +49,23 @@ export const useFetchPosts = ({
   const dispatch = useDispatch();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
-  const toggleLoadingNotification = () =>
-    loadingNotification && toggleLoading();
+  const toggleLoadingNotification =
+    (delay = 0) =>
+    () =>
+      loadingNotification && setTimeout(toggleLoading, delay);
 
   const fetchPosts = useEventCallback(
     pipe(
-      toggleLoadingNotification,
+      toggleLoadingNotification(),
       getCommunityId(router),
       fetchPostsFromFirestore,
-      andThen(pipe(formatPosts, pipe(setPosts, dispatch))),
-      otherwise(errorFetchingPosts),
-      toggleLoadingNotification,
+      andThen(
+        pipe(
+          formatPosts,
+          pipe(setPosts, dispatch, toggleLoadingNotification(500)),
+        ),
+      ),
+      otherwise(pipe(errorFetchingPosts, toggleLoadingNotification())),
     ),
   );
 

@@ -1,5 +1,5 @@
 import PageContent from "@/components/Layout/PageContent";
-import NewPostForm from "@/features/posts/components/CreatePost/NewPostForm";
+import CreatePost from "@/features/posts/components/CreatePost/CreatePost";
 import { Flex, Text } from "@mantine/core";
 import { FC } from "react";
 
@@ -14,7 +14,7 @@ const SubmitPage: FC<SubmitPageProps> = () => {
             Create Post
           </Text>
         </Flex>
-        <NewPostForm />
+        <CreatePost />
       </>
       <>{/* Bout */}</>
     </PageContent>

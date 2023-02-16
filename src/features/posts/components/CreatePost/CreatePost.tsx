@@ -5,9 +5,9 @@ import PreviewImages from "@/features/posts/components/CreatePost/components/Pre
 import SubmitButton from "@/features/posts/components/CreatePost/components/SubmitButton";
 import TabList from "@/features/posts/components/CreatePost/components/TabList";
 import {
-  NewPostFormProvider,
-  useNewPostForm,
-} from "@/features/posts/components/CreatePost/newPostFormContext";
+  CreatePostFormProvider,
+  useCreatePostForm,
+} from "@/features/posts/components/CreatePost/createPostFormContext";
 
 import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
 import { useStyles } from "@/features/posts/styles";
@@ -17,17 +17,15 @@ import mergeArrays from "@/utility/mergeArrays";
 import { Box, Paper, Tabs } from "@mantine/core";
 import { FileWithPath } from "@mantine/dropzone";
 import { isNotEmpty } from "@mantine/form";
-import { FC, useState } from "react";
+import { useState } from "react";
 
-type NewPostFormProps = {};
-
-const NewPostForm: FC<NewPostFormProps> = () => {
+const CreatePost = () => {
   const { classes } = useStyles();
   const [activeTab, setActiveTab] = useState<string | null>(Tab.Post);
 
   const { isLoading, createPost } = useCreatePost();
 
-  const form = useNewPostForm({
+  const form = useCreatePostForm({
     initialValues: { title: "", body: "", files: [] },
     validate: { title: isNotEmpty("Title cannot be empty") },
   });
@@ -44,7 +42,7 @@ const NewPostForm: FC<NewPostFormProps> = () => {
       <Tabs value={activeTab} onTabChange={setActiveTab} classNames={classes}>
         <TabList activeTab={activeTab as Tab} />
 
-        <NewPostFormProvider form={form}>
+        <CreatePostFormProvider form={form}>
           <Box component="form" px="md" onSubmit={form.onSubmit(createPost)}>
             <TextInput
               mt="md"
@@ -71,10 +69,10 @@ const NewPostForm: FC<NewPostFormProps> = () => {
 
             <SubmitButton isLoading={isLoading} />
           </Box>
-        </NewPostFormProvider>
+        </CreatePostFormProvider>
       </Tabs>
     </Paper>
   );
 };
 
-export default NewPostForm;
+export default CreatePost;
