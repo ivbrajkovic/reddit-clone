@@ -2,6 +2,7 @@ import { createStyles } from "@mantine/core";
 
 const usePostItemStyles = createStyles((theme) => ({
   postItem: {
+    position: "relative",
     cursor: "pointer",
     "&:hover": {
       borderColor: theme.colors.blue[5],

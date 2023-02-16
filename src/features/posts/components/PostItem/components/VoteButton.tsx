@@ -1,4 +1,5 @@
-import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
+import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
+import { useVotePost } from "@/features/posts/hooks/useVotePost";
 import { stopPropagation } from "@/utility";
 import { ActionIcon, Box, Flex, Text } from "@mantine/core";
 import { MouseEventHandler } from "react";
@@ -10,7 +11,8 @@ import {
 } from "react-icons/io5";
 
 const VoteButtons = () => {
-  const { voteStatus, onVotePost } = usePostItemContext();
+  const { voteStatus } = usePostItemContext();
+  const onVotePost = useVotePost();
 
   const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
     onVotePost(1);

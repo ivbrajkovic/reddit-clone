@@ -26,6 +26,7 @@ export type Post = {
 };
 
 export type PostState = {
+  isLoadingPost: boolean;
   selectedPost: Post | null;
   posts: Post[];
 };

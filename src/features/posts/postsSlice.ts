@@ -3,6 +3,7 @@ import { RootState } from "@/store/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialPostState: PostState = {
+  isLoadingPost: false,
   selectedPost: null,
   posts: [],
 };
@@ -11,6 +12,9 @@ const postsSlice = createSlice({
   name: "posts",
   initialState: initialPostState,
   reducers: {
+    toggleIsLoadingPost: (state) => {
+      state.isLoadingPost = !state.isLoadingPost;
+    },
     setSelectedPost: (state, action: PayloadAction<Post>) => {
       state.selectedPost = action.payload;
     },
@@ -28,13 +32,17 @@ const postsSlice = createSlice({
     //     })),
     //   }),
     // },
-    deletePostById: (state, action: PayloadAction<string>) => {
-      state.posts = state.posts.filter((post) => post.id !== action.payload);
+    deletePost: (state, action: PayloadAction<Post>) => {
+      state.posts = state.posts.filter((post) => post.id !== action.payload.id);
     },
   },
 });
 
-export const { setSelectedPost, setPosts, deletePostById } = postsSlice.actions;
+export const { toggleIsLoadingPost, setSelectedPost, setPosts, deletePost } =
+  postsSlice.actions;
+
+export const selectIsLoadingPost = (state: RootState) =>
+  state.postSlice.isLoadingPost;
 
 export const selectSelectedPost = (state: RootState) =>
   state.postSlice.selectedPost;

@@ -1,5 +1,5 @@
 import { FadeInImage } from "@/components/FadeInImage";
-import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
+import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
 import { Stack, Text } from "@mantine/core";
 
 const PostItemBody = () => {

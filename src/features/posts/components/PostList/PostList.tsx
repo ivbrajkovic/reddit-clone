@@ -2,13 +2,13 @@ import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import PostItem from "@/features/posts/components/PostItem/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
 import { useFetchPosts } from "@/features/posts/hooks/useFetchPosts";
-import { usePosts } from "@/features/posts/hooks/usePosts";
 import { Stack } from "@mantine/core";
 
 const PostList = () => {
   const user = useSignedInUser();
-  const { isLoading } = useFetchPosts({ fetchOnMount: true });
-  const posts = usePosts();
+  const { isLoading, posts, fetchPosts } = useFetchPosts({
+    fetchOnMount: true,
+  });
 
   if (isLoading) return <PostLoader />;
 

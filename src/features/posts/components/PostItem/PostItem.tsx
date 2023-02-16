@@ -1,54 +1,56 @@
 import PostItemBody from "@/features/posts/components/PostItem/components/PostItemBody";
-import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
 import PostItemFooter from "@/features/posts/components/PostItem/components/PostItemFooter";
 import PostItemHeader from "@/features/posts/components/PostItem/components/PostItemHeader";
 import PostItemProvider from "@/features/posts/components/PostItem/components/PostItemProvider";
 import usePostItemStyles from "@/features/posts/components/PostItem/components/postItemStyles";
 import VoteButtons from "@/features/posts/components/PostItem/components/VoteButton";
+import { useSelectPost } from "@/features/posts/hooks/useSeledtPost";
+import { selectIsLoadingPost } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
-import { Box, Flex, Paper, Stack } from "@mantine/core";
+import { useAppSelector } from "@/store/hooks";
+import { Box, Flex, LoadingOverlay, Paper, Stack } from "@mantine/core";
 import { FC, memo } from "react";
-
-export type PostItemProps = Post & { userIsCreator: boolean };
 
 const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
   prevProps.id === nextProps.id;
 
-const WithPostItemProvider: FC<PostItemProps> = memo(
-  (props) => (
-    <PostItemProvider {...props}>
-      <PostItem />
-    </PostItemProvider>
-  ),
-  isEqual,
-);
+export type PostItemProps = Post & { userIsCreator: boolean };
 
-WithPostItemProvider.displayName = "PostItem(WithPostItemProvider)";
-
-const PostItem = () => {
+const PostItem: FC<PostItemProps> = memo((props) => {
   const { classes } = usePostItemStyles();
-  const { onSelectPost } = usePostItemContext();
+  const onSelectPost = useSelectPost(props.id);
+  const isLoadingPost = useAppSelector(selectIsLoadingPost);
 
   return (
-    <Paper
-      withBorder
-      shadow="lg"
-      className={classes.postItem}
-      onClick={onSelectPost}
-    >
-      <Flex>
-        <Box className={classes.leftSide}>
-          <VoteButtons />
-        </Box>
+    <PostItemProvider {...props}>
+      <Box pos="relative">
+        <Paper
+          withBorder
+          shadow="lg"
+          className={classes.postItem}
+          onClick={onSelectPost}
+        >
+          <Flex>
+            <Box className={classes.leftSide}>
+              <VoteButtons />
+            </Box>
 
-        <Stack pt={8} pl={4} spacing={4} w="100%">
-          <PostItemHeader />
-          <PostItemBody />
-          <PostItemFooter />
-        </Stack>
-      </Flex>
-    </Paper>
+            <Stack pt={8} pl={4} spacing={4} w="100%">
+              <PostItemHeader />
+              <PostItemBody />
+              <PostItemFooter />
+            </Stack>
+          </Flex>
+        </Paper>
+        <LoadingOverlay
+          visible={isLoadingPost}
+          overlayBlur={2}
+          transitionDuration={500}
+        />
+      </Box>
+    </PostItemProvider>
   );
-};
+}, isEqual);
 
-export default WithPostItemProvider;
+PostItem.displayName = "PostItem";
+export default PostItem;

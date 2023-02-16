@@ -1,5 +1,5 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import { setPosts } from "@/features/posts/postsSlice";
+import { selectPosts, setPosts } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
 import { firestore } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/router";
 import { andThen, otherwise, pipe } from "ramda";
 import { useEffect, useReducer } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const errorFetchingPosts = showNotificationError("Error fetching posts");
 
@@ -41,12 +41,18 @@ type UsePostsProps = {
   loadingNotification?: boolean;
 };
 
+const t = () => {
+  console.log("first");
+  return () => {};
+};
+
 export const useFetchPosts = ({
   fetchOnMount = false,
   loadingNotification = true,
 }: UsePostsProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const posts = useSelector(selectPosts);
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
   const toggleLoadingNotification =
@@ -54,7 +60,7 @@ export const useFetchPosts = ({
     () =>
       loadingNotification && setTimeout(toggleLoading, delay);
 
-  const fetchPosts = useEventCallback(
+  const fetchPosts = useEventCallback(() =>
     pipe(
       toggleLoadingNotification(),
       getCommunityId(router),
@@ -66,12 +72,12 @@ export const useFetchPosts = ({
         ),
       ),
       otherwise(pipe(errorFetchingPosts, toggleLoadingNotification())),
-    ),
+    )(),
   );
 
   useEffect(() => {
     fetchOnMount && fetchPosts();
   }, [fetchPosts, fetchOnMount]);
 
-  return { isLoading, fetchPosts };
+  return { isLoading, posts, fetchPosts };
 };

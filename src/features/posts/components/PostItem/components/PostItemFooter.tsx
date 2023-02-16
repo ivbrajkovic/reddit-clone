@@ -1,5 +1,6 @@
-import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
 import FooterButton from "@/features/posts/components/PostItem/components/PostItemFooterButton";
+import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
+import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
 import { stopPropagation } from "@/utility";
 import { Box, Group, Menu } from "@mantine/core";
 import { BsThreeDots } from "react-icons/bs";
@@ -10,10 +11,11 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { VscComment, VscTrash } from "react-icons/vsc";
 
 const PostItemFooter = () => {
-  const { id, commentCount, userIsCreator, imageUrl, onDeletePost } =
-    usePostItemContext();
+  const post = usePostItemContext();
+  const onDeletePost = useDeletePost();
 
-  const handleDeletePost = () => onDeletePost(id, !!imageUrl);
+  const handleDeletePost = () => onDeletePost(post);
+  const { commentCount, userIsCreator } = post;
 
   return (
     <Group spacing={4} pb={2} onClick={stopPropagation}>

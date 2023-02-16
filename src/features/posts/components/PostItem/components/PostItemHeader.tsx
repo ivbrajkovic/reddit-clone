@@ -1,4 +1,4 @@
-import { usePostItemContext } from "@/features/posts/components/PostItem/components/postItemContext";
+import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
 import { Box, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 
