@@ -16,7 +16,7 @@ const useStyles = createStyles((theme) => ({
     display: "grid",
     alignItems: "center",
     gridGap: theme.spacing.md,
-    gridTemplateColumns: "1fr auto",
+    gridTemplateColumns: "minmax(0, 1fr) auto",
   },
   image: {},
   icon: {
