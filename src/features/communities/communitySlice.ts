@@ -69,6 +69,9 @@ const communitySlice = createSlice({
     setCommunityData: (state, { payload }: PayloadAction<Community>) => {
       state.communityData = payload;
     },
+    setCommunityDataImageUrl: (state, { payload }: PayloadAction<string>) => {
+      state.communityData.imageUrl = payload;
+    },
 
     resetCommunityData: (state) => {
       state.communityData = { ...initialCommunityData };
@@ -96,6 +99,7 @@ export const {
   leaveCommunity,
   setCommunityData,
   resetCommunityData,
+  setCommunityDataImageUrl,
   toggleIsLoadingSnippets,
   setCommunitySnippets,
   clearCommunitySnippets,

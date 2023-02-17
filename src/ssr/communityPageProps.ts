@@ -40,6 +40,10 @@ const returnCommunityNotExists = () => ({
   props: { isCommunityExists: false },
 });
 
+const returnCommunityData = (communityData: Community) => ({
+  props: { communityData },
+});
+
 /**
  * SSR rendering of community page
  * Get community data from firestore on server side and dispatch it to redux store
@@ -57,6 +61,7 @@ export const getServerSideProps: GetServerSideProps =
           jsonParseStringify,
           dispatchCommunityData(store),
           returnCommunityExists,
+          // returnCommunityData,
         ),
       ),
       otherwise(pipe(logErrorIfDevelopment, returnCommunityNotExists)),

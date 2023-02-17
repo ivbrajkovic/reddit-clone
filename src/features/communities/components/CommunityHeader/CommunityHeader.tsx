@@ -20,32 +20,52 @@ const useStyles = createStyles((theme) => ({
       // paddingInline: 24,
     },
   },
-  logo: {
+  imageContainer: {
+    overflow: "hidden",
     marginTop: -12,
+    width: 72,
+    height: 72,
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
     fontSize: 72,
     color: theme.colors.blue[4],
+
+    borderRadius: "50%",
     border: `4px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : "white"
     }`,
-    borderRadius: "50%",
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[4] : "white",
   },
 }));
 
-const Header = () => {
+const CommunityHeader = () => {
   const { classes } = useStyles();
   const communityData = useCommunityData();
-  if (!communityData) return null;
+
+  if (!communityData) return <Box bg="red" />;
 
   return (
     <div className={classes.header}>
       <div></div>
       <div>
-        <Container px="xl" display="flex">
-          {communityData.imageUrl ? (
-            <Image src={""} alt="" />
-          ) : (
-            <FaReddit className={classes.logo} />
-          )}
+        <Container display="flex">
+          <Box className={classes.imageContainer}>
+            {communityData.imageUrl ? (
+              <Image
+                src={communityData.imageUrl}
+                alt="Community image"
+                fit="cover"
+                width={72}
+                height={72}
+              />
+            ) : (
+              <FaReddit />
+            )}
+          </Box>
           <Flex p="10px 16px">
             <Box mr={24}>
               <Text fw="700" fz="16pt" lh={1}>
@@ -62,4 +82,4 @@ const Header = () => {
     </div>
   );
 };
-export default Header;
+export default CommunityHeader;

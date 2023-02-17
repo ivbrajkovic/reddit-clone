@@ -1,47 +1,46 @@
-import { readFiles } from "@/utility/readFiles";
+import { useCommunityImageUpload } from "@/features/communities/hooks/useCommunityImage";
 import {
   Box,
   createStyles,
   FileInput,
-  Group,
   Image,
+  Loader,
   Text,
 } from "@mantine/core";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { FaReddit } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 
 const useStyles = createStyles((theme) => ({
   uploadImageContainer: {
     display: "grid",
-    alignItems: "center",
-    gridGap: theme.spacing.md,
-    gridTemplateColumns: "minmax(0, 1fr) 60px",
+    alignItems: "flex-end",
+    gridGap: theme.spacing.xl,
+    gridTemplateColumns: "minmax(0, 1fr) 42px",
   },
   image: {},
   icon: {
     fontSize: 40,
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 4 : 6],
+    color: theme.colors.red[theme.colorScheme === "dark" ? 4 : 6],
   },
 }));
 
 type AboutCommunityAdminProps = {
   isVisible: boolean;
   imageUrl: string | null;
+  communityId: string;
 };
 
 const AboutCommunityAdmin: FC<AboutCommunityAdminProps> = ({
   isVisible,
   imageUrl,
+  communityId,
 }) => {
   const { classes } = useStyles();
-  const [uploadedImage, setUploadedImage] = useState("");
+  const { isLoading, uploadCommunityImage } = useCommunityImageUpload();
 
-  const onChange = async (file: File) => {
-    const readFile = await readFiles([file], "readAsDataURL");
-    setUploadedImage(readFile[0]);
-  };
+  const onChange = async (file: File) =>
+    uploadCommunityImage(communityId, file);
 
   if (!isVisible) return null;
 
@@ -53,23 +52,26 @@ const AboutCommunityAdmin: FC<AboutCommunityAdminProps> = ({
 
       <Box className={classes.uploadImageContainer}>
         <FileInput
+          disabled={isLoading}
+          label="Community image"
+          labelProps={{ color: "gray", fz: "8pt" }}
           placeholder="Upload image"
-          icon={<FiUpload />}
+          icon={isLoading ? <Loader size="xs" /> : <FiUpload />}
           onChange={onChange}
         />
 
-        <Group position="right">
-          {imageUrl || uploadedImage ? (
-            <Image
-              src={uploadedImage || imageUrl}
-              fit="contain"
-              alt=""
-              styles={{ image: { maxHeight: 40 } }}
-            />
-          ) : (
-            <FaReddit className={classes.icon} />
-          )}
-        </Group>
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            fit="cover"
+            width={42}
+            height={42}
+            radius="xl"
+            alt=""
+          />
+        ) : (
+          <FaReddit className={classes.icon} />
+        )}
       </Box>
     </Box>
   );

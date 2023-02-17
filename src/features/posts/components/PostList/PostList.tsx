@@ -6,7 +6,7 @@ import { Stack } from "@mantine/core";
 
 const PostList = () => {
   const user = useSignedInUser();
-  const { isLoading, posts, fetchPosts } = useFetchPosts({
+  const { isLoading, posts } = useFetchPosts({
     fetchOnMount: true,
   });
 

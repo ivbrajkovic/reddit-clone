@@ -15,7 +15,6 @@ import {
 } from "@mantine/core";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { RiCakeLine } from "react-icons/ri";
@@ -55,13 +54,15 @@ type AboutCommunityProps = {};
 
 const AboutCommunity: FC<AboutCommunityProps> = () => {
   const { classes } = useStyles();
-  const router = useRouter();
   const user = useSignedInUser();
-  const { membersCount, createdAt, creatorId, imageUrl } = useCommunityData();
+  const { communityId, membersCount, createdAt, creatorId, imageUrl } =
+    useCommunityData();
+
   const membersCountFormatted = membersCount.toLocaleString();
   const createdAtFormatted = dayjs(createdAt.seconds * 1000).format(
     "MMM DD, YYYY",
   );
+
   return (
     <Paper withBorder shadow="lg" className={classes.paper}>
       <Group mb="sm" position="apart" className={classes.header}>
@@ -97,11 +98,7 @@ const AboutCommunity: FC<AboutCommunityProps> = () => {
           <Text fz="10pt">Created {createdAtFormatted}</Text>
         </Group>
 
-        <Button
-          component={Link}
-          href={`/r/${router.query.communityId}/submit`}
-          h={30}
-        >
+        <Button component={Link} href={`/r/${communityId}/submit`} h={30}>
           Create post
         </Button>
 
@@ -110,6 +107,7 @@ const AboutCommunity: FC<AboutCommunityProps> = () => {
         <AboutCommunityAdmin
           isVisible={user?.uid === creatorId}
           imageUrl={imageUrl}
+          communityId={communityId as string}
         />
       </Stack>
     </Paper>
