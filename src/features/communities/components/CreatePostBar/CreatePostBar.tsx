@@ -64,7 +64,7 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
             image: classes.userImage as any,
           }}
         />
-        <TextInput mr="xs" placeholder="Search Reddit" onClick={goToSubmit} />
+        <TextInput mr="xs" placeholder="Create Post" onClick={goToSubmit} />
         <div className={classes.iconContainer} onClick={goToSubmit}>
           <IoImageOutline className={classes.icon} fontSize={24} />
         </div>

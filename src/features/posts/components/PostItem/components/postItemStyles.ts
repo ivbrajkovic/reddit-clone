@@ -10,6 +10,8 @@ const usePostItemStyles = createStyles((theme) => ({
   },
   leftSide: {
     alignSelf: "stretch",
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[6] : "white",
   },

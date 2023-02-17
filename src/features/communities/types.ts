@@ -14,7 +14,7 @@ export type Community = {
   creatorId: string;
   membersCount: number;
   privacyType: PrivacyType;
-  createdAt: Timestamp | null;
+  createdAt: Timestamp;
   imageUrl: string | null;
 };
 

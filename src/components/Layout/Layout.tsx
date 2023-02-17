@@ -1,4 +1,6 @@
 import { Navbar } from "@/components/Navbar/Navbar";
+import { HEADER_HEIGHT } from "@/constants";
+import { Box } from "@mantine/core";
 import { Open_Sans } from "@next/font/google";
 import React from "react";
 
@@ -10,10 +12,12 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <main className={openSans.className}>
+    <>
       <Navbar />
-      {children}
-    </main>
+      <Box component="main" pt={HEADER_HEIGHT} className={openSans.className}>
+        {children}
+      </Box>
+    </>
   );
 };
 export default Layout;

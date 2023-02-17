@@ -1,4 +1,5 @@
 import PageContent from "@/components/Layout/PageContent";
+import { AboutCommunity } from "@/features/communities/components/AboutCommunity";
 import { CreatePostBar } from "@/features/communities/components/CreatePostBar";
 import { Header } from "@/features/communities/components/Header";
 import { CommunityNotFound } from "@/features/communities/components/NotFound.tsx";
@@ -21,9 +22,7 @@ const CommunityPage: FC<CommunityPageProps> = ({ isCommunityExists }) => {
           <PostList />
         </>
         <>
-          <div>Right!!</div>
-          <div>Right!!</div>
-          <div>Right!!</div>
+          <AboutCommunity />
         </>
       </PageContent>
     </>

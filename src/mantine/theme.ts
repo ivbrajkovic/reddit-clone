@@ -20,5 +20,16 @@ export const theme: MantineThemeOverride = {
 
   components: {
     Button: mantineButton,
+    Container: {
+      defaultProps: {
+        sizes: {
+          xs: 540,
+          sm: 720,
+          md: 992,
+          lg: 1140,
+          xl: 1320,
+        },
+      },
+    },
   },
 };

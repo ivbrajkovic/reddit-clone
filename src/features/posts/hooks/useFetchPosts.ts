@@ -41,11 +41,6 @@ type UsePostsProps = {
   loadingNotification?: boolean;
 };
 
-const t = () => {
-  console.log("first");
-  return () => {};
-};
-
 export const useFetchPosts = ({
   fetchOnMount = false,
   loadingNotification = true,

@@ -5,26 +5,19 @@ import {
 } from "@/features/communities/types";
 import { RootState } from "@/store/store";
 import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Timestamp } from "firebase/firestore";
 import { HYDRATE } from "next-redux-wrapper";
-import { any, complement, filter, propEq } from "ramda";
+import { complement, filter, propEq } from "ramda";
 
 const filterByCommunityId = (communityId: string) =>
   filter(complement(propEq("communityId", communityId)));
-
-const hasCommunityId = (communityId: string) =>
-  any(propEq("communityId", communityId));
-
-const checkIfUserJoinedInCurrentCommunity = (
-  communityId: string | undefined,
-  communitySnippets: CommunitySnippet[],
-) => (communityId ? hasCommunityId(communityId)(communitySnippets) : false);
 
 const initialCommunityData: Community = {
   adultContent: false,
   communityId: "",
   creatorId: "",
   privacyType: "public",
-  createdAt: null,
+  createdAt: { seconds: 0, nanoseconds: 0 } as Timestamp,
   imageUrl: null,
   membersCount: 0,
 };

@@ -28,11 +28,6 @@ const deletePostImageFromStorage = async (post: Post) =>
 const deletePostFromFirebase = (post: Post) =>
   pipe(postDocumentRef, deleteDoc, andThen(always(post)))(post);
 
-const t = () => {
-  console.log("first");
-  return () => {};
-};
-
 export const useDeletePost = () => {
   const dispatch = useDispatch();
   const toggleLoading = () => dispatch(toggleIsLoadingPost());
@@ -44,7 +39,6 @@ export const useDeletePost = () => {
       andThen(pipe(deletePost, dispatch)),
       otherwise(errorDeletingPost),
       andThen(toggleLoading),
-      t,
     )(post);
   });
 };
