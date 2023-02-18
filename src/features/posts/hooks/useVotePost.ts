@@ -4,6 +4,7 @@ import {
   selectPosts,
   selectPostVotes,
   setPostVoteByPostId,
+  updatePostById,
 } from "@/features/posts/postsSlice";
 import { Post, PostVote } from "@/features/posts/types";
 import { firestore } from "@/firebase/clientApp";
@@ -49,6 +50,8 @@ export const useVotePost = () => {
 
       // Update post vote count in store
       dispatch(setPostVoteByPostId(newVote));
+      dispatch(updatePostById({ ...post, voteStatus: post.voteStatus + vote }));
+
       // } else {
       // if (removin) {
       //   // Remove vote (set to 0)

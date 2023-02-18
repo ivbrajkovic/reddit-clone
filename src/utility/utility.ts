@@ -45,10 +45,12 @@ export const isPost = (value: any): value is Post =>
   typeof value === "object" &&
   "id" in value &&
   "communityId" in value &&
+  "creatorId" in value &&
+  "creatorDisplayName" in value &&
   "title" in value &&
   "body" in value &&
+  "commentCount" in value &&
+  "voteStatus" in value &&
   "createdAt" in value &&
-  "updatedAt" in value &&
-  "userId" in value &&
-  "username" in value &&
-  "userAvatar" in value;
+  "imageUrl" in value &&
+  "communityImageUrl" in value;

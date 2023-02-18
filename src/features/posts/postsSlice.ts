@@ -1,7 +1,7 @@
 import { Post, PostState, PostVote } from "@/features/posts/types";
 import { RootState } from "@/store/store";
 import { RequiredByKeys } from "@/types";
-import { isPost, isPostVote } from "@/utility";
+import { isPostVote } from "@/utility";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { find, ifElse, pipe, propEq, when } from "ramda";
 
@@ -46,10 +46,8 @@ const postsSlice = createSlice({
       state,
       action: PayloadAction<RequiredByKeys<Partial<Post>, "id">>,
     ) => {
-      pipe(
-        findPost(action.payload.id),
-        when(isPost, (post) => Object.assign(post, action.payload)),
-      )(state.posts);
+      const post = state.posts.find((post) => post.id === action.payload.id);
+      if (post) Object.assign(post, action.payload);
     },
 
     setPostVoteByPostId: (state, action: PayloadAction<PostVote>) => {
@@ -83,6 +81,7 @@ export const {
   setSelectedPost,
   setPosts,
   deletePost,
+  updatePostById,
   setPostVoteByPostId,
 } = postsSlice.actions;
 
