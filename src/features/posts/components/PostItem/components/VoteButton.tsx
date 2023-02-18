@@ -11,14 +11,16 @@ import {
 } from "react-icons/io5";
 
 const VoteButtons = () => {
-  const { voteStatus } = usePostItemContext();
+  const post = usePostItemContext();
   const onVotePost = useVotePost();
 
   const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    onVotePost(1);
+    onVotePost(1, post);
 
   const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    onVotePost(-1);
+    onVotePost(-1, post);
+
+  const { voteStatus } = post;
 
   const upArrow = voteStatus > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
   const upArrowFill = voteStatus > 0 ? "#FF4500" : "inherit";

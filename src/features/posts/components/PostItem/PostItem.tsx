@@ -9,14 +9,14 @@ import { selectIsLoadingPost } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Flex, LoadingOverlay, Paper, Stack } from "@mantine/core";
-import { FC, memo } from "react";
+import { FC } from "react";
 
 const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
   prevProps.id === nextProps.id;
 
 export type PostItemProps = Post & { userIsCreator: boolean };
 
-const PostItem: FC<PostItemProps> = memo((props) => {
+const PostItem: FC<PostItemProps> = (props) => {
   const { classes } = usePostItemStyles();
   const onSelectPost = useSelectPost(props.id);
   const isLoadingPost = useAppSelector(selectIsLoadingPost);
@@ -50,7 +50,7 @@ const PostItem: FC<PostItemProps> = memo((props) => {
       </Box>
     </PostItemProvider>
   );
-}, isEqual);
+};
 
 PostItem.displayName = "PostItem";
 export default PostItem;

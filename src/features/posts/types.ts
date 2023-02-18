@@ -25,8 +25,16 @@ export type Post = {
   communityImageUrl: string | null;
 };
 
+export type PostVote = {
+  id: string;
+  postId: string;
+  communityId: string;
+  voteValue: number;
+};
+
 export type PostState = {
   isLoadingPost: boolean;
   selectedPost: Post | null;
   posts: Post[];
+  postVotes: PostVote[];
 };
