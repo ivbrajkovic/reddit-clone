@@ -7,16 +7,19 @@ import VoteButtons from "@/features/posts/components/PostItem/components/VoteBut
 import { useSelectPost } from "@/features/posts/hooks/useSeledtPost";
 import { selectIsLoadingPost } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Flex, LoadingOverlay, Paper, Stack } from "@mantine/core";
-import { FC } from "react";
+import { FC, memo } from "react";
 
 const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
-  prevProps.id === nextProps.id;
+  prevProps.id === nextProps.id &&
+  prevProps.voteStatus === nextProps.voteStatus;
 
 export type PostItemProps = Post & { userIsCreator: boolean };
 
-const PostItem: FC<PostItemProps> = (props) => {
+const PostItem: FC<PostItemProps> = memo((props) => {
+  useRenderCount("PostItem -> " + props.id);
   const { classes } = usePostItemStyles();
   const onSelectPost = useSelectPost(props.id);
   const isLoadingPost = useAppSelector(selectIsLoadingPost);
@@ -50,7 +53,7 @@ const PostItem: FC<PostItemProps> = (props) => {
       </Box>
     </PostItemProvider>
   );
-};
+}, isEqual);
 
 PostItem.displayName = "PostItem";
 export default PostItem;

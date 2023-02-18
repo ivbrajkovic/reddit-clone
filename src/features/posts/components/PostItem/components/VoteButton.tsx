@@ -1,7 +1,7 @@
 import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
 import { useVotePost } from "@/features/posts/hooks/useVotePost";
 import { stopPropagation } from "@/utility";
-import { ActionIcon, Box, Flex, Text } from "@mantine/core";
+import { ActionIcon, Box, Flex, Group, Text } from "@mantine/core";
 import { MouseEventHandler } from "react";
 import {
   IoArrowDownCircle,
@@ -41,13 +41,11 @@ const VoteButtons = () => {
       <ActionIcon onClick={incrementVote}>
         <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>
       </ActionIcon>
-      <Box my={2}>
-        {voteStatus || (
-          <Text fz="xs" fw="bolder">
-            Vote
-          </Text>
-        )}
-      </Box>
+      <Group h={24}>
+        <Text fz="xs" fw="bolder">
+          {voteStatus || "Vote"}
+        </Text>
+      </Group>
       <ActionIcon onClick={decrementVote}>
         <Box component={downArrow} fontSize={24} fill={downArrowFill}></Box>
       </ActionIcon>
