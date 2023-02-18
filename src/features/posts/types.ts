@@ -32,9 +32,18 @@ export type PostVote = {
   voteValue: number;
 };
 
+export type PostVotes = {
+  votes: {
+    [key: string]: PostVote;
+  };
+  lookUpVoteIdByPostId: {
+    [key: string]: string;
+  };
+};
+
 export type PostState = {
   isLoadingPost: boolean;
   selectedPost: Post | null;
   posts: Post[];
-  postVotes: PostVote[];
+  postVotes: PostVotes;
 };

@@ -48,7 +48,6 @@ export const useFetchPosts = ({
   const router = useRouter();
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts);
-  console.log("🚀 ~ file: useFetchPosts.ts:51 ~ posts", posts);
 
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 

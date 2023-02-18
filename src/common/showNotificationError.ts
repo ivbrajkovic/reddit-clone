@@ -3,7 +3,7 @@ import { isError, isString } from "@/utility";
 import { showNotification } from "@mantine/notifications";
 
 export const showNotificationError =
-  (title: string, message?: string) => (error: unknown) => {
+  (title: string, message?: string) => (error?: unknown) => {
     const errorMessage = isString(message)
       ? message
       : isError(error)

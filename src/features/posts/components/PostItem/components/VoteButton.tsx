@@ -1,8 +1,8 @@
-import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
 import { useVotePost } from "@/features/posts/hooks/useVotePost";
+import { Post, PostVote } from "@/features/posts/types";
 import { stopPropagation } from "@/utility";
 import { ActionIcon, Box, Flex, Group, Text } from "@mantine/core";
-import { MouseEventHandler } from "react";
+import { FC } from "react";
 import {
   IoArrowDownCircle,
   IoArrowDownCircleOutline,
@@ -10,24 +10,24 @@ import {
   IoArrowUpCircleOutline,
 } from "react-icons/io5";
 
-const VoteButtons = () => {
-  const post = usePostItemContext();
-  const onVotePost = useVotePost();
+type VoteButtonsProps = {
+  post: Post;
+  postVote: PostVote;
+};
 
-  const incrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    onVotePost(1, post);
+const VoteButtons: FC<VoteButtonsProps> = (props) => {
+  const { incrementVote, decrementVote } = useVotePost();
 
-  const decrementVote: MouseEventHandler<HTMLButtonElement> = (e) =>
-    onVotePost(-1, post);
+  const onIncrementVote = () => incrementVote(props.post);
+  const onDecrementVote = () => decrementVote(props.post);
 
-  const { voteStatus } = post;
-
-  const upArrow = voteStatus > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
-  const upArrowFill = voteStatus > 0 ? "#FF4500" : "inherit";
+  const upArrow =
+    props.postVote.voteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
+  const upArrowFill = props.postVote.voteValue > 0 ? "#FF4500" : "inherit";
 
   const downArrow =
-    voteStatus < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
-  const downArrowFill = voteStatus > 0 ? "#7193FF" : "inherit";
+    props.postVote.voteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
+  const downArrowFill = props.postVote.voteValue < 0 ? "#7193FF" : "inherit";
 
   return (
     <Flex
@@ -38,15 +38,15 @@ const VoteButtons = () => {
       justify="center"
       onClick={stopPropagation}
     >
-      <ActionIcon onClick={incrementVote}>
+      <ActionIcon onClick={onIncrementVote}>
         <Box component={upArrow} fontSize={24} fill={upArrowFill}></Box>
       </ActionIcon>
       <Group h={24}>
         <Text fz="xs" fw="bolder">
-          {voteStatus || "Vote"}
+          {props.post.voteStatus || "Vote"}
         </Text>
       </Group>
-      <ActionIcon onClick={decrementVote}>
+      <ActionIcon onClick={onDecrementVote}>
         <Box component={downArrow} fontSize={24} fill={downArrowFill}></Box>
       </ActionIcon>
     </Flex>

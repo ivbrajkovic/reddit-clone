@@ -1,20 +1,22 @@
-import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
+import { Post } from "@/features/posts/types";
 import { Box, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
+import { FC } from "react";
 
-const PostItemHeader = () => {
-  const { title, creatorDisplayName, createdAt } = usePostItemContext();
-  const formatCreatedAt = dayjs(createdAt.seconds * 1000).fromNow();
+type PostItemHeaderProps = { post: Post };
+
+const PostItemHeader: FC<PostItemHeaderProps> = (props) => {
+  const formatCreatedAt = dayjs(props.post.createdAt.seconds * 1000).fromNow();
 
   return (
     <Box>
       <Group mb={4} spacing="sm" fz="9pt">
         <div>pic</div>
-        <Text>Posted by u/{creatorDisplayName}</Text>
+        <Text>Posted by u/{props.post.creatorDisplayName}</Text>
         <Text>{formatCreatedAt}</Text>
       </Group>
       <Text mb={4} fz="12pt" fw={600}>
-        {title}
+        {props.post.title}
       </Text>
     </Box>
   );

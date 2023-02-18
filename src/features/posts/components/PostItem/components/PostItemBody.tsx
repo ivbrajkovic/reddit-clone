@@ -1,15 +1,17 @@
 import { FadeInImage } from "@/components/FadeInImage";
-import { usePostItemContext } from "@/features/posts/components/PostItem/hooks/usePostItemContext";
+import { Post } from "@/features/posts/types";
 import { Stack, Text } from "@mantine/core";
+import { FC } from "react";
 
-const PostItemBody = () => {
-  const { body, imageUrl } = usePostItemContext();
+type PostItemBodyProps = { post: Post };
+
+const PostItemBody: FC<PostItemBodyProps> = (props) => {
   return (
     <Stack spacing="sm">
-      <Text>{body}</Text>
-      {imageUrl ? (
+      <Text>{props.post.body}</Text>
+      {props.post.imageUrl ? (
         <FadeInImage
-          src={imageUrl}
+          src={props.post.imageUrl}
           alt="post"
           fit="contain"
           styles={{ image: { maxHeight: 460 } }}

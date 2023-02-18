@@ -1,13 +1,17 @@
 import { Post, PostState, PostVote } from "@/features/posts/types";
 import { RootState } from "@/store/store";
 import { RequiredByKeys } from "@/types";
+import { findById } from "@/utility";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialPostState: PostState = {
   isLoadingPost: false,
   selectedPost: null,
   posts: [],
-  postVotes: [],
+  postVotes: {
+    votes: {},
+    lookUpVoteIdByPostId: {},
+  },
 };
 
 const postsSlice = createSlice({
@@ -34,23 +38,42 @@ const postsSlice = createSlice({
     //     })),
     //   }),
     // },
-    deletePostById: (state, { payload }: PayloadAction<Post>) => {
+    deletePost: (state, { payload }: PayloadAction<Post>) => {
       state.posts = state.posts.filter((post) => post.id !== payload.id);
     },
-    updatePostById: (
+    updatePost: (
       state,
       { payload }: PayloadAction<RequiredByKeys<Partial<Post>, "id">>,
     ) => {
-      const post = state.posts.find((post) => post.id === payload.id);
+      const post = findById(payload.id, state.posts);
       post && Object.assign(post, payload);
     },
+    incrementPostVoteStatus: (state, action: PayloadAction<string>) => {
+      const post = findById(action.payload, state.posts);
+      post && post.voteStatus++;
+    },
+    decrementPostVoteStatus: (state, action: PayloadAction<string>) => {
+      const post = findById(action.payload, state.posts);
+      post && post.voteStatus--;
+    },
 
-    setPostVoteByPostId: (state, { payload }: PayloadAction<PostVote>) => {
-      const { postId, voteValue } = payload;
-      const postVote = state.postVotes.find((vote) => vote.postId === postId);
-      postVote
-        ? (postVote.voteValue = voteValue)
-        : state.postVotes.push(payload);
+    // PostVote
+
+    addPostVote: (state, { payload }: PayloadAction<PostVote>) => {
+      state.postVotes.votes[payload.id] = payload;
+      state.postVotes.lookUpVoteIdByPostId[payload.postId] = payload.id;
+    },
+    deletePostVote: (state, { payload }: PayloadAction<string>) => {
+      const postVote = state.postVotes.votes[payload];
+      delete state.postVotes.lookUpVoteIdByPostId[postVote?.postId];
+      delete state.postVotes.votes[payload];
+    },
+    updatePostVote: (
+      state,
+      { payload }: PayloadAction<RequiredByKeys<Partial<PostVote>, "id">>,
+    ) => {
+      const postVote = state.postVotes.votes[payload.id];
+      postVote && Object.assign(postVote, payload);
     },
   },
 });
@@ -59,9 +82,13 @@ export const {
   toggleIsLoadingPost,
   setSelectedPost,
   setPosts,
-  deletePostById: deletePost,
-  updatePostById,
-  setPostVoteByPostId,
+  deletePost,
+  updatePost,
+  incrementPostVoteStatus,
+  decrementPostVoteStatus,
+  addPostVote,
+  deletePostVote,
+  updatePostVote,
 } = postsSlice.actions;
 
 export const selectIsLoadingPost = (state: RootState) =>

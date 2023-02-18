@@ -30,3 +30,9 @@ export const isNullOrUndefined = <T>(value: T): boolean =>
 
 export const stopPropagation: MouseEventHandler<any> = (e) =>
   e.stopPropagation();
+
+export const filterById = <T extends any[]>(id: string, arr: T) =>
+  arr.filter((item) => item.id !== id);
+
+export const findById = <T extends any[]>(id: string, arr: T) =>
+  arr.find((item) => item.id === id);

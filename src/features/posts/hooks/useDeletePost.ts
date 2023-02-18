@@ -1,8 +1,5 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import {
-  deletePostById,
-  toggleIsLoadingPost,
-} from "@/features/posts/postsSlice";
+import { deletePost, toggleIsLoadingPost } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
@@ -39,7 +36,7 @@ export const useDeletePost = () => {
       tap(toggleLoading),
       deletePostImageFromStorage,
       andThen(deletePostFromFirebase),
-      andThen(pipe(deletePostById, dispatch)),
+      andThen(pipe(deletePost, dispatch)),
       otherwise(errorDeletingPost),
       andThen(toggleLoading),
     )(post);
