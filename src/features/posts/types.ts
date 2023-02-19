@@ -42,7 +42,6 @@ export type PostVotes = {
 };
 
 export type PostState = {
-  isLoadingPost: boolean;
   selectedPost: Post | null;
   posts: Post[];
   postVotes: PostVotes;

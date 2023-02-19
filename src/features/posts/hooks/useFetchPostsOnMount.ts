@@ -4,7 +4,7 @@ import { useEffect, useReducer } from "react";
 
 const delay500 = (fn: () => void) => delayFn(fn, 500);
 
-export const useFetchPostOnMount = () => {
+export const useFetchPostsOnMount = () => {
   const fetchPosts = useFetchPosts();
   const [isLoading, toggleLoading] = useReducer((s) => !s, true);
 

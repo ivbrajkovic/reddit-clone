@@ -10,7 +10,6 @@ const initialPostVotes = {
 };
 
 const initialPostState: PostState = {
-  isLoadingPost: false,
   selectedPost: null,
   posts: [],
   postVotes: { ...initialPostVotes },
@@ -25,9 +24,6 @@ const postsSlice = createSlice({
     });
   },
   reducers: {
-    toggleIsLoadingPost: (state) => {
-      state.isLoadingPost = !state.isLoadingPost;
-    },
     setSelectedPost: (state, action: PayloadAction<Post>) => {
       state.selectedPost = action.payload;
     },
@@ -81,7 +77,6 @@ const postsSlice = createSlice({
 });
 
 export const {
-  toggleIsLoadingPost,
   setSelectedPost,
   setPosts,
   deletePost,
@@ -91,9 +86,6 @@ export const {
   deletePostVote,
   updatePostVote,
 } = postsSlice.actions;
-
-export const selectIsLoadingPost = (state: RootState) =>
-  state.postSlice.isLoadingPost;
 
 export const selectSelectedPost = (state: RootState) =>
   state.postSlice.selectedPost;

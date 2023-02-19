@@ -1,11 +1,11 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import { deletePost, toggleIsLoadingPost } from "@/features/posts/postsSlice";
+import { deletePost } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-import { always, andThen, isNil, otherwise, pipe, tap, unless } from "ramda";
+import { always, andThen, isNil, otherwise, pipe, unless } from "ramda";
 import { useDispatch } from "react-redux";
 
 const formatImagePath = (post: Post) => `posts/${post.id}/image`;
@@ -30,15 +30,12 @@ const deletePostFromFirebase = (post: Post) =>
 
 export const useDeletePost = () => {
   const dispatch = useDispatch();
-  const toggleLoading = () => dispatch(toggleIsLoadingPost());
-  return useEventCallback((post: Post) => {
-    pipe(
-      tap(toggleLoading),
+  return useEventCallback(async (post: Post) => {
+    return pipe(
       deletePostImageFromStorage,
       andThen(deletePostFromFirebase),
       andThen(pipe(deletePost, dispatch)),
       otherwise(errorDeletingPost),
-      andThen(toggleLoading),
     )(post);
   });
 };

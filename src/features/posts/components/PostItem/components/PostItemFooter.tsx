@@ -1,6 +1,5 @@
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import FooterButton from "@/features/posts/components/PostItem/components/PostItemFooterButton";
-import { usePostContext } from "@/features/posts/context/postContext";
 import { Post } from "@/features/posts/types";
 import { stopPropagation } from "@/utility";
 import { Box, Group, Menu } from "@mantine/core";
@@ -14,12 +13,12 @@ import { VscComment, VscTrash } from "react-icons/vsc";
 
 type PostItemFooterProps = {
   post: Post;
+  onDeletePost: (post: Post) => void;
 };
 
 const PostItemFooter: FC<PostItemFooterProps> = (props) => {
   const user = useSignedInUser();
-  const { onDeletePost } = usePostContext();
-  const handleDeletePost = () => onDeletePost(props.post);
+  const handleDeletePost = () => props.onDeletePost(props.post);
 
   return (
     <Group spacing={4} pb={2} onClick={stopPropagation}>

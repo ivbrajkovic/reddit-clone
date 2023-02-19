@@ -5,7 +5,7 @@ import { createContext, FC, useContext, useRef } from "react";
 
 type PostContext = {
   onSelectPost: (postId: string) => void;
-  onDeletePost: (post: Post) => void;
+  onDeletePost: (post: Post) => Promise<void>;
 };
 
 const PostContext = createContext({} as PostContext);
