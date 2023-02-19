@@ -27,8 +27,8 @@ export type CommunitySnippet = {
 };
 
 export type CommunityState = {
-  isCreateCommunityModalOpen: boolean;
-  isLoadingSnippets: boolean;
+  isCommunityCreateModal: boolean;
+  isCommunityLoader: boolean;
   communitySnippets: CommunitySnippet[];
   communityData: Community;
 };

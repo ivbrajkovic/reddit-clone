@@ -1,7 +1,7 @@
 import PostItem from "@/features/posts/components/PostItem/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
-import { useFetchPosts } from "@/features/posts/hooks/useFetchPosts";
-import { selectPostVotes } from "@/features/posts/postsSlice";
+import { useFetchPostOnMount } from "@/features/posts/hooks/useFetchPostOnMount";
+import { selectPosts, selectPostVotes } from "@/features/posts/postsSlice";
 import { PostVotes } from "@/features/posts/types";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { Stack } from "@mantine/core";
@@ -15,10 +15,10 @@ const getPostVoteByPostId = (postId: string, postVotes: PostVotes) => {
 const PostList = () => {
   useRenderCount("PostList");
 
+  const posts = useSelector(selectPosts);
   const postVotes = useSelector(selectPostVotes);
 
-  const { isLoading, posts } = useFetchPosts({ fetchOnMount: true });
-
+  const { isLoading } = useFetchPostOnMount();
   if (isLoading) return <PostLoader />;
 
   return (

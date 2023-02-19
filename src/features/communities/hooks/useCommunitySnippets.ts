@@ -1,18 +1,14 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import {
-  clearCommunitySnippets,
-  setCommunitySnippets,
-  toggleIsLoadingSnippets,
-} from "@/features/communities/communitySlice";
+import { setCommunitySnippets } from "@/features/communities/communitySlice";
 import { CommunitySnippet } from "@/features/communities/types";
 import { firestore } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { useAppDispatch } from "@/store/hooks";
-import { User } from "firebase/auth";
 import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
-import { andThen, map, otherwise, pipe, prop, tap } from "ramda";
+import { andThen, map, otherwise, pipe, prop } from "ramda";
 
-const formatSnippetPath = (user: User) => `users/${user.uid}/communitySnippets`;
+const formatSnippetPath = (userId: string) =>
+  `users/${userId}/communitySnippets`;
 const getSnippetCollection = (path: string) => collection(firestore, path);
 
 const formatSnippets = (doc: QueryDocumentSnapshot) =>
@@ -21,37 +17,22 @@ const formatSnippets = (doc: QueryDocumentSnapshot) =>
     ...doc.data(),
   } as CommunitySnippet);
 
-export const useUserCommunitySnippets = () => {
+export const useFetchCommunitySnippets = () => {
   const dispatch = useAppDispatch();
 
-  const toggleLoading = () => dispatch(toggleIsLoadingSnippets());
-
-  const clearUserCommunitySnippets = useEventCallback(async () =>
-    dispatch(clearCommunitySnippets()),
-  );
-
-  const getUserCommunitySnippets = useEventCallback((user: User) => {
-    pipe(
+  return useEventCallback(async (userId: string) => {
+    return pipe(
       formatSnippetPath,
       getSnippetCollection,
-      tap(toggleLoading),
       getDocs,
       andThen(
         pipe(
           prop("docs"),
           map(formatSnippets),
           pipe(setCommunitySnippets, dispatch),
-          toggleLoading,
         ),
       ),
-      otherwise(
-        pipe(
-          showNotificationError("Error getting community snippets"),
-          toggleLoading,
-        ),
-      ),
-    )(user);
+      otherwise(showNotificationError("Error getting community snippets")),
+    )(userId);
   });
-
-  return { clearUserCommunitySnippets, getUserCommunitySnippets };
 };

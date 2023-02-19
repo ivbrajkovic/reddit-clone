@@ -1,7 +1,7 @@
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { isUser } from "@/features/auth/utility";
-import { selectIsLoadingSnippets } from "@/features/communities/communitySlice";
+import { selectIsCommunityLoader } from "@/features/communities/communitySlice";
 import { useCommunityData } from "@/features/communities/context/communityContext";
 import { useIsUserJoinedInCommunity } from "@/features/communities/hooks/useIsUserJoinedInCommunity";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
@@ -21,7 +21,7 @@ export const useCommunity = () => {
   const leaveCommunity = useLeaveCommunity();
 
   const isUserJoinedInCommunity = useIsUserJoinedInCommunity();
-  const isLoadingSnippets = useSelector(selectIsLoadingSnippets);
+  const isCommunityLoader = useSelector(selectIsCommunityLoader);
 
   const joinOrLeaveCommunity = useEventCallback(() => {
     const joinOrLeave = ifElse(
@@ -33,7 +33,7 @@ export const useCommunity = () => {
   });
 
   return {
-    isLoading: isLoadingSnippets,
+    isLoading: isCommunityLoader,
     isUserJoinedInCommunity,
     joinOrLeaveCommunity,
   };

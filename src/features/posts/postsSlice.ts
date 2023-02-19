@@ -4,19 +4,26 @@ import { RequiredByKeys } from "@/types";
 import { findById } from "@/utility";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const initialPostVotes = {
+  votes: {},
+  lookUpVoteIdByPostId: {},
+};
+
 const initialPostState: PostState = {
   isLoadingPost: false,
   selectedPost: null,
   posts: [],
-  postVotes: {
-    votes: {},
-    lookUpVoteIdByPostId: {},
-  },
+  postVotes: { ...initialPostVotes },
 };
 
 const postsSlice = createSlice({
   name: "posts",
   initialState: initialPostState,
+  extraReducers: (builder) => {
+    builder.addCase("auth/logout", (state) => {
+      state.postVotes = { ...initialPostVotes };
+    });
+  },
   reducers: {
     toggleIsLoadingPost: (state) => {
       state.isLoadingPost = !state.isLoadingPost;

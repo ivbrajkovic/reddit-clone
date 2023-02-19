@@ -23,8 +23,8 @@ const initialCommunityData: Community = {
 };
 
 const initialState: CommunityState = {
-  isCreateCommunityModalOpen: false,
-  isLoadingSnippets: false,
+  isCommunityCreateModal: false,
+  isCommunityLoader: false,
   communitySnippets: [],
   communityData: { ...initialCommunityData },
 };
@@ -36,20 +36,29 @@ const communitySlice = createSlice({
     builder
       .addCase("auth/logout", (state) => {
         state.communitySnippets = [];
-        state.isLoadingSnippets = false;
-        state.isCreateCommunityModalOpen = false;
+        state.isCommunityLoader = false;
+        state.isCommunityCreateModal = false;
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
         state.communityData = action.payload.communitySlice.communityData;
       });
   },
   reducers: {
+    // Community Create Modal
     openCommunityCreateModal: (state) => {
-      state.isCreateCommunityModalOpen = true;
+      state.isCommunityCreateModal = true;
     },
     closeCommunityCreateModal: (state) => {
-      state.isCreateCommunityModalOpen = false;
+      state.isCommunityCreateModal = false;
     },
+
+    // Community Loader
+
+    toggleCommunityLoader: (state) => {
+      state.isCommunityLoader = !state.isCommunityLoader;
+    },
+
+    // Community actions
 
     joinCommunity: (
       state,
@@ -66,6 +75,11 @@ const communitySlice = createSlice({
       );
     },
 
+    // Community Data
+
+    resetCommunityData: (state) => {
+      state.communityData = { ...initialCommunityData };
+    },
     setCommunityData: (state, { payload }: PayloadAction<Community>) => {
       state.communityData = payload;
     },
@@ -73,20 +87,15 @@ const communitySlice = createSlice({
       state.communityData.imageUrl = payload;
     },
 
-    resetCommunityData: (state) => {
-      state.communityData = { ...initialCommunityData };
-    },
+    // Community Snippets
 
-    toggleIsLoadingSnippets: (state) => {
-      state.isLoadingSnippets = !state.isLoadingSnippets;
-    },
     setCommunitySnippets: (
       state,
       { payload: communitySnippets }: PayloadAction<CommunitySnippet[]>,
     ) => {
       state.communitySnippets = communitySnippets;
     },
-    clearCommunitySnippets: (state) => {
+    resetCommunitySnippets: (state) => {
       state.communitySnippets = [];
     },
   },
@@ -100,19 +109,19 @@ export const {
   setCommunityData,
   resetCommunityData,
   setCommunityDataImageUrl,
-  toggleIsLoadingSnippets,
+  toggleCommunityLoader,
   setCommunitySnippets,
-  clearCommunitySnippets,
+  resetCommunitySnippets,
 } = communitySlice.actions;
 
 export const selectIsCreateCommunityModalOpen = (state: RootState) =>
-  state.communitySlice.isCreateCommunityModalOpen;
+  state.communitySlice.isCommunityCreateModal;
 
 export const selectCommunitySnippets = (state: RootState) =>
   state.communitySlice.communitySnippets;
 
-export const selectIsLoadingSnippets = (state: RootState) =>
-  state.communitySlice.isLoadingSnippets;
+export const selectIsCommunityLoader = (state: RootState) =>
+  state.communitySlice.isCommunityLoader;
 
 export const selectCommunityData = (state: RootState) =>
   state.communitySlice.communityData;

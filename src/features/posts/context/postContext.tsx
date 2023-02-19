@@ -1,7 +1,7 @@
 import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
 import { useSelectPost } from "@/features/posts/hooks/useSelectPost";
 import { Post } from "@/features/posts/types";
-import { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext, useRef } from "react";
 
 type PostContext = {
   onSelectPost: (postId: string) => void;
@@ -15,8 +15,13 @@ export const PostProvider: FC<PostProviderProps> = ({ children }) => {
   const onSelectPost = useSelectPost();
   const onDeletePost = useDeletePost();
 
+  const handlers = useRef({
+    onSelectPost,
+    onDeletePost,
+  });
+
   return (
-    <PostContext.Provider value={{ onSelectPost, onDeletePost }}>
+    <PostContext.Provider value={handlers.current}>
       {children}
     </PostContext.Provider>
   );
