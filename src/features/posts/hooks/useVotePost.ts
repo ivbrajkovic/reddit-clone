@@ -11,8 +11,7 @@ import { Post, PostVote } from "@/features/posts/types";
 import { firestore } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { AppDispatch } from "@/store/store";
-import { collection, doc, WriteBatch, writeBatch } from "firebase/firestore";
+import { collection, doc, writeBatch } from "firebase/firestore";
 
 const createPostVote = (id: string, vote: number, post: Post): PostVote => ({
   id,
@@ -26,26 +25,6 @@ const createPostVoteRef = (userId: string) =>
 
 const getPostVoteRef = (userId: string, postVoteId: string) =>
   doc(firestore, "users", `${userId}/postVotes/${postVoteId}`);
-
-const errorUserNotSignedIn = () =>
-  showNotificationError("User not signed in")();
-
-const createNewVote = (
-  userId: string,
-  vote: number,
-  post: Post,
-  batch: WriteBatch,
-  dispatch: AppDispatch,
-) => {
-  // Create new vote
-  const posteVoteRef = createPostVoteRef(userId);
-  const newVote = createPostVote(posteVoteRef.id, vote, post);
-  batch.set(posteVoteRef, newVote);
-
-  // Dispatch post vote changes to store
-  dispatch(updatePost({ ...post, voteStatus: post.voteStatus + vote }));
-  dispatch(addPostVote(newVote));
-};
 
 export const useVotePost = () => {
   const user = useSignedInUser();
@@ -68,7 +47,7 @@ export const useVotePost = () => {
         const posteVoteRef = createPostVoteRef(user.uid);
         const newVote = createPostVote(posteVoteRef.id, vote, post);
         batch.set(posteVoteRef, newVote);
-        // await batch.commit();
+        await batch.commit();
 
         // Dispatch post vote changes to store
         dispatch(updatePost(updatedPost));

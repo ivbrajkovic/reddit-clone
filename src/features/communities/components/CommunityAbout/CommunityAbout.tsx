@@ -1,7 +1,7 @@
 import { HEADER_HEIGHT } from "@/constants";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import AboutCommunityAdmin from "@/features/communities/components/AboutCommunity/components/AboutComunityAdmin";
-import { useCommunityData } from "@/features/communities/hooks/useCommunityData";
+import CommunityAboutAdmin from "@/features/communities/components/CommunityAbout/components/CommunityAboutAdmin";
+import { useCommunityData } from "@/features/communities/context/communityContext";
 import {
   Box,
   Button,
@@ -50,9 +50,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type AboutCommunityProps = {};
+type CommunityAboutProps = {};
 
-const AboutCommunity: FC<AboutCommunityProps> = () => {
+const CommunityAbout: FC<CommunityAboutProps> = () => {
   const { classes } = useStyles();
   const user = useSignedInUser();
   const { communityId, membersCount, createdAt, creatorId, imageUrl } =
@@ -104,7 +104,7 @@ const AboutCommunity: FC<AboutCommunityProps> = () => {
 
         <Divider />
 
-        <AboutCommunityAdmin
+        <CommunityAboutAdmin
           isVisible={user?.uid === creatorId}
           imageUrl={imageUrl}
           communityId={communityId as string}
@@ -113,4 +113,4 @@ const AboutCommunity: FC<AboutCommunityProps> = () => {
     </Paper>
   );
 };
-export default AboutCommunity;
+export default CommunityAbout;

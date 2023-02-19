@@ -25,13 +25,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type AboutCommunityAdminProps = {
+type CommunityAboutAdminProps = {
   isVisible: boolean;
   imageUrl: string | null;
   communityId: string;
 };
 
-const AboutCommunityAdmin: FC<AboutCommunityAdminProps> = ({
+const CommunityAboutAdmin: FC<CommunityAboutAdminProps> = ({
   isVisible,
   imageUrl,
   communityId,
@@ -76,4 +76,4 @@ const AboutCommunityAdmin: FC<AboutCommunityAdminProps> = ({
     </Box>
   );
 };
-export default AboutCommunityAdmin;
+export default CommunityAboutAdmin;

@@ -3,7 +3,7 @@ import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
 import { HEADER_HEIGHT } from "@/constants";
-import CreateCommunityModal from "@/features/communities/components/CreateCommunityModal/CreateCommunityModal";
+import { CommunityCreateModal } from "@/features/communities";
 import { createStyles, Group, Header } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
@@ -21,7 +21,7 @@ export const Navbar = () => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.header}>
       <Group spacing={8}>
-        <CreateCommunityModal />
+        <CommunityCreateModal />
         <Logo />
         <Directory />
         <SearchInput />

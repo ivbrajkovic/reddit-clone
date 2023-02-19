@@ -12,14 +12,14 @@ export const useJoinCommunity = () => {
   const dispatch = useAppDispatch();
 
   return useEventCallback((user: User, communityData: Community) => {
+    const createWritingBatch = () => writeBatch(firestore);
+    const commitBatchToFirestore = (batch: WriteBatch) => batch.commit();
+
     const createSnippet = () => ({
       imageUrl: communityData.imageUrl,
       communityId: communityData.communityId,
       isModerator: false,
     });
-
-    const createWritingBatch = () => writeBatch(firestore);
-    const commitBatchToFirestore = (batch: WriteBatch) => batch.commit();
 
     const setCommunitySnippet = (batch: WriteBatch) => {
       const snippetsPath = `users/${user.uid}/communitySnippets`;

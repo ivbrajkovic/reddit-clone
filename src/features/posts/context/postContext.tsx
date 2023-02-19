@@ -10,8 +10,8 @@ type PostContext = {
 
 const PostContext = createContext({} as PostContext);
 
-type PostContextProviderProps = { children: React.ReactNode };
-export const PostProvider: FC<PostContextProviderProps> = ({ children }) => {
+type PostProviderProps = { children: React.ReactNode };
+export const PostProvider: FC<PostProviderProps> = ({ children }) => {
   const onSelectPost = useSelectPost();
   const onDeletePost = useDeletePost();
 

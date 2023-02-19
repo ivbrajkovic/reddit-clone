@@ -6,10 +6,9 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const AuthState = () => {
+  const [user] = useAuthState(auth);
   const { getUserCommunitySnippets, clearUserCommunitySnippets } =
     useUserCommunitySnippets();
-
-  const [user] = useAuthState(auth);
 
   useEffect(() => {
     ifElse(isUser, getUserCommunitySnippets, clearUserCommunitySnippets)(user);

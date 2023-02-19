@@ -2,7 +2,7 @@ import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { isUser } from "@/features/auth/utility";
 import { selectIsLoadingSnippets } from "@/features/communities/communitySlice";
-import { useCommunityData } from "@/features/communities/hooks/useCommunityData";
+import { useCommunityData } from "@/features/communities/context/communityContext";
 import { useIsUserJoinedInCommunity } from "@/features/communities/hooks/useIsUserJoinedInCommunity";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
 import { useLeaveCommunity } from "@/features/communities/hooks/useLeaveCommunity";
@@ -16,12 +16,12 @@ export const useCommunity = () => {
 
   const { openLogin } = useAuthModalHandlers();
 
+  const communityData = useCommunityData();
   const joinCommunity = useJoinCommunity();
   const leaveCommunity = useLeaveCommunity();
 
-  const communityData = useCommunityData();
-  const isLoadingSnippets = useSelector(selectIsLoadingSnippets);
   const isUserJoinedInCommunity = useIsUserJoinedInCommunity();
+  const isLoadingSnippets = useSelector(selectIsLoadingSnippets);
 
   const joinOrLeaveCommunity = useEventCallback(() => {
     const joinOrLeave = ifElse(

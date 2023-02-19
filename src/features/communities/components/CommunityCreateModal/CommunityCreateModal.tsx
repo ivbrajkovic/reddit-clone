@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { Modal } from "@/components/Modal";
 import { selectIsCreateCommunityModalOpen } from "@/features/communities/communitySlice";
-import RadioButtonWithIcon from "@/features/communities/components/CreateCommunityModal/RadioButtonWithIcon";
+import RadioButtonWithIcon from "@/features/communities/components/CommunityCreateModal/RadioButtonWithIcon";
 import { useCommunityCreate } from "@/features/communities/hooks/useCommunityCreate";
 import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
 import { CreateCommunityFormValues } from "@/features/communities/types";

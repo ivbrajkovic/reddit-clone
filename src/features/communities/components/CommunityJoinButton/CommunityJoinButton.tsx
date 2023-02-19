@@ -2,9 +2,9 @@ import { useCommunity } from "@/features/communities/hooks/useCommunity";
 import { Button, ButtonProps } from "@mantine/core";
 import { FC } from "react";
 
-type JoinCommunityButtonProps = ButtonProps;
+type CommunityJoinButtonProps = ButtonProps;
 
-const JoinCommunityButton: FC<JoinCommunityButtonProps> = (props) => {
+const CommunityJoinButton: FC<CommunityJoinButtonProps> = (props) => {
   const { isLoading, isUserJoinedInCommunity, joinOrLeaveCommunity } =
     useCommunity();
 
@@ -19,4 +19,4 @@ const JoinCommunityButton: FC<JoinCommunityButtonProps> = (props) => {
     </Button>
   );
 };
-export default JoinCommunityButton;
+export default CommunityJoinButton;

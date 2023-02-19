@@ -1,9 +1,13 @@
 import PageContent from "@/components/Layout/PageContent";
-import { AboutCommunity } from "@/features/communities/components/AboutCommunity";
-import { CreatePostBar } from "@/features/communities/components/CreatePostBar";
-import { CommunityHeader } from "@/features/communities/components/Header";
-import { CommunityNotFound } from "@/features/communities/components/NotFound.tsx";
+import {
+  CommunityAbout,
+  CommunityCreatePostBar,
+  CommunityHeader,
+  CommunityNotFound,
+} from "@/features/communities";
+import { CommunityProvider } from "@/features/communities/context/communityContext";
 import { PostList } from "@/features/posts";
+import { PostProvider } from "@/features/posts/context/postContext";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { FC } from "react";
 export { getServerSideProps } from "@/ssr/communityPageProps";
@@ -17,18 +21,20 @@ const CommunityPage: FC<CommunityPageProps> = ({ isCommunityExists }) => {
 
   if (!isCommunityExists) return <CommunityNotFound />;
   return (
-    <>
-      <CommunityHeader />
-      <PageContent>
-        <>
-          <CreatePostBar />
-          <PostList />
-        </>
-        <>
-          <AboutCommunity />
-        </>
-      </PageContent>
-    </>
+    <CommunityProvider>
+      <PostProvider>
+        <CommunityHeader />
+        <PageContent>
+          <>
+            <CommunityCreatePostBar />
+            <PostList />
+          </>
+          <>
+            <CommunityAbout />
+          </>
+        </PageContent>
+      </PostProvider>
+    </CommunityProvider>
   );
 };
 

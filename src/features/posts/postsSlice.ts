@@ -1,4 +1,4 @@
-import { Post, PostState, PostVote } from "@/features/posts/types";
+import { Post, PostState, PostVote, PostVotes } from "@/features/posts/types";
 import { RootState } from "@/store/store";
 import { RequiredByKeys } from "@/types";
 import { findById } from "@/utility";
@@ -48,17 +48,12 @@ const postsSlice = createSlice({
       const post = findById(payload.id, state.posts);
       post && Object.assign(post, payload);
     },
-    incrementPostVoteStatus: (state, action: PayloadAction<string>) => {
-      const post = findById(action.payload, state.posts);
-      post && post.voteStatus++;
-    },
-    decrementPostVoteStatus: (state, action: PayloadAction<string>) => {
-      const post = findById(action.payload, state.posts);
-      post && post.voteStatus--;
-    },
 
     // PostVote
 
+    setPostVotes: (state, { payload }: PayloadAction<PostVotes>) => {
+      state.postVotes = payload;
+    },
     addPostVote: (state, { payload }: PayloadAction<PostVote>) => {
       state.postVotes.votes[payload.id] = payload;
       state.postVotes.lookUpVoteIdByPostId[payload.postId] = payload.id;
@@ -84,8 +79,7 @@ export const {
   setPosts,
   deletePost,
   updatePost,
-  incrementPostVoteStatus,
-  decrementPostVoteStatus,
+  setPostVotes,
   addPostVote,
   deletePostVote,
   updatePostVote,

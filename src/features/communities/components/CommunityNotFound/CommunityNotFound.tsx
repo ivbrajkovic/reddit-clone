@@ -2,9 +2,9 @@ import { Button, Flex, Text } from "@mantine/core";
 import Link from "next/link";
 import { FC } from "react";
 
-type NotFoundProps = {};
+type CommunityNotFoundProps = {};
 
-const NotFound: FC<NotFoundProps> = () => {
+const CommunityNotFound: FC<CommunityNotFoundProps> = () => {
   return (
     <Flex direction="column" justify="center" align="center" mih="60vh">
       <Text mb="lg" fz="xl" fw="400">
@@ -16,4 +16,4 @@ const NotFound: FC<NotFoundProps> = () => {
     </Flex>
   );
 };
-export default NotFound;
+export default CommunityNotFound;

@@ -1,3 +1,4 @@
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import FooterButton from "@/features/posts/components/PostItem/components/PostItemFooterButton";
 import { usePostContext } from "@/features/posts/context/postContext";
 import { Post } from "@/features/posts/types";
@@ -13,10 +14,10 @@ import { VscComment, VscTrash } from "react-icons/vsc";
 
 type PostItemFooterProps = {
   post: Post;
-  userIsCreator: boolean;
 };
 
 const PostItemFooter: FC<PostItemFooterProps> = (props) => {
+  const user = useSignedInUser();
   const { onDeletePost } = usePostContext();
   const handleDeletePost = () => onDeletePost(props.post);
 
@@ -41,7 +42,7 @@ const PostItemFooter: FC<PostItemFooterProps> = (props) => {
           <Menu.Item
             color="red"
             icon={<VscTrash fontSize={20} />}
-            disabled={!props.userIsCreator}
+            disabled={!(user?.uid === props.post.creatorId)}
             onClick={handleDeletePost}
           >
             Delete post

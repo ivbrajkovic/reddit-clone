@@ -38,9 +38,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type CreatePostBarProps = {};
+type CommunityCreatePostBarProps = {};
 
-const CreatePostBar: FC<CreatePostBarProps> = () => {
+const CommunityCreatePostBar: FC<CommunityCreatePostBarProps> = () => {
   const { classes } = useStyles();
   const router = useRouter();
 
@@ -75,4 +75,4 @@ const CreatePostBar: FC<CreatePostBarProps> = () => {
     </Paper>
   );
 };
-export default CreatePostBar;
+export default CommunityCreatePostBar;

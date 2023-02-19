@@ -1,28 +1,28 @@
-import { Community } from "@/features/communities/types";
 import PostItemBody from "@/features/posts/components/PostItem/components/PostItemBody";
 import PostItemFooter from "@/features/posts/components/PostItem/components/PostItemFooter";
 import PostItemHeader from "@/features/posts/components/PostItem/components/PostItemHeader";
 import usePostItemStyles from "@/features/posts/components/PostItem/components/postItemStyles";
 import VoteButtons from "@/features/posts/components/PostItem/components/VoteButton";
-import { usePostContext } from "@/features/posts/context/PostContext";
+import { usePostContext } from "@/features/posts/context/postContext";
 import { selectIsLoadingPost } from "@/features/posts/postsSlice";
 import { Post, PostVote } from "@/features/posts/types";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Flex, LoadingOverlay, Paper, Stack } from "@mantine/core";
-import { FC } from "react";
+import { FC, memo } from "react";
 
-// const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
-//   prevProps.id === nextProps.id &&
-//   prevProps.voteStatus === nextProps.voteStatus;
+const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
+  prevProps.post.id === nextProps.post.id &&
+  prevProps.postVote.voteValue === nextProps.postVote.voteValue;
 
 export type PostItemProps = {
   post: Post;
-  userIsCreator: boolean;
   postVote: PostVote;
-  community: Community;
 };
 
-const PostItem: FC<PostItemProps> = (props) => {
+const PostItem: FC<PostItemProps> = memo((props) => {
+  useRenderCount("PostItem -> " + props.post.id);
+
   const { classes } = usePostItemStyles();
   const { onSelectPost } = usePostContext();
   const isLoadingPost = useAppSelector(selectIsLoadingPost);
@@ -45,10 +45,7 @@ const PostItem: FC<PostItemProps> = (props) => {
           <Stack pt={8} pl={4} spacing={4} w="100%">
             <PostItemHeader post={props.post} />
             <PostItemBody post={props.post} />
-            <PostItemFooter
-              post={props.post}
-              userIsCreator={props.userIsCreator}
-            />
+            <PostItemFooter post={props.post} />
           </Stack>
         </Flex>
       </Paper>
@@ -59,7 +56,7 @@ const PostItem: FC<PostItemProps> = (props) => {
       />
     </Box>
   );
-};
+}, isEqual);
 
 PostItem.displayName = "PostItem";
 export default PostItem;

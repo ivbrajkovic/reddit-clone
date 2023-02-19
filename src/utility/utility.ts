@@ -36,3 +36,6 @@ export const filterById = <T extends any[]>(id: string, arr: T) =>
 
 export const findById = <T extends any[]>(id: string, arr: T) =>
   arr.find((item) => item.id === id);
+
+export const delayFn = (fn: () => void, delay: number) => () =>
+  setTimeout(fn, delay);

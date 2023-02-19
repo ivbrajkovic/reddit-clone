@@ -1,5 +1,5 @@
-import { JoinCommunityButton } from "@/features/communities/components/JoinCommunityButton";
-import { useCommunityData } from "@/features/communities/hooks/useCommunityData";
+import { CommunityJoinButton } from "@/features/communities/components/CommunityJoinButton";
+import { useCommunityData } from "@/features/communities/context/communityContext";
 import { Box, Container, createStyles, Flex, Image, Text } from "@mantine/core";
 import { FaReddit } from "react-icons/fa";
 
@@ -75,7 +75,7 @@ const CommunityHeader = () => {
                 {communityData.communityId}
               </Text>
             </Box>
-            <JoinCommunityButton h={30} px={24} />
+            <CommunityJoinButton h={30} px={24} />
           </Flex>
         </Container>
       </div>
