@@ -1,4 +1,4 @@
-import { usePostVote } from "@/features/posts/hooks/usePostVote";
+import { useVotePost } from "@/features/posts/hooks/useVotePost";
 import { Post, PostVote } from "@/features/posts/types";
 import { stopPropagation } from "@/utility";
 import { ActionIcon, Box, Flex, Group, Text } from "@mantine/core";
@@ -16,7 +16,7 @@ type VoteButtonsProps = {
 };
 
 const VoteButtons: FC<VoteButtonsProps> = (props) => {
-  const { incrementVote, decrementVote } = usePostVote();
+  const { incrementVote, decrementVote } = useVotePost();
 
   const onIncrementVote = () => incrementVote(props.post);
   const onDecrementVote = () => decrementVote(props.post);

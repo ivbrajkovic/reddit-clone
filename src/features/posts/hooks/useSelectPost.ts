@@ -1,7 +1,11 @@
+import { setSelectedPost } from "@/features/posts/postsSlice";
+import { Post } from "@/features/posts/types";
 import { useEventCallback } from "@/hooks/useEventCallback";
+import { useAppDispatch } from "@/store/hooks";
 
 export const useSelectPost = () => {
-  return useEventCallback((postId: string) => {
-    console.log("onSelectedPost", postId);
+  const dispatch = useAppDispatch();
+  return useEventCallback((postId: Post) => {
+    dispatch(setSelectedPost(postId));
   });
 };

@@ -4,7 +4,7 @@ import { Post } from "@/features/posts/types";
 import { createContext, FC, useContext, useRef } from "react";
 
 type PostContext = {
-  onSelectPost: (postId: string) => void;
+  onSelectPost: (post: Post) => void;
   onDeletePost: (post: Post) => Promise<void>;
 };
 

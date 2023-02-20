@@ -19,7 +19,7 @@ import { collection, doc, writeBatch } from "firebase/firestore";
 const getPostVoteRef = (userId: string, postVoteId: string) =>
   doc(firestore, "users", `${userId}/postVotes/${postVoteId}`);
 
-const createNewVote = async (
+const createVote = async (
   dispatch: AppDispatch,
   userId: string,
   vote: number,
@@ -56,7 +56,7 @@ const createNewVote = async (
   await batch.commit();
 };
 
-const removeExistingVote = async (
+const removeVote = async (
   dispatch: AppDispatch,
   userId: string,
   vote: number,
@@ -83,7 +83,7 @@ const removeExistingVote = async (
   await batch.commit();
 };
 
-const updateExistingVote = async (
+const updateVote = async (
   dispatch: AppDispatch,
   userId: string,
   vote: number,
@@ -112,7 +112,7 @@ const updateExistingVote = async (
 
 const errorCreatePostVote = showNotificationError("Error creating post vote");
 
-export const usePostVote = () => {
+export const useVotePost = () => {
   const user = useSignedInUser();
   const dispatch = useAppDispatch();
   const { openLogin } = useAuthModalHandlers();
@@ -124,7 +124,7 @@ export const usePostVote = () => {
     return vote;
   };
 
-  const handlePostVote = async (vote: number, post: Post) => {
+  const handleVotePost = async (vote: number, post: Post) => {
     try {
       if (!isUser(user)) {
         openLogin();
@@ -133,21 +133,21 @@ export const usePostVote = () => {
 
       const existingVote = getPostVoteByPostId(post.id);
 
-      if (!existingVote) await createNewVote(dispatch, user.uid, vote, post);
+      if (!existingVote) await createVote(dispatch, user.uid, vote, post);
       else if (existingVote.voteValue === vote)
-        await removeExistingVote(dispatch, user.uid, vote, post, existingVote);
+        await removeVote(dispatch, user.uid, vote, post, existingVote);
       else if (existingVote.voteValue !== vote)
-        await updateExistingVote(dispatch, user.uid, vote, post, existingVote);
+        await updateVote(dispatch, user.uid, vote, post, existingVote);
     } catch (error) {
       errorCreatePostVote(error);
     }
   };
 
   const incrementVote = useEventCallback((post: Post) =>
-    handlePostVote(1, post),
+    handleVotePost(1, post),
   );
   const decrementVote = useEventCallback((post: Post) =>
-    handlePostVote(-1, post),
+    handleVotePost(-1, post),
   );
 
   return {
