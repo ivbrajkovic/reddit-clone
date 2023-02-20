@@ -4,7 +4,7 @@ import { useFetchPostVotes } from "@/features/posts/hooks/useFetchPostVotes";
 import { selectPosts, selectPostVotes } from "@/features/posts/postsSlice";
 import { delayFn, isString } from "@/utility";
 import { when } from "ramda";
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const delay500 = (fn: () => void) => delayFn(fn, 500);
@@ -17,10 +17,11 @@ export const usePosts = () => {
   const posts = useSelector(selectPosts);
   const postVotes = useSelector(selectPostVotes);
 
-  const [isLoading, toggleLoading] = useReducer((s) => !s, true);
+  const [isLoading, setIsLoading] = useState(true); // Can't be anonymous reducer
 
   useEffect(() => {
-    fetchPosts().then(delay500(toggleLoading));
+    setIsLoading(true);
+    fetchPosts().then(delay500(() => setIsLoading(false)));
   }, [fetchPosts]);
 
   useEffect(() => {

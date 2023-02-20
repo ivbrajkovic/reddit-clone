@@ -32,13 +32,17 @@ export type PostVote = {
   voteValue: number;
 };
 
+export type Votes = {
+  [key: string]: PostVote;
+};
+
+export type LookUpVoteIdByPostId = {
+  [key: string]: string;
+};
+
 export type PostVotes = {
-  votes: {
-    [key: string]: PostVote;
-  };
-  lookUpVoteIdByPostId: {
-    [key: string]: string;
-  };
+  votes: Votes;
+  lookUpVoteIdByPostId: LookUpVoteIdByPostId;
 };
 
 export type PostState = {

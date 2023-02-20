@@ -9,6 +9,7 @@ export const theme: MantineThemeOverride = {
   },
 
   globalStyles: (theme) => ({
+    // html: { scrollbarGutter: "stable" },
     body: {
       ...theme.fn.fontStyles(),
       backgroundColor:

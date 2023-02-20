@@ -3,6 +3,7 @@ import { PostLoader } from "@/features/posts/components/PostLoader";
 import { usePosts } from "@/features/posts/hooks/usePosts";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { Stack } from "@mantine/core";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PostList = () => {
   useRenderCount("PostList");
@@ -12,11 +13,22 @@ const PostList = () => {
 
   return (
     <Stack>
-      {posts.map((post) => {
-        const voteId = postVotes.lookUpVoteIdByPostId[post.id];
-        const postVote = postVotes.votes[voteId] ?? {};
-        return <PostItem key={post.id} post={post} postVote={postVote} />;
-      })}
+      <AnimatePresence mode="popLayout">
+        {posts.map((post) => {
+          const voteId = postVotes.lookUpVoteIdByPostId[post.id];
+          const postVote = postVotes.votes[voteId] ?? {};
+          return (
+            <motion.div
+              layout
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "tween" }}
+              key={post.id}
+            >
+              <PostItem post={post} postVote={postVote} />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </Stack>
   );
 };
