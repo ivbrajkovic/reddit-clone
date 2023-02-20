@@ -48,12 +48,12 @@ const createNewVote = async (
   const newVote = createPostVote(posteVoteRef.id);
   batch.set(posteVoteRef, newVote);
 
-  // Save changes to database
-  await batch.commit();
-
   // Dispatch post vote changes to store
   dispatch(updatePost(updatedPost));
   dispatch(addPostVote(newVote));
+
+  // Save changes to database
+  await batch.commit();
 };
 
 const removeExistingVote = async (
@@ -74,11 +74,13 @@ const removeExistingVote = async (
   // Delete existing vote
   const postVoteRef = getPostVoteRef(userId, existingVote.id);
   batch.delete(postVoteRef);
-  await batch.commit();
 
   // Dispatch post vote changes to store
   dispatch(updatePost(updatedPost));
   dispatch(deletePostVote(existingVote.id));
+
+  // Save changes to database
+  await batch.commit();
 };
 
 const updateExistingVote = async (
@@ -99,11 +101,13 @@ const updateExistingVote = async (
   // Update existing vote
   const postVoteRef = getPostVoteRef(userId, existingVote.id);
   batch.update(postVoteRef, { voteValue: vote });
-  await batch.commit();
 
   // Dispatch post vote changes to store
   dispatch(updatePost(updatedPost));
   dispatch(updatePostVote({ ...existingVote, voteValue: vote }));
+
+  // Save changes to database
+  await batch.commit();
 };
 
 const errorCreatePostVote = showNotificationError("Error creating post vote");
