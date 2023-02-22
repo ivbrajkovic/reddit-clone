@@ -1,6 +1,8 @@
 import { CommunityJoinButton } from "@/features/communities/components/CommunityJoinButton";
-import { useCommunityData } from "@/features/communities/context/communityContext";
+import { Community } from "@/features/communities/types";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { Box, Container, createStyles, Flex, Image, Text } from "@mantine/core";
+import { FC } from "react";
 import { FaReddit } from "react-icons/fa";
 
 const useStyles = createStyles((theme) => ({
@@ -42,11 +44,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const CommunityHeader = () => {
-  const { classes } = useStyles();
-  const communityData = useCommunityData();
+type CommunityHeaderProps = { communityData: Community };
 
-  if (!communityData) return <Box bg="red" />;
+const CommunityHeader: FC<CommunityHeaderProps> = ({ communityData }) => {
+  useRenderCount("CommunityHeader");
+  const { classes } = useStyles();
 
   return (
     <div className={classes.header}>

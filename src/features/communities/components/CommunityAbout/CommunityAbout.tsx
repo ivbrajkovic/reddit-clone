@@ -1,7 +1,8 @@
 import { HEADER_HEIGHT } from "@/constants";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import CommunityAboutAdmin from "@/features/communities/components/CommunityAbout/components/CommunityAboutAdmin";
-import { useCommunityData } from "@/features/communities/context/communityContext";
+import { Community } from "@/features/communities/types";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import {
   Box,
   Button,
@@ -50,13 +51,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type CommunityAboutProps = {};
+type CommunityAboutProps = {
+  communityData: Community;
+};
 
-const CommunityAbout: FC<CommunityAboutProps> = () => {
+const CommunityAbout: FC<CommunityAboutProps> = ({ communityData }) => {
+  useRenderCount("CommunityAbout");
+
   const { classes } = useStyles();
   const user = useSignedInUser();
   const { communityId, membersCount, createdAt, creatorId, imageUrl } =
-    useCommunityData();
+    communityData;
 
   const membersCountFormatted = membersCount.toLocaleString();
   const createdAtFormatted = dayjs(createdAt.seconds * 1000).format(

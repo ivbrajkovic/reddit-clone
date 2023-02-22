@@ -1,48 +1,35 @@
 import { logError } from "@/common/logError";
 import { setCommunityData } from "@/features/communities/communitySlice";
 import { Community } from "@/features/communities/types";
-import { firestore } from "@/firebase/clientApp";
+import fetchCommunity from "@/features/communities/utils/fetchCommunity";
 import { AppStore, wrapper } from "@/store/store";
-import { jsonParseStringify } from "@/utility";
-import { doc, DocumentSnapshot, getDoc } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { andThen, otherwise, pipe } from "ramda";
 
+const {
+  formatCommunityData,
+  getCommunityRef,
+  parseCommunityData,
+  throwIfCommunityNotFound,
+} = fetchCommunity;
+
 const getCommunityIdFromContext = ({ query }: GetServerSidePropsContext) =>
   query.communityId as string;
-
-const getCommunityRef = (communityId: string) =>
-  doc(firestore, "communities", communityId);
-
-const throwIfCommunityNotFound = <T extends DocumentSnapshot>(
-  docSnap: T,
-): T => {
-  if (!docSnap.exists()) throw new Error("Community not found");
-  return docSnap;
-};
-
-const formatCommunityData = (docSnap: DocumentSnapshot) =>
-  ({ communityId: docSnap.id, ...docSnap.data() } as Community);
 
 const dispatchCommunityData = (store: AppStore) => (community: Community) => {
   store.dispatch(setCommunityData(community));
   return community;
 };
 
-const returnCommunityExists = (community: Community) => ({
-  props: { isCommunityExists: !!community },
+const returnCommunityData = (community: Community) => ({
+  props: { communityData: community },
 });
 
 const logErrorIfDevelopment = (error: Error) =>
   logError(error, "Community page SSR error: community not found");
 
-const returnCommunityNotExists = () => ({
-  props: { isCommunityExists: false },
-});
-
-const returnCommunityData = (communityData: Community) => ({
-  props: { communityData },
-});
+const returnEmptyProps = () => ({ props: {} });
 
 /**
  * SSR rendering of community page
@@ -58,12 +45,11 @@ export const getServerSideProps: GetServerSideProps =
         pipe(
           throwIfCommunityNotFound,
           formatCommunityData,
-          jsonParseStringify,
+          parseCommunityData,
           dispatchCommunityData(store),
-          returnCommunityExists,
-          // returnCommunityData,
+          returnCommunityData,
         ),
       ),
-      otherwise(pipe(logErrorIfDevelopment, returnCommunityNotExists)),
+      otherwise(pipe(logErrorIfDevelopment, returnEmptyProps)),
     ),
   );

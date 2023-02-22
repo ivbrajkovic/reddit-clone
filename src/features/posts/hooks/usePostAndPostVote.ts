@@ -7,20 +7,20 @@ import { useSelector } from "react-redux";
 
 const delay500 = (fn: () => void) => delayFn(fn, 500);
 
-export const usePost = () => {
+export const usePostAndPostVote = () => {
   const router = useRouter();
   const fetchPost = useFetchPost();
 
   const posts = useSelector(selectPosts);
   const postVotes = useSelector(selectPostVotes);
 
-  const [isLoading, setIsLoading] = useReducer((s) => !s, !posts.length);
+  const [isLoading, toggleLoading] = useReducer((s) => !s, !posts.length);
 
   const postId = router.query.postId as string;
 
   useEffect(() => {
     if (!postId || posts.length) return;
-    fetchPost(postId).then(delay500(setIsLoading));
+    fetchPost(postId).then(delay500(toggleLoading));
   }, [fetchPost, postId, posts]);
 
   const post = useMemo(

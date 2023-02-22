@@ -1,36 +1,41 @@
 import PageContent from "@/components/Layout/PageContent";
+import { CommunityAbout } from "@/features/communities";
+import { CommunityAboutLoader } from "@/features/communities/components/CommunityAboutLoader";
+import { useFetchCommunityEffect } from "@/features/communities/hooks/useFetchCommunityEffect";
 import { PostItem } from "@/features/posts/components/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
 import { PostNotFound } from "@/features/posts/components/PostNotFound";
 import { PostProvider } from "@/features/posts/context/postContext";
-import { usePost } from "@/features/posts/hooks/usePost";
-import { FC } from "react";
-export { getServerSideProps } from "@/ssr/postPageProps";
+import { usePostAndPostVote } from "@/features/posts/hooks/usePostAndPostVote";
+import { NextPage } from "next";
 
-type PostPageProps = {
-  communityId: string;
-};
+const PostPage: NextPage = () => {
+  const { isLoading: isCommunityLoading, communityData } =
+    useFetchCommunityEffect();
 
-const PostPage: FC<PostPageProps> = ({ communityId }) => {
-  console.log(
-    "🚀 ~ file: [postId].tsx:10 ~ PostPage ~ communityId:",
-    communityId,
-  );
-  const { isLoading, post, postVote } = usePost();
-
-  if (!isLoading && !post) return <PostNotFound />;
+  const { isLoading: isPostLoading, post, postVote } = usePostAndPostVote();
 
   return (
     <PostProvider>
       <PageContent>
         <>
-          {isLoading ? (
+          {isPostLoading ? (
             <PostLoader postCount={1} />
-          ) : post ? (
+          ) : !post ? (
+            <PostNotFound />
+          ) : (
             <PostItem post={post} postVote={postVote} />
-          ) : null}
+          )}
         </>
-        <>{/* <CommunityAbout /> */}</>
+        <>
+          {isCommunityLoading ? (
+            <CommunityAboutLoader />
+          ) : !communityData.communityId ? (
+            <div>Community not found</div>
+          ) : (
+            <CommunityAbout communityData={communityData} />
+          )}
+        </>
       </PageContent>
     </PostProvider>
   );

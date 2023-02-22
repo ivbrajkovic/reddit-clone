@@ -6,6 +6,7 @@ import {
   CommunityNotFound,
 } from "@/features/communities";
 import { CommunityProvider } from "@/features/communities/context/communityContext";
+import { Community } from "@/features/communities/types";
 import { PostList } from "@/features/posts";
 import { PostProvider } from "@/features/posts/context/postContext";
 import { useRenderCount } from "@/hooks/useRenderCount";
@@ -13,24 +14,24 @@ import { FC } from "react";
 export { getServerSideProps } from "@/ssr/communityPageProps";
 
 type CommunityPageProps = {
-  isCommunityExists: boolean;
+  communityData?: Community;
 };
 
-const CommunityPage: FC<CommunityPageProps> = ({ isCommunityExists }) => {
+const CommunityPage: FC<CommunityPageProps> = ({ communityData }) => {
   useRenderCount("CommunityPage");
 
-  if (!isCommunityExists) return <CommunityNotFound />;
+  if (!communityData) return <CommunityNotFound />;
   return (
     <CommunityProvider>
       <PostProvider>
-        <CommunityHeader />
+        <CommunityHeader communityData={communityData} />
         <PageContent>
           <>
             <CommunityCreatePostBar />
             <PostList />
           </>
           <>
-            <CommunityAbout />
+            <CommunityAbout communityData={communityData} />
           </>
         </PageContent>
       </PostProvider>
