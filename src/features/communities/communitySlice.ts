@@ -40,7 +40,8 @@ const communitySlice = createSlice({
         state.isCommunityCreateModal = false;
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
-        state.communityData = action.payload.communitySlice.communityData;
+        if (action.payload.communitySlice.communityData.communityId)
+          state.communityData = action.payload.communitySlice.communityData;
       });
   },
   reducers: {

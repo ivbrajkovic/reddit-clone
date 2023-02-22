@@ -21,8 +21,8 @@ const VoteButtons: FC<VoteButtonsProps> = (props) => {
   const onIncrementVote = () => incrementVote(props.post);
   const onDecrementVote = () => decrementVote(props.post);
 
-  const isPositiveVote = props.postVote?.voteValue ?? 0 > 0;
-  const isNegativeVote = props.postVote?.voteValue ?? 0 < 0;
+  const isPositiveVote = (props.postVote?.voteValue ?? 0) > 0;
+  const isNegativeVote = (props.postVote?.voteValue ?? 0) < 0;
 
   const upArrow = isPositiveVote ? IoArrowUpCircle : IoArrowUpCircleOutline;
   const upArrowFill = isPositiveVote ? "#FF4500" : "inherit";
