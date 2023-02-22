@@ -1,23 +1,16 @@
 import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
-import { useSelectPost } from "@/features/posts/hooks/useSelectPost";
-import { Post } from "@/features/posts/types";
 import { createContext, FC, useContext, useRef } from "react";
 
-type PostContext = {
-  onSelectPost: (post: Post) => void;
-  onDeletePost: (post: Post) => Promise<void>;
-};
+type PostContext = ReturnType<typeof useDeletePost>;
 
 const PostContext = createContext({} as PostContext);
 
 type PostProviderProps = { children: React.ReactNode };
 export const PostProvider: FC<PostProviderProps> = ({ children }) => {
-  const onSelectPost = useSelectPost();
-  const onDeletePost = useDeletePost();
+  const deletePost = useDeletePost();
 
-  const handlers = useRef({
-    onSelectPost,
-    onDeletePost,
+  const handlers = useRef<PostContext>({
+    ...deletePost,
   });
 
   return (

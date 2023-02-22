@@ -39,3 +39,23 @@ export const findById = <T extends any[]>(id: string, arr: T) =>
 
 export const delayFn = (fn: () => void, delay: number) => () =>
   setTimeout(fn, delay);
+
+export const isThruty = (value: any): value is true => !!value;
+
+export const runIfThruty = (value: any) => (fn: () => void) =>
+  isThruty(value) && fn();
+
+const isFunction = (value: unknown): value is Function =>
+  typeof value === "function";
+
+export const runIfDefined =
+  <T extends any, R>(fn?: (arg0: T) => R) =>
+  (arg0: T) => {
+    isFunction(fn) && fn(arg0);
+    return arg0;
+  };
+
+export const delayFnAsync =
+  <R>(fn: () => R, delay: number) =>
+  () =>
+    new Promise<R>((resolve) => setTimeout(() => resolve(fn()), delay));

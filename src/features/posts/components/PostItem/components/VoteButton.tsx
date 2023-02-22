@@ -12,7 +12,7 @@ import {
 
 type VoteButtonsProps = {
   post: Post;
-  postVote: PostVote;
+  postVote?: PostVote;
 };
 
 const VoteButtons: FC<VoteButtonsProps> = (props) => {
@@ -21,13 +21,16 @@ const VoteButtons: FC<VoteButtonsProps> = (props) => {
   const onIncrementVote = () => incrementVote(props.post);
   const onDecrementVote = () => decrementVote(props.post);
 
-  const upArrow =
-    props.postVote.voteValue > 0 ? IoArrowUpCircle : IoArrowUpCircleOutline;
-  const upArrowFill = props.postVote.voteValue > 0 ? "#FF4500" : "inherit";
+  const isPositiveVote = props.postVote?.voteValue ?? 0 > 0;
+  const isNegativeVote = props.postVote?.voteValue ?? 0 < 0;
 
-  const downArrow =
-    props.postVote.voteValue < 0 ? IoArrowDownCircle : IoArrowDownCircleOutline;
-  const downArrowFill = props.postVote.voteValue < 0 ? "#7193FF" : "inherit";
+  const upArrow = isPositiveVote ? IoArrowUpCircle : IoArrowUpCircleOutline;
+  const upArrowFill = isPositiveVote ? "#FF4500" : "inherit";
+
+  const downArrow = isNegativeVote
+    ? IoArrowDownCircle
+    : IoArrowDownCircleOutline;
+  const downArrowFill = isNegativeVote ? "#7193FF" : "inherit";
 
   return (
     <Flex

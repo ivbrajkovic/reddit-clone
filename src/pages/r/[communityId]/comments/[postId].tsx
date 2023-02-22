@@ -1,30 +1,24 @@
 import PageContent from "@/components/Layout/PageContent";
 import { PostItem } from "@/features/posts/components/PostItem";
+import { PostLoader } from "@/features/posts/components/PostLoader";
+import { PostNotFound } from "@/features/posts/components/PostNotFound";
 import { PostProvider } from "@/features/posts/context/postContext";
-import {
-  selectPostVotes,
-  selectSelectedPost,
-} from "@/features/posts/postsSlice";
-import { useSelector } from "react-redux";
+import { usePost } from "@/features/posts/hooks/usePost";
 
 const PostPage = () => {
-  const post = useSelector(selectSelectedPost);
-  const postVotes = useSelector(selectPostVotes);
+  const { isLoading, post, postVote } = usePost();
 
-  if (!post)
-    return (
-      <div>
-        <h1>Post not found</h1>
-      </div>
-    );
+  if (!isLoading && !post) return <PostNotFound />;
 
-  const voteId = postVotes.lookUpVoteIdByPostId[post.id];
-  const postVote = postVotes.votes[voteId] ?? {};
   return (
     <PostProvider>
       <PageContent>
         <>
-          <PostItem isSelectable={true} post={post} postVote={postVote} />
+          {isLoading ? (
+            <PostLoader postCount={1} />
+          ) : post ? (
+            <PostItem post={post} postVote={postVote} />
+          ) : null}
         </>
         <>{/* <CommunityAbout /> */}</>
       </PageContent>

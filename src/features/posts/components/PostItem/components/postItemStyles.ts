@@ -1,12 +1,12 @@
 import { createStyles } from "@mantine/core";
 
 const usePostItemStyles = createStyles(
-  (theme, params: { isSelectable: boolean }) => ({
+  (theme, params: { isPostPage: boolean }) => ({
     postItem: {
-      cursor: params?.isSelectable ? "pointer" : "default",
+      cursor: params?.isPostPage ? "default" : "pointer",
       position: "relative",
       "&:hover": {
-        borderColor: theme.colors.blue[5],
+        borderColor: params?.isPostPage ? "none" : theme.colors.blue[5],
       },
     },
     leftSide: {

@@ -10,7 +10,6 @@ const initialPostVotes = {
 };
 
 const initialPostState: PostState = {
-  selectedPost: null,
   posts: [],
   postVotes: { ...initialPostVotes },
 };
@@ -24,8 +23,8 @@ const postsSlice = createSlice({
     });
   },
   reducers: {
-    setSelectedPost: (state, action: PayloadAction<Post>) => {
-      state.selectedPost = action.payload;
+    addPost: (state, { payload }: PayloadAction<Post>) => {
+      state.posts.push(payload);
     },
     setPosts: (state, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
@@ -63,7 +62,8 @@ const postsSlice = createSlice({
     },
     deletePostVote: (state, { payload }: PayloadAction<string>) => {
       const postVote = state.postVotes.votes[payload];
-      delete state.postVotes.lookUpVoteIdByPostId[postVote?.postId];
+      if (!postVote) return;
+      delete state.postVotes.lookUpVoteIdByPostId[postVote.postId];
       delete state.postVotes.votes[payload];
     },
     updatePostVote: (
@@ -77,7 +77,7 @@ const postsSlice = createSlice({
 });
 
 export const {
-  setSelectedPost,
+  addPost,
   setPosts,
   deletePost,
   updatePost,
@@ -86,9 +86,6 @@ export const {
   deletePostVote,
   updatePostVote,
 } = postsSlice.actions;
-
-export const selectSelectedPost = (state: RootState) =>
-  state.postSlice.selectedPost;
 
 export const selectPosts = (state: RootState) => state.postSlice.posts;
 

@@ -32,13 +32,8 @@ export type PostVote = {
   voteValue: number;
 };
 
-export type Votes = {
-  [key: string]: PostVote;
-};
-
-export type LookUpVoteIdByPostId = {
-  [key: string]: string;
-};
+export type Votes = Record<string, PostVote | undefined>;
+export type LookUpVoteIdByPostId = Record<string, string>;
 
 export type PostVotes = {
   votes: Votes;
@@ -46,7 +41,6 @@ export type PostVotes = {
 };
 
 export type PostState = {
-  selectedPost: Post | null;
   posts: Post[];
   postVotes: PostVotes;
 };

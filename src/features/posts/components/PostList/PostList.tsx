@@ -2,12 +2,10 @@ import PostItem from "@/features/posts/components/PostItem/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
 import { usePosts } from "@/features/posts/hooks/usePosts";
 import { usePostsVotes } from "@/features/posts/hooks/usePostVotes";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { Stack } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 
 const PostList = () => {
-  useRenderCount("PostList");
   const { isLoading, posts } = usePosts();
   const { postVotes } = usePostsVotes();
 
@@ -18,7 +16,7 @@ const PostList = () => {
       <AnimatePresence mode="popLayout">
         {posts.map((post) => {
           const voteId = postVotes.lookUpVoteIdByPostId[post.id];
-          const postVote = postVotes.votes[voteId] ?? {};
+          const postVote = postVotes.votes[voteId];
           return (
             <motion.div
               layout
