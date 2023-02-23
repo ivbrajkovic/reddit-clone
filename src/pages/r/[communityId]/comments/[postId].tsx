@@ -1,41 +1,35 @@
 import PageContent from "@/components/Layout/PageContent";
-import { CommunityAbout } from "@/features/communities";
-import { CommunityAboutLoader } from "@/features/communities/components/CommunityAboutLoader";
+import { CommunityAboutWrapper } from "@/features/communities/components/CommunityAbout";
 import { useFetchCommunityEffect } from "@/features/communities/hooks/useFetchCommunityEffect";
-import { PostItem } from "@/features/posts/components/PostItem";
-import { PostLoader } from "@/features/posts/components/PostLoader";
-import { PostNotFound } from "@/features/posts/components/PostNotFound";
+import { PostComments } from "@/features/posts/components/PostComments";
+import PostItemWrapper from "@/features/posts/components/PostItem/components/PostItemWrapper";
 import { PostProvider } from "@/features/posts/context/postContext";
 import { usePostAndPostVote } from "@/features/posts/hooks/usePostAndPostVote";
+import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
 
 const PostPage: NextPage = () => {
-  const { isLoading: isCommunityLoading, communityData } =
-    useFetchCommunityEffect();
+  useRenderCount("PostPage");
 
   const { isLoading: isPostLoading, post, postVote } = usePostAndPostVote();
+  const { isLoading: isCommunityLoading, communityData } =
+    useFetchCommunityEffect();
 
   return (
     <PostProvider>
       <PageContent>
         <>
-          {isPostLoading ? (
-            <PostLoader postCount={1} />
-          ) : !post ? (
-            <PostNotFound />
-          ) : (
-            <PostItem post={post} postVote={postVote} />
-          )}
+          <PostItemWrapper
+            isLoading={isPostLoading}
+            post={post}
+            postVote={postVote}
+          />
+          <PostComments post={post} />
         </>
-        <>
-          {isCommunityLoading ? (
-            <CommunityAboutLoader />
-          ) : !communityData.communityId ? (
-            <div>Community not found</div>
-          ) : (
-            <CommunityAbout communityData={communityData} />
-          )}
-        </>
+        <CommunityAboutWrapper
+          isLoading={isCommunityLoading}
+          communityData={communityData}
+        />
       </PageContent>
     </PostProvider>
   );

@@ -118,4 +118,5 @@ const CommunityAbout: FC<CommunityAboutProps> = ({ communityData }) => {
     </Paper>
   );
 };
+
 export default CommunityAbout;

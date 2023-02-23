@@ -10,14 +10,14 @@ import { Community } from "@/features/communities/types";
 import { PostList } from "@/features/posts";
 import { PostProvider } from "@/features/posts/context/postContext";
 import { useRenderCount } from "@/hooks/useRenderCount";
-import { FC } from "react";
+import { NextPage } from "next";
 export { getServerSideProps } from "@/ssr/communityPageProps";
 
 type CommunityPageProps = {
   communityData?: Community;
 };
 
-const CommunityPage: FC<CommunityPageProps> = ({ communityData }) => {
+const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
   useRenderCount("CommunityPage");
 
   if (!communityData) return <CommunityNotFound />;

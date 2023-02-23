@@ -1,19 +1,19 @@
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { useFetchPostVotes } from "@/features/posts/hooks/useFetchPostVotes";
-import { selectPostVotes } from "@/features/posts/postsSlice";
-import { isString } from "@/utility";
-import { when } from "ramda";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
-export const usePostsVotes = () => {
+export const usePostVotes = () => {
+  const router = useRouter();
   const user = useSignedInUser();
   const fetchPostVotes = useFetchPostVotes();
-  const postVotes = useSelector(selectPostVotes);
 
   useEffect(() => {
-    when(isString, fetchPostVotes)(user?.uid);
-  }, [fetchPostVotes, user]);
+    const communityId = router.query.communityId as string;
+    const userId = user?.uid;
 
-  return { postVotes };
+    if (!communityId || !userId) return;
+
+    fetchPostVotes(communityId, userId);
+  }, [fetchPostVotes, router.query.communityId, user?.uid]);
 };

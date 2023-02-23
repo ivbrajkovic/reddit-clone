@@ -41,6 +41,18 @@ export type PostVotes = {
 };
 
 export type PostState = {
+  initialized: boolean;
   posts: Post[];
   postVotes: PostVotes;
+};
+
+export type PostComment = {
+  id: string;
+  creatorId: string;
+  creatorDisplayName: string;
+  communityId: string;
+  postId: string;
+  postTitle: string;
+  text: string;
+  createdAt: Timestamp;
 };

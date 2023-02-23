@@ -1,38 +1,15 @@
-import { showNotificationError } from "@/common/showNotificationError";
-import { setCommunitySnippets } from "@/features/communities/communitySlice";
-import { CommunitySnippet } from "@/features/communities/types";
-import { firestore } from "@/firebase/clientApp";
-import { useEventCallback } from "@/hooks/useEventCallback";
-import { useAppDispatch } from "@/store/hooks";
-import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
-import { andThen, map, otherwise, pipe, prop } from "ramda";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { useFetchCommunitySnippets } from "@/features/communities/hooks/useFetchCommunitySnippets";
+import { isString } from "@/utility";
+import { when } from "ramda";
+import { useEffect } from "react";
 
-const formatSnippetPath = (userId: string) =>
-  `users/${userId}/communitySnippets`;
-const getSnippetCollection = (path: string) => collection(firestore, path);
+export const useCommunitySnippets = () => {
+  const user = useSignedInUser();
+  const fetchCommunitySnippets = useFetchCommunitySnippets();
 
-const formatSnippets = (doc: QueryDocumentSnapshot) =>
-  ({
-    communityId: doc.id,
-    ...doc.data(),
-  } as CommunitySnippet);
-
-export const useFetchCommunitySnippets = () => {
-  const dispatch = useAppDispatch();
-
-  return useEventCallback(async (userId: string) => {
-    return pipe(
-      formatSnippetPath,
-      getSnippetCollection,
-      getDocs,
-      andThen(
-        pipe(
-          prop("docs"),
-          map(formatSnippets),
-          pipe(setCommunitySnippets, dispatch),
-        ),
-      ),
-      otherwise(showNotificationError("Error getting community snippets")),
-    )(userId);
-  });
+  useEffect(() => {
+    const userId = user?.uid;
+    when(isString, fetchCommunitySnippets)(userId);
+  }, [user?.uid, fetchCommunitySnippets]);
 };

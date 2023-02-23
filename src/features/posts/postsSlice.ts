@@ -10,6 +10,7 @@ const initialPostVotes = {
 };
 
 const initialPostState: PostState = {
+  initialized: false,
   posts: [],
   postVotes: { ...initialPostVotes },
 };
@@ -19,6 +20,7 @@ const postsSlice = createSlice({
   initialState: initialPostState,
   extraReducers: (builder) => {
     builder.addCase("auth/logout", (state) => {
+      state.initialized = false;
       state.postVotes = { ...initialPostVotes };
     });
   },
@@ -27,7 +29,7 @@ const postsSlice = createSlice({
       state.posts.push(payload);
     },
     setPosts: (state, action: PayloadAction<Post[]>) => {
-      state.posts = action.payload;
+      state.posts = action.payload; // Merge posts ?
     },
     // setPosts: {
     //   reducer: (state, action: PayloadAction<Post[]>) => {

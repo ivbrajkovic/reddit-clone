@@ -1,13 +1,14 @@
 import PostItem from "@/features/posts/components/PostItem/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
 import { usePosts } from "@/features/posts/hooks/usePosts";
-import { usePostsVotes } from "@/features/posts/hooks/usePostVotes";
+import { selectPostVotes } from "@/features/posts/postsSlice";
 import { Stack } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const PostList = () => {
   const { isLoading, posts } = usePosts();
-  const { postVotes } = usePostsVotes();
+  const postVotes = useSelector(selectPostVotes);
 
   if (isLoading) return <PostLoader />;
 
