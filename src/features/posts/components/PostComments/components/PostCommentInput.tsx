@@ -1,12 +1,12 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { Textarea } from "@/components/FormControls";
 import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { formatDisplayName } from "@/features/auth/utility";
 import { useCreatePostComment } from "@/features/posts/hooks/useCreatePostComment";
 import { Post } from "@/features/posts/types";
 import { Button, Flex, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { User } from "firebase/auth";
 import { FC } from "react";
 
 const NotAuthenticated = () => {
@@ -22,17 +22,19 @@ const NotAuthenticated = () => {
 
 type FormValues = { commentText: string };
 
-type PostCommentInputProps = { post: Post };
+type PostCommentInputProps = {
+  user: User | null | undefined;
+  post: Post;
+};
 
-const PostCommentInput: FC<PostCommentInputProps> = (props) => {
-  const user = useSignedInUser();
+const PostCommentInput: FC<PostCommentInputProps> = ({ user, post }) => {
   const { isLoading, createPostComment } = useCreatePostComment();
   const form = useForm<FormValues>({ initialValues: { commentText: "" } });
 
   if (!user) return <NotAuthenticated />;
 
   const onSubmit = async (values: FormValues) =>
-    createPostComment(values.commentText, props.post, user)
+    createPostComment(values.commentText, post, user)
       .then(form.reset)
       .catch(showNotificationError("Error creating post comment."));
 
@@ -40,7 +42,10 @@ const PostCommentInput: FC<PostCommentInputProps> = (props) => {
 
   return (
     <form onSubmit={form.onSubmit(onSubmit)}>
-      <Text mb="xs">Comment as {displayName}</Text>
+      <Group mb="xs" spacing="xs">
+        <Text>Comment as</Text>
+        <Text color="blue">{displayName}</Text>
+      </Group>
       <Textarea
         mb="md"
         minRows={5}

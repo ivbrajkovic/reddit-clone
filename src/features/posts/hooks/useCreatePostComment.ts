@@ -1,7 +1,12 @@
 import { formatDisplayName } from "@/features/auth/utility";
-import { Post } from "@/features/posts/types";
+import {
+  addPostComment,
+  incrementPostCommentCount,
+} from "@/features/posts/postsSlice";
+import { Post, PostComment } from "@/features/posts/types";
 import { firestore } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
+import { useAppDispatch } from "@/store/hooks";
 import { User } from "firebase/auth";
 import {
   collection,
@@ -11,9 +16,16 @@ import {
   Timestamp,
   writeBatch,
 } from "firebase/firestore";
+import { pipe } from "ramda";
 import { useReducer } from "react";
 
+const updateCreatedAt = (postComment: PostComment): PostComment => ({
+  ...postComment,
+  createdAt: { seconds: Date.now() / 1000 } as Timestamp,
+});
+
 export const useCreatePostComment = () => {
+  const dispatch = useAppDispatch();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
   const createPostComment = useEventCallback(
@@ -23,7 +35,7 @@ export const useCreatePostComment = () => {
 
       const commentDocRef = doc(collection(firestore, "comments"));
       const userDisplayName = formatDisplayName(user);
-      const newComment = {
+      const postComment = {
         id: commentDocRef.id,
         text: commentText,
         creatorId: user.uid,
@@ -33,12 +45,20 @@ export const useCreatePostComment = () => {
         communityId: post.communityId,
         createdAt: serverTimestamp() as Timestamp,
       };
-      batch.set(commentDocRef, newComment);
+      batch.set(commentDocRef, postComment);
 
       const postDocRef = doc(firestore, "posts", post.id);
-      batch.update(postDocRef, { commentsNumber: increment(1) });
+      batch.update(postDocRef, { commentCount: increment(1) });
 
-      return batch.commit().finally(toggleLoading);
+      const incrementCommentCount = () =>
+        pipe(incrementPostCommentCount, dispatch)(post.id);
+      const addComment = () =>
+        pipe(updateCreatedAt, addPostComment, dispatch)(postComment);
+
+      return batch
+        .commit()
+        .then(pipe(incrementCommentCount, addComment))
+        .finally(toggleLoading);
     },
   );
 

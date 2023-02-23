@@ -24,7 +24,7 @@ const PostPage: NextPage = () => {
             post={post}
             postVote={postVote}
           />
-          <PostComments post={post} />
+          {post ? <PostComments post={post} /> : null}
         </>
         <CommunityAboutWrapper
           isLoading={isCommunityLoading}

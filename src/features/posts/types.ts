@@ -44,6 +44,7 @@ export type PostState = {
   initialized: boolean;
   posts: Post[];
   postVotes: PostVotes;
+  postComments: PostComment[];
 };
 
 export type PostComment = {

@@ -1,7 +1,7 @@
 import { HEADER_HEIGHT } from "@/constants";
 import { Group, Paper, SimpleGrid, Skeleton } from "@mantine/core";
 
-const PADDING_TOP = HEADER_HEIGHT + 16;
+const PADDING_TOP = HEADER_HEIGHT + 24;
 
 const CommunityAboutLoader = () => {
   return (

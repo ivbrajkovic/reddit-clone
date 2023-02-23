@@ -12,7 +12,8 @@ import { FC, memo, useReducer } from "react";
 
 const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
   prevProps.post.id === nextProps.post.id &&
-  prevProps.postVote?.voteValue === nextProps.postVote?.voteValue;
+  prevProps.postVote?.voteValue === nextProps.postVote?.voteValue &&
+  prevProps.post.commentCount === nextProps.post.commentCount;
 
 export type PostItemProps = {
   post: Post;

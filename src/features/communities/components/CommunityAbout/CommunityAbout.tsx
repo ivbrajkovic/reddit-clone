@@ -20,7 +20,7 @@ import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { RiCakeLine } from "react-icons/ri";
 
-const PADDING_TOP = HEADER_HEIGHT + 16;
+const PADDING_TOP = HEADER_HEIGHT + 24;
 
 const useStyles = createStyles((theme) => ({
   paper: {

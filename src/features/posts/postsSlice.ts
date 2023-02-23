@@ -1,7 +1,13 @@
-import { Post, PostState, PostVote, PostVotes } from "@/features/posts/types";
+import {
+  Post,
+  PostComment,
+  PostState,
+  PostVote,
+  PostVotes,
+} from "@/features/posts/types";
 import { RootState } from "@/store/store";
 import { RequiredByKeys } from "@/types";
-import { findById } from "@/utility";
+import { filterById, findById } from "@/utility";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialPostVotes = {
@@ -13,6 +19,7 @@ const initialPostState: PostState = {
   initialized: false,
   posts: [],
   postVotes: { ...initialPostVotes },
+  postComments: [],
 };
 
 const postsSlice = createSlice({
@@ -52,6 +59,26 @@ const postsSlice = createSlice({
       const post = findById(payload.id, state.posts);
       post && Object.assign(post, payload);
     },
+    incrementPostCommentCount: (state, { payload }: PayloadAction<string>) => {
+      const post = findById(payload, state.posts);
+      post && post.commentCount++;
+    },
+    decrementPostCommentCount: (state, { payload }: PayloadAction<string>) => {
+      const post = findById(payload, state.posts);
+      post && post.commentCount--;
+    },
+
+    // PostComment
+
+    setPostComments: (state, { payload }: PayloadAction<PostComment[]>) => {
+      state.postComments = payload;
+    },
+    addPostComment: (state, { payload }: PayloadAction<PostComment>) => {
+      state.postComments.push(payload);
+    },
+    deletePostComment: (state, { payload }: PayloadAction<string>) => {
+      state.postComments = filterById(payload, state.postComments);
+    },
 
     // PostVote
 
@@ -83,6 +110,11 @@ export const {
   setPosts,
   deletePost,
   updatePost,
+  incrementPostCommentCount,
+  decrementPostCommentCount,
+  setPostComments,
+  addPostComment,
+  deletePostComment,
   setPostVotes,
   addPostVote,
   deletePostVote,
@@ -92,5 +124,8 @@ export const {
 export const selectPosts = (state: RootState) => state.postSlice.posts;
 
 export const selectPostVotes = (state: RootState) => state.postSlice.postVotes;
+
+export const selectPostComments = (state: RootState) =>
+  state.postSlice.postComments;
 
 export default postsSlice.reducer;
