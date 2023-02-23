@@ -13,30 +13,31 @@ type PostCommentsProps = { post: Post };
 
 const PostComments: FC<PostCommentsProps> = (props) => {
   const user = useSignedInUser();
-  const { isLoading, fetchComments } = useFetchPostComments();
   const postComments = useAppSelector(selectPostComments);
+  const { isLoading, fetchComments } = useFetchPostComments();
 
   useEffect(() => {
     fetchComments(props.post.id);
   }, [fetchComments, props.post.id]);
 
+  if (isLoading)
+    return (
+      <Paper withBorder shadow="lg" px="md" py="xl">
+        <PostCommentLoader />
+      </Paper>
+    );
+
   return (
     <Paper withBorder shadow="lg" p="md">
-      <PostCommentInput user={user} post={props.post} />
       <Stack spacing="lg">
-        {isLoading ? (
-          <PostCommentLoader />
-        ) : (
-          <>
-            {postComments.map((comment) => (
-              <PostCommentItem
-                key={comment.id}
-                isCreator={user?.uid === comment.creatorId}
-                comment={comment}
-              />
-            ))}
-          </>
-        )}
+        <PostCommentInput user={user} post={props.post} />
+        {postComments.map((comment) => (
+          <PostCommentItem
+            key={comment.id}
+            isCreator={user?.uid === comment.creatorId}
+            comment={comment}
+          />
+        ))}
       </Stack>
     </Paper>
   );

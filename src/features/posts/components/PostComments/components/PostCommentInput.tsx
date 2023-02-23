@@ -52,7 +52,7 @@ const PostCommentInput: FC<PostCommentInputProps> = ({ user, post }) => {
         placeholder="What are your thoughts?"
         {...form.getInputProps("commentText")}
       ></Textarea>
-      <Group mb="xs" position="right">
+      <Group position="right">
         <Button
           type="submit"
           h={26}

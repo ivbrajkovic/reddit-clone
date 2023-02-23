@@ -1,11 +1,8 @@
 import { useFetchPost } from "@/features/posts/hooks/useFetchPost";
 import { selectPosts, selectPostVotes } from "@/features/posts/postsSlice";
-import { delayFn } from "@/utility";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useReducer } from "react";
 import { useSelector } from "react-redux";
-
-const delay500 = (fn: () => void) => delayFn(fn, 500);
 
 export const usePostAndPostVote = () => {
   const router = useRouter();
@@ -20,7 +17,7 @@ export const usePostAndPostVote = () => {
 
   useEffect(() => {
     if (!postId || posts.length) return;
-    fetchPost(postId).then(delay500(toggleLoading));
+    fetchPost(postId).then(toggleLoading);
   }, [fetchPost, postId, posts]);
 
   const post = useMemo(

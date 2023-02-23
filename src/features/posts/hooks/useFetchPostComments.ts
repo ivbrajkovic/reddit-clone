@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import {
   collection,
   getDocs,
+  orderBy,
   query,
   QuerySnapshot,
   where,
@@ -16,14 +17,13 @@ import { useReducer } from "react";
 
 export const useFetchPostComments = () => {
   const dispatch = useAppDispatch();
-  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
+  const [isLoading, toggleLoading] = useReducer((s) => !s, true);
 
   const fetchComments = useEventCallback((postId: string) => {
-    toggleLoading();
-
     const commentDocRef = query(
       collection(firestore, "comments"),
       where("postId", "==", postId),
+      orderBy("createdAt", "desc"),
     );
 
     const formatPostComments = (querySnapshot: QuerySnapshot) =>
