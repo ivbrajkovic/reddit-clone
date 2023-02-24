@@ -2,6 +2,7 @@ import modalSlice from "@/components/Modal/modalSlice";
 
 import authSlice from "@/features/auth/authSlice";
 import communitySlice from "@/features/communities/communitySlice";
+import directorySlice from "@/features/directory/directorySlice";
 import postsSlice from "@/features/posts/postsSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
@@ -14,6 +15,7 @@ export const makeStore = () =>
       authSlice: authSlice,
       communitySlice: communitySlice,
       postSlice: postsSlice,
+      directorySlice: directorySlice,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

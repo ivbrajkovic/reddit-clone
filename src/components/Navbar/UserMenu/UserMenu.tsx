@@ -1,4 +1,4 @@
-import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
+import UserMenuTarget from "@/components/MenuTarget/MenuTarget";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { formatDisplayName } from "@/features/auth/utility";

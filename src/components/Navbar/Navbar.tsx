@@ -1,9 +1,9 @@
-import Directory from "@/components/Navbar/Directory/Directory";
 import Logo from "@/components/Navbar/Logo";
 import RightContent from "@/components/Navbar/RightContent/RightContent";
 import SearchInput from "@/components/Navbar/SearchInput";
 import { HEADER_HEIGHT } from "@/constants";
 import { CommunityCreateModal } from "@/features/communities";
+import { Directory } from "@/features/directory";
 import { createStyles, Group, Header } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
