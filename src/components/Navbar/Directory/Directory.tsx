@@ -3,8 +3,10 @@ import UserMenuTarget from "@/components/Navbar/UserMenu/UserMenuTarget";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { selectCommunitySnippets } from "@/features/communities/communitySlice";
 import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
+import { CommunitySnippet } from "@/features/communities/types";
 import { Box, createStyles, CSSObject, Flex, Menu, Text } from "@mantine/core";
 import Link from "next/link";
+import { FaReddit } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
 import { VscAdd } from "react-icons/vsc";
 import { useSelector } from "react-redux";
@@ -19,12 +21,14 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const isModerator = (communitySnippet: CommunitySnippet) =>
+  communitySnippet.isModerator;
+
 const Directory = () => {
   const { classes } = useStyles();
   const user = useSignedInUser();
-  const { openCommunityCreateModal } = useCommunityCreateModal();
-
   const communitySnippets = useSelector(selectCommunitySnippets);
+  const { openCommunityCreateModal } = useCommunityCreateModal();
 
   if (!user) return null;
   return (
@@ -45,6 +49,30 @@ const Directory = () => {
         </Flex>
       </UserMenuTarget>
       <Menu.Dropdown>
+        <Menu.Label>Moderating</Menu.Label>
+        {communitySnippets.filter(isModerator).map((community) => (
+          <Menu.Item
+            component={Link}
+            key={community.communityId}
+            icon={
+              community.imageUrl ? (
+                <FadeInImage
+                  src={community.imageUrl}
+                  alt="Community logo"
+                  radius="xl"
+                  height={20}
+                  width={20}
+                />
+              ) : (
+                <FaReddit fontSize={20} color="lightblue" />
+              )
+            }
+            href={`/r/${community.communityId}`}
+          >
+            {`/r/${community.communityId}`}
+          </Menu.Item>
+        ))}
+
         <Menu.Label>My Communities</Menu.Label>
         <Menu.Item
           icon={<VscAdd fontSize={20} />}
@@ -66,7 +94,7 @@ const Directory = () => {
                   width={20}
                 />
               ) : (
-                <TiHome fontSize={20} />
+                <FaReddit fontSize={20} color="lightblue" />
               )
             }
             href={`/r/${community.communityId}`}

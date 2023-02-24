@@ -4,7 +4,10 @@ import { selectIsCreateCommunityModalOpen } from "@/features/communities/communi
 import RadioButtonWithIcon from "@/features/communities/components/CommunityCreateModal/RadioButtonWithIcon";
 import { useCommunityCreate } from "@/features/communities/hooks/useCommunityCreate";
 import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
-import { CreateCommunityFormValues } from "@/features/communities/types";
+import {
+  CommunitySnippet,
+  CreateCommunityFormValues,
+} from "@/features/communities/types";
 import { validateCommunityName } from "@/features/communities/utils/validateCommunityName";
 import { useAppSelector } from "@/store/hooks";
 import {
@@ -20,7 +23,8 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ifElse } from "ramda";
+import { useRouter } from "next/router";
+import { ifElse, tap } from "ramda";
 import { CgInfo } from "react-icons/cg";
 import { HiUser } from "react-icons/hi";
 import { ImEye } from "react-icons/im";
@@ -47,9 +51,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const CreateCommunityModal = () => {
+  const router = useRouter();
   const { classes } = useStyles();
-  const { closeCommunityCreateModal: closeCreateCommunityModal } =
-    useCommunityCreateModal();
+  const { closeCommunityCreateModal } = useCommunityCreateModal();
 
   const form = useForm<CreateCommunityFormValues>({
     initialValues: {
@@ -72,13 +76,17 @@ const CreateCommunityModal = () => {
     const isCommunityNameTaken = (error: Error) =>
       error.message === "Document already exists.";
 
+    const goToCommunity = (communitySnippet: CommunitySnippet) =>
+      router.push(`/r/${communitySnippet.communityId}`);
+
     handleCreateCommunity(values)
-      .then(closeCreateCommunityModal)
+      .then(tap(closeCommunityCreateModal))
+      .then(goToCommunity)
       .catch(
         ifElse(
           isCommunityNameTaken,
           setFormFieldError("communityName", "Community name already taken."),
-          showNotificationError("Error creating community"),
+          showNotificationError("Error creating community."),
         ),
       );
   };
@@ -98,6 +106,7 @@ const CreateCommunityModal = () => {
 
         <TextInput
           mb="md"
+          aria-label="Community name"
           inputWrapperOrder={["label", "input", "description", "error"]}
           icon={<p>r/</p>}
           maxLength={NAME_MAX_LENGTH}
@@ -117,6 +126,7 @@ const CreateCommunityModal = () => {
           orientation="vertical"
           spacing="xs"
           withAsterisk
+          defaultValue="public"
           {...form.getInputProps("communityType")}
         >
           <RadioButtonWithIcon
@@ -160,7 +170,7 @@ const CreateCommunityModal = () => {
         justify="flex-end"
         className={classes.footer}
       >
-        <Button variant="outline" h={32} onClick={closeCreateCommunityModal}>
+        <Button variant="outline" h={32} onClick={closeCommunityCreateModal}>
           Cancel
         </Button>
         <Button type="submit" h={32} loading={isLoading}>

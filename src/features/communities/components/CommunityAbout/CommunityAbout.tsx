@@ -1,7 +1,7 @@
 import { HEADER_HEIGHT } from "@/constants";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { selectCommunityData } from "@/features/communities/communitySlice";
 import CommunityAboutAdmin from "@/features/communities/components/CommunityAbout/components/CommunityAboutAdmin";
-import { Community } from "@/features/communities/types";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import {
   Box,
@@ -16,9 +16,9 @@ import {
 } from "@mantine/core";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { RiCakeLine } from "react-icons/ri";
+import { useSelector } from "react-redux";
 
 const PADDING_TOP = HEADER_HEIGHT + 24;
 
@@ -51,15 +51,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type CommunityAboutProps = {
-  communityData: Community;
-};
-
-const CommunityAbout: FC<CommunityAboutProps> = ({ communityData }) => {
+const CommunityAbout = () => {
   useRenderCount("CommunityAbout");
 
   const { classes } = useStyles();
   const user = useSignedInUser();
+  const communityData = useSelector(selectCommunityData);
+
   const { communityId, membersCount, createdAt, creatorId, imageUrl } =
     communityData;
 

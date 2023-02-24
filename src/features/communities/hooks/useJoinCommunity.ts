@@ -18,7 +18,7 @@ export const useJoinCommunity = () => {
     const createSnippet = () => ({
       imageUrl: communityData.imageUrl,
       communityId: communityData.communityId,
-      isModerator: false,
+      isModerator: user.uid === communityData.creatorId,
     });
 
     const setCommunitySnippet = (batch: WriteBatch) => {

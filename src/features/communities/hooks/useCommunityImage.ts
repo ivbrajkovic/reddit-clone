@@ -1,5 +1,8 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import { setCommunityDataImageUrl } from "@/features/communities/communitySlice";
+import {
+  updateCommunityData,
+  updateCommunitySnippet,
+} from "@/features/communities/communitySlice";
 import { firestore, storage } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { useAppDispatch } from "@/store/hooks";
@@ -11,7 +14,6 @@ import {
   StorageReference,
   uploadString,
 } from "firebase/storage";
-import { pipe } from "ramda";
 import { useReducer } from "react";
 
 const getImageBase64 = (file: File) => async () =>
@@ -36,6 +38,12 @@ export const useCommunityImageUpload = () => {
   const dispatch = useAppDispatch();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
+  const updateStore = (communityId: string) => (imageUrl: string) => {
+    dispatch(updateCommunityData({ communityId, imageUrl }));
+    dispatch(updateCommunitySnippet({ communityId, imageUrl }));
+    return imageUrl;
+  };
+
   const uploadCommunityImage = useEventCallback(
     (communityId: string, file: File) =>
       Promise.resolve()
@@ -43,7 +51,7 @@ export const useCommunityImageUpload = () => {
         .then(getImageBase64(file))
         .then(uploadImage(communityId))
         .then(updateCommunityImage(communityId))
-        .then(pipe(setCommunityDataImageUrl, dispatch))
+        .then(updateStore(communityId))
         .catch(errorUploadingImage)
         .finally(toggleLoading),
   );

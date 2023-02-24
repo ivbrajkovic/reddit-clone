@@ -31,11 +31,21 @@ export const isNullOrUndefined = <T>(value: T): boolean =>
 export const stopPropagation: MouseEventHandler<any> = (e) =>
   e.stopPropagation();
 
-export const filterById = <T extends any[]>(id: string, arr: T) =>
+export const filterByCommunityId = <T extends { communityId: string }>(
+  communityId: string,
+  arr: T[],
+) => arr.filter((item) => item.communityId !== communityId);
+
+export const filterById = <T extends { id: string }>(id: string, arr: T[]) =>
   arr.filter((item) => item.id !== id);
 
-export const findById = <T extends any[]>(id: string, arr: T) =>
+export const findById = <T extends { id: string }>(id: string, arr: T[]) =>
   arr.find((item) => item.id === id);
+
+export const findByCommunityId = <T extends { communityId: string }>(
+  communityId: string,
+  arr: T[],
+) => arr.find((item) => item.communityId === communityId);
 
 export const delayFn = (fn: () => void, delay: number) => () =>
   setTimeout(fn, delay);

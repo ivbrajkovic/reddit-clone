@@ -21,14 +21,14 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
   if (!communityData) return <CommunityNotFound />;
   return (
     <>
-      <CommunityHeader communityData={communityData} />
+      <CommunityHeader />
       <PageContent>
         <>
           <CommunityCreatePostBar />
           <PostList />
         </>
         <>
-          <CommunityAbout communityData={communityData} />
+          <CommunityAbout />
         </>
       </PageContent>
     </>

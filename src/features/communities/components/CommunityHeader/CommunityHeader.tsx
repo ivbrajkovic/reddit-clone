@@ -1,9 +1,9 @@
+import { selectCommunityData } from "@/features/communities/communitySlice";
 import { CommunityJoinButton } from "@/features/communities/components/CommunityJoinButton";
-import { Community } from "@/features/communities/types";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { Box, Container, createStyles, Flex, Image, Text } from "@mantine/core";
-import { FC } from "react";
 import { FaReddit } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -44,11 +44,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type CommunityHeaderProps = { communityData: Community };
-
-const CommunityHeader: FC<CommunityHeaderProps> = ({ communityData }) => {
+const CommunityHeader = () => {
   useRenderCount("CommunityHeader");
+
   const { classes } = useStyles();
+  const communityData = useSelector(selectCommunityData);
 
   return (
     <div className={classes.header}>

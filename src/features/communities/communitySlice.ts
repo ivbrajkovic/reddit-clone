@@ -4,13 +4,11 @@ import {
   CommunityState,
 } from "@/features/communities/types";
 import { RootState } from "@/store/store";
+import { RequiredByKeys } from "@/types";
+import { filterByCommunityId, findByCommunityId } from "@/utility";
 import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Timestamp } from "firebase/firestore";
 import { HYDRATE } from "next-redux-wrapper";
-import { complement, filter, propEq } from "ramda";
-
-const filterByCommunityId = (communityId: string) =>
-  filter(complement(propEq("communityId", communityId)));
 
 const initialCommunityData: Community = {
   adultContent: false,
@@ -71,7 +69,8 @@ const communitySlice = createSlice({
       state,
       { payload: communityId }: PayloadAction<string>,
     ) => {
-      state.communitySnippets = filterByCommunityId(communityId)(
+      state.communitySnippets = filterByCommunityId(
+        communityId,
         state.communitySnippets,
       );
     },
@@ -84,8 +83,13 @@ const communitySlice = createSlice({
     setCommunityData: (state, { payload }: PayloadAction<Community>) => {
       state.communityData = payload;
     },
-    setCommunityDataImageUrl: (state, { payload }: PayloadAction<string>) => {
-      state.communityData.imageUrl = payload;
+    updateCommunityData: (
+      state,
+      {
+        payload,
+      }: PayloadAction<RequiredByKeys<Partial<Community>, "communityId">>,
+    ) => {
+      Object.assign(state.communityData, payload);
     },
 
     // Community Snippets
@@ -95,6 +99,26 @@ const communitySlice = createSlice({
       { payload: communitySnippets }: PayloadAction<CommunitySnippet[]>,
     ) => {
       state.communitySnippets = communitySnippets;
+    },
+    addCommunitySnippet: (
+      state,
+      { payload }: PayloadAction<CommunitySnippet>,
+    ) => {
+      state.communitySnippets.push(payload);
+    },
+    updateCommunitySnippet: (
+      state,
+      {
+        payload,
+      }: PayloadAction<
+        RequiredByKeys<Partial<CommunitySnippet>, "communityId">
+      >,
+    ) => {
+      const communitySnippet = findByCommunityId(
+        payload.communityId,
+        state.communitySnippets,
+      );
+      communitySnippet && Object.assign(communitySnippet, payload);
     },
     resetCommunitySnippets: (state) => {
       state.communitySnippets = [];
@@ -109,9 +133,11 @@ export const {
   leaveCommunity,
   setCommunityData,
   resetCommunityData,
-  setCommunityDataImageUrl,
+  updateCommunityData,
   toggleCommunityLoader,
   setCommunitySnippets,
+  addCommunitySnippet,
+  updateCommunitySnippet,
   resetCommunitySnippets,
 } = communitySlice.actions;
 
