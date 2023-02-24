@@ -2,6 +2,7 @@ import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import PostCommentInput from "@/features/posts/components/PostComments/components/PostCommentInput";
 import PostCommentItem from "@/features/posts/components/PostComments/components/PostCommentItem";
 import PostCommentLoader from "@/features/posts/components/PostComments/components/PostCommentLoader";
+import { useDeletePostComment } from "@/features/posts/hooks/useDeletePostComment";
 import { useFetchPostComments } from "@/features/posts/hooks/useFetchPostComments";
 import { selectPostComments } from "@/features/posts/postsSlice";
 import { Post } from "@/features/posts/types";
@@ -14,11 +15,12 @@ type PostCommentsProps = { post: Post };
 const PostComments: FC<PostCommentsProps> = (props) => {
   const user = useSignedInUser();
   const postComments = useAppSelector(selectPostComments);
-  const { isLoading, fetchComments } = useFetchPostComments();
+  const { isLoading, fetchPostComments } = useFetchPostComments();
+  const { loadingCommentId, deletePostComment } = useDeletePostComment();
 
   useEffect(() => {
-    fetchComments(props.post.id);
-  }, [fetchComments, props.post.id]);
+    fetchPostComments(props.post.id);
+  }, [fetchPostComments, props.post.id]);
 
   if (isLoading)
     return (
@@ -35,7 +37,9 @@ const PostComments: FC<PostCommentsProps> = (props) => {
           <PostCommentItem
             key={comment.id}
             isCreator={user?.uid === comment.creatorId}
+            isLoading={comment.id === loadingCommentId}
             comment={comment}
+            onDelete={deletePostComment}
           />
         ))}
       </Stack>

@@ -1,5 +1,5 @@
-import { Box, createStyles, Image, ImageProps, Skeleton } from "@mantine/core";
-import { FC, ReactEventHandler, useReducer } from "react";
+import { Box, createStyles, Image, ImageProps } from "@mantine/core";
+import { FC, ReactEventHandler } from "react";
 
 const useStyles = createStyles((theme) => ({
   image: {
@@ -9,31 +9,23 @@ const useStyles = createStyles((theme) => ({
       opacity: "1 !important",
     },
   },
-  skeleton: {
-    position: "absolute",
-    inset: 0,
-  },
 }));
 
 type FadeInImageProps = ImageProps & React.RefAttributes<HTMLDivElement>;
 
-const FadeInImage: FC<{ isLoader?: boolean } & FadeInImageProps> = ({
-  isLoader = true,
+const FadeInImage: FC<{ mih?: number } & FadeInImageProps> = ({
+  mih,
   alt,
   className,
   ...props
 }) => {
   const { cx, classes } = useStyles();
-  const [isLoading, toggleLoading] = useReducer((s) => !s, true);
 
-  const onLoad: ReactEventHandler<HTMLDivElement> = (e) => {
-    isLoader && toggleLoading();
-    e.currentTarget.dataset.fadeIn = "true";
-  };
+  const onLoad: ReactEventHandler<HTMLDivElement> = (e) =>
+    (e.currentTarget.dataset.fadeIn = "true");
 
   return (
-    <Box mih={200} pos="relative">
-      <Skeleton radius="sm" visible={isLoading} className={classes.skeleton} />
+    <Box mih={mih} pos="relative">
       <Image
         alt={alt}
         className={cx(classes.image, className)}

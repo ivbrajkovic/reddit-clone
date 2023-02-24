@@ -1,8 +1,10 @@
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
 import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import { isUser } from "@/features/auth/utility";
-import { selectIsCommunityLoader } from "@/features/communities/communitySlice";
-import { useCommunityData } from "@/features/communities/context/communityContext";
+import {
+  selectCommunityData,
+  selectIsCommunityLoader,
+} from "@/features/communities/communitySlice";
 import { useIsUserJoinedInCommunity } from "@/features/communities/hooks/useIsUserJoinedInCommunity";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
 import { useLeaveCommunity } from "@/features/communities/hooks/useLeaveCommunity";
@@ -16,7 +18,7 @@ export const useCommunity = () => {
 
   const { openLogin } = useAuthModalHandlers();
 
-  const communityData = useCommunityData();
+  const communityData = useSelector(selectCommunityData);
   const joinCommunity = useJoinCommunity();
   const leaveCommunity = useLeaveCommunity();
 

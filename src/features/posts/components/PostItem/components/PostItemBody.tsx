@@ -11,6 +11,7 @@ const PostItemBody: FC<PostItemBodyProps> = (props) => {
       <Text>{props.post.body}</Text>
       {props.post.imageUrl ? (
         <FadeInImage
+          mih={400}
           src={props.post.imageUrl}
           alt="post"
           fit="contain"

@@ -5,10 +5,8 @@ import {
   CommunityHeader,
   CommunityNotFound,
 } from "@/features/communities";
-import { CommunityProvider } from "@/features/communities/context/communityContext";
 import { Community } from "@/features/communities/types";
 import { PostList } from "@/features/posts";
-import { PostProvider } from "@/features/posts/context/postContext";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
 export { getServerSideProps } from "@/ssr/communityPageProps";
@@ -22,20 +20,18 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
 
   if (!communityData) return <CommunityNotFound />;
   return (
-    <CommunityProvider>
-      <PostProvider>
-        <CommunityHeader communityData={communityData} />
-        <PageContent>
-          <>
-            <CommunityCreatePostBar />
-            <PostList />
-          </>
-          <>
-            <CommunityAbout communityData={communityData} />
-          </>
-        </PageContent>
-      </PostProvider>
-    </CommunityProvider>
+    <>
+      <CommunityHeader communityData={communityData} />
+      <PageContent>
+        <>
+          <CommunityCreatePostBar />
+          <PostList />
+        </>
+        <>
+          <CommunityAbout communityData={communityData} />
+        </>
+      </PageContent>
+    </>
   );
 };
 

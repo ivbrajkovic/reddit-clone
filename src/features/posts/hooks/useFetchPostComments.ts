@@ -19,7 +19,7 @@ export const useFetchPostComments = () => {
   const dispatch = useAppDispatch();
   const [isLoading, toggleLoading] = useReducer((s) => !s, true);
 
-  const fetchComments = useEventCallback((postId: string) => {
+  const fetchPostComments = useEventCallback((postId: string) => {
     const commentDocRef = query(
       collection(firestore, "comments"),
       where("postId", "==", postId),
@@ -36,5 +36,5 @@ export const useFetchPostComments = () => {
       .finally(toggleLoading);
   });
 
-  return { isLoading, fetchComments };
+  return { isLoading, fetchPostComments };
 };

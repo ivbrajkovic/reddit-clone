@@ -3,7 +3,6 @@ import { CommunityAboutWrapper } from "@/features/communities/components/Communi
 import { useFetchCommunityEffect } from "@/features/communities/hooks/useFetchCommunityEffect";
 import { PostComments } from "@/features/posts/components/PostComments";
 import PostItemWrapper from "@/features/posts/components/PostItem/components/PostItemWrapper";
-import { PostProvider } from "@/features/posts/context/postContext";
 import { usePostAndPostVote } from "@/features/posts/hooks/usePostAndPostVote";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
@@ -16,22 +15,20 @@ const PostPage: NextPage = () => {
     useFetchCommunityEffect();
 
   return (
-    <PostProvider>
-      <PageContent>
-        <>
-          <PostItemWrapper
-            isLoading={isPostLoading}
-            post={post}
-            postVote={postVote}
-          />
-          {post ? <PostComments post={post} /> : null}
-        </>
-        <CommunityAboutWrapper
-          isLoading={isCommunityLoading}
-          communityData={communityData}
+    <PageContent>
+      <>
+        <PostItemWrapper
+          isLoading={isPostLoading}
+          post={post}
+          postVote={postVote}
         />
-      </PageContent>
-    </PostProvider>
+        {post ? <PostComments post={post} /> : null}
+      </>
+      <CommunityAboutWrapper
+        isLoading={isCommunityLoading}
+        communityData={communityData}
+      />
+    </PageContent>
   );
 };
 

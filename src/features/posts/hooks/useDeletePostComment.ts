@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import {
-  deletePostComment,
-  incrementPostCommentCount,
+  decrementPostCommentCount,
+  deletePostComment as deletePostCommentFromStore,
 } from "@/features/posts/postsSlice";
 import { PostComment } from "@/features/posts/types";
 import { firestore } from "@/firebase/clientApp";
@@ -9,14 +9,14 @@ import { useEventCallback } from "@/hooks/useEventCallback";
 import { useAppDispatch } from "@/store/hooks";
 import { doc, increment, writeBatch } from "firebase/firestore";
 import { pipe } from "ramda";
-import { useReducer } from "react";
+import { useState } from "react";
 
 export const useDeletePostComment = () => {
   const dispatch = useAppDispatch();
-  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
+  const [loadingCommentId, setLoadingId] = useState<string | null>(null);
 
-  const deleteComment = useEventCallback((comment: PostComment) => {
-    toggleLoading();
+  const deletePostComment = useEventCallback((comment: PostComment) => {
+    setLoadingId(comment.id);
     const batch = writeBatch(firestore);
 
     const commentDocRef = doc(firestore, "comments", comment.id);
@@ -26,15 +26,18 @@ export const useDeletePostComment = () => {
     batch.update(postDocRef, { commentCount: increment(-1) });
 
     const decrementCommentCount = () =>
-      pipe(incrementPostCommentCount, dispatch)(comment.postId);
-    const deleteComment = () => pipe(deletePostComment, dispatch)(comment.id);
+      pipe(decrementPostCommentCount, dispatch)(comment.postId);
+    const deleteComment = () =>
+      pipe(deletePostCommentFromStore, dispatch)(comment.id);
+
+    const clearLoadingId = () => setLoadingId(null);
 
     return batch
       .commit()
       .then(pipe(decrementCommentCount, deleteComment))
       .catch(showNotificationError("Error deleting comment"))
-      .finally(toggleLoading);
+      .finally(clearLoadingId);
   });
 
-  return { isLoading, deleteComment };
+  return { loadingCommentId, deletePostComment };
 };

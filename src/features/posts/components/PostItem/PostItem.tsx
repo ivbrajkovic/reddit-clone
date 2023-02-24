@@ -3,12 +3,11 @@ import PostItemFooter from "@/features/posts/components/PostItem/components/Post
 import PostItemHeader from "@/features/posts/components/PostItem/components/PostItemHeader";
 import usePostItemStyles from "@/features/posts/components/PostItem/components/postItemStyles";
 import VoteButtons from "@/features/posts/components/PostItem/components/VoteButton";
-import { usePostContext } from "@/features/posts/context/postContext";
+import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
 import { Post, PostVote } from "@/features/posts/types";
 import { Box, Flex, LoadingOverlay, Paper, Stack } from "@mantine/core";
 import { useRouter } from "next/router";
-import { andThen, pipe, tap } from "ramda";
-import { FC, memo, useReducer } from "react";
+import { FC, memo } from "react";
 
 const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
   prevProps.post.id === nextProps.post.id &&
@@ -22,18 +21,13 @@ export type PostItemProps = {
 
 const PostItem: FC<PostItemProps> = memo(({ ...props }) => {
   const router = useRouter();
-  const { deletePost } = usePostContext();
+  const { isLoading, deletePost } = useDeletePost();
 
   const isPostPage = Boolean(router.query.postId);
   const { classes } = usePostItemStyles({ isPostPage });
 
-  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
-
   const onSelectPost = () =>
     router.push(`/r/${props.post.communityId}/comments/${props.post.id}`);
-
-  const onDeletePost = (post: Post) =>
-    pipe(tap(toggleLoading), deletePost, andThen(toggleLoading))(post);
 
   return (
     <Box pos="relative">
@@ -51,7 +45,7 @@ const PostItem: FC<PostItemProps> = memo(({ ...props }) => {
           <Stack pt={8} pl={4} spacing={4} w="100%">
             <PostItemHeader post={props.post} />
             <PostItemBody post={props.post} />
-            <PostItemFooter post={props.post} onDeletePost={onDeletePost} />
+            <PostItemFooter post={props.post} onDeletePost={deletePost} />
           </Stack>
         </Flex>
       </Paper>

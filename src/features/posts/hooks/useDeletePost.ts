@@ -8,24 +8,14 @@ import { AppDispatch } from "@/store/store";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { NextRouter, useRouter } from "next/router";
-import { andThen, ifElse, isNil, otherwise, pipe } from "ramda";
+import { andThen, ifElse, isNil, otherwise, pipe, tap } from "ramda";
+import { useReducer } from "react";
 
 const formatImagePath = (post: Post) => `posts/${post.id}/image`;
 const postHasImage = (post: Post) => isNil(post.imageUrl);
 const imageDocumentRef = (imagePath: string) => ref(storage, imagePath);
 const postDocumentRef = (post: Post) => doc(firestore, "posts", post.id);
 const errorDeletingPost = showNotificationError("Error deleting post.");
-
-// const deletePostImageFromStorage = async (post: Post) =>
-//   unless(
-//     postHasImage,
-//     pipe(
-//       formatImagePath,
-//       imageDocumentRef,
-//       deleteObject,
-//       andThen(always(post)),
-//     ),
-//   )(post);
 
 const deletePostImageFromStorage = async (post: Post) => {
   if (postHasImage(post)) return post;
@@ -35,17 +25,11 @@ const deletePostImageFromStorage = async (post: Post) => {
   return post;
 };
 
-// const deletePostFromFirebase = async (post: Post) =>
-//   pipe(postDocumentRef, deleteDoc, andThen(always(post)))(post);
-
 const deletePostFromFirebase = async (post: Post) => {
   const postRef = postDocumentRef(post);
   await deleteDoc(postRef);
   return post;
 };
-
-// const deletePostFromStore = (dispatch: AppDispatch) => (post: Post) =>
-//   pipe(deletePost, dispatch, always(post))(post);
 
 const deletePostFromStore = (dispatch: AppDispatch) => (post: Post) => {
   dispatch(deletePost(post));
@@ -63,9 +47,11 @@ const isPostPage = (router: NextRouter) => (_: unknown) =>
 export const useDeletePost = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 
   const deletePost = useEventCallback(async (post: Post) =>
     pipe(
+      tap(toggleLoading),
       deletePostImageFromStorage,
       andThen(deletePostFromFirebase),
       andThen(
@@ -76,14 +62,9 @@ export const useDeletePost = () => {
         ),
       ),
       otherwise(errorDeletingPost),
+      andThen(toggleLoading),
     )(post),
   );
 
-  return {
-    deletePostImageFromStorage,
-    deletePostFromFirebase,
-    deletePostFromStore,
-    errorDeletingPost,
-    deletePost,
-  };
+  return { isLoading, deletePost };
 };

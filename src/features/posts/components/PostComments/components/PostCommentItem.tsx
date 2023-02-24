@@ -1,4 +1,3 @@
-import { useDeletePostComment } from "@/features/posts/hooks/useDeletePostComment";
 import { PostComment } from "@/features/posts/types";
 import {
   Box,
@@ -27,19 +26,20 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type PostCommentItemProps = {
-  comment: PostComment;
+  isLoading: boolean;
   isCreator: boolean;
+  comment: PostComment;
+  onDelete: (comment: PostComment) => void;
 };
 
 const PostCommentItem: FC<PostCommentItemProps> = (props) => {
   const { classes } = useStyles();
-  const { isLoading, deleteComment } = useDeletePostComment();
 
   const creatorDisplayName = props.comment.creatorDisplayName;
   const createdAt = dayjs(props.comment.createdAt.seconds * 1000).fromNow();
   const commentText = props.comment.text;
 
-  const onDelete = () => deleteComment(props.comment);
+  const onDelete = () => props.onDelete(props.comment);
 
   return (
     <Box pos="relative">
@@ -70,7 +70,7 @@ const PostCommentItem: FC<PostCommentItemProps> = (props) => {
         </Box>
       </Flex>
       <LoadingOverlay
-        visible={isLoading}
+        visible={props.isLoading}
         overlayBlur={2}
         transitionDuration={500}
       />
