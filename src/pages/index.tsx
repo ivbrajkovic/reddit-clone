@@ -46,6 +46,7 @@ const Home = () => {
 
     // if (!user && !isLoadingUser)
     buildNoUserHomeFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoadingUser]);
 
   return (

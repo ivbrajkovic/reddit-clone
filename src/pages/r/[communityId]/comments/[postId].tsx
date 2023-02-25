@@ -11,8 +11,9 @@ import { NextPage } from "next";
 
 const PostWithComments = () => {
   const { isLoading, post, postVote } = usePostAndPostVote();
-  if (!post) return <PostNotFound />;
   if (isLoading) return <PostLoader postCount={1} />;
+  if (!isLoading && !post) return <PostNotFound />;
+  if (!post) return null;
   return (
     <>
       <PostItem post={post} postVote={postVote} />

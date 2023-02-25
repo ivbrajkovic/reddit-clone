@@ -31,7 +31,6 @@ const Directory = () => {
     isOpenDirectory,
     setIsOpenDirectory,
     selectedDirectoryItem,
-    selectDirectoryItem,
   } = useDirectory();
 
   if (!user) return null;
@@ -60,7 +59,6 @@ const Directory = () => {
               icon="FaReddit"
               iconColor="lightcoral"
               imageUrl={communitySnippet.imageUrl}
-              onClick={selectDirectoryItem}
             />
           );
         })}
@@ -79,7 +77,6 @@ const Directory = () => {
             icon="FaReddit"
             iconColor="lightblue"
             imageUrl={communitySnippet.imageUrl}
-            onClick={selectDirectoryItem}
           />
         ))}
       </Menu.Dropdown>

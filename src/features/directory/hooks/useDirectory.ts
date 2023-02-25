@@ -3,19 +3,19 @@ import {
   selectCommunitySnippets,
 } from "@/features/communities/communitySlice";
 import {
-  DirectoryItemProps,
   resetSelectedDirectoryItem,
   selectDirectory,
   setDirectoryOpen,
   setSelectedDirectoryItem,
 } from "@/features/directory/directorySlice";
 import { useEventCallback } from "@/hooks/useEventCallback";
-import { useRouteChanged } from "@/hooks/useRouteChange";
 import { useAppDispatch } from "@/store/hooks";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export const useDirectory = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const communitySnippets = useSelector(selectCommunitySnippets);
@@ -26,31 +26,27 @@ export const useDirectory = () => {
   const setIsOpenDirectory = useEventCallback((isOpen: boolean) =>
     dispatch(setDirectoryOpen(isOpen)),
   );
-  const selectDirectoryItem = useEventCallback((item: DirectoryItemProps) =>
-    dispatch(setSelectedDirectoryItem(item)),
-  );
-
-  useRouteChanged((e) => e === "/" && dispatch(resetSelectedDirectoryItem()));
 
   useEffect(() => {
-    const { communityId, imageUrl } = communityData;
-    if (!communityId) {
+    if (router.asPath === "/" || !communityData.communityId) {
       dispatch(resetSelectedDirectoryItem());
       return;
     }
-    selectDirectoryItem({
-      url: `/r/${communityId}`,
-      imageUrl,
-      icon: "FaReddit",
-      iconColor: "lightblue",
-    });
-  }, [communityData, dispatch, selectDirectoryItem]);
+
+    dispatch(
+      setSelectedDirectoryItem({
+        url: `/r/${communityData.communityId}`,
+        imageUrl: communityData.imageUrl,
+        icon: "FaReddit",
+        iconColor: "lightblue",
+      }),
+    );
+  }, [router.asPath, communityData, dispatch]);
 
   return {
     communitySnippets,
     isOpenDirectory,
     setIsOpenDirectory,
     selectedDirectoryItem,
-    selectDirectoryItem,
   };
 };

@@ -1,7 +1,7 @@
 import { selectCommunityData } from "@/features/communities/communitySlice";
 import { useFetchCommunity } from "@/features/communities/hooks/useFetchCommunity";
 import { useRouter } from "next/router";
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export const useFetchCommunityEffect = () => {
@@ -9,17 +9,16 @@ export const useFetchCommunityEffect = () => {
   const fetchCommunity = useFetchCommunity();
   const communityData = useSelector(selectCommunityData);
 
-  const [isLoading, toggleLoading] = useReducer(
-    (s) => !s,
-    !Boolean(communityData.communityId),
-  );
+  const communityId = router.query.communityId as string;
+  const isSameCommunity = communityId === communityData.communityId;
+
+  const [isLoading, setLoading] = useState(!isSameCommunity);
 
   useEffect(() => {
-    const communityId = router.query.communityId as string;
-    if (!communityId) return;
-    if (communityData.communityId) return;
-    fetchCommunity(communityId as string).then(toggleLoading);
-  }, [communityData.communityId, router.query.communityId, fetchCommunity]);
+    if (isSameCommunity) return;
+    const unsetLoading = () => setLoading(false);
+    fetchCommunity(communityId as string).then(unsetLoading);
+  }, [communityId, fetchCommunity, isSameCommunity]);
 
   return { isLoading, communityData };
 };
