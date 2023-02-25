@@ -1,7 +1,7 @@
+import { CreatePostBar } from "@/components/CreatePostBar";
 import PageContent from "@/components/Layout/PageContent";
 import {
   CommunityAbout,
-  CommunityCreatePostBar,
   CommunityHeader,
   CommunityNotFound,
 } from "@/features/communities";
@@ -24,7 +24,7 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
       <CommunityHeader />
       <PageContent>
         <>
-          <CommunityCreatePostBar />
+          <CreatePostBar />
           <PostList />
         </>
         <>

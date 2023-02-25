@@ -13,14 +13,14 @@ import {
   where,
 } from "firebase/firestore";
 
-const errorFetchingPost = showNotificationError("Error fetching post");
+export const errorFetchingPost = showNotificationError("Error fetching post");
 
-const fetchPostById = async (postId: string) => {
+export const fetchPostById = async (postId: string) => {
   const postRef = doc(firestore, "posts", postId);
   return getDoc(postRef);
 };
 
-const fetchPostsByCommunityId = async (communityId: string) => {
+export const fetchPostsByCommunityId = async (communityId: string) => {
   const queryPosts = query(
     collection(firestore, "posts"),
     where("communityId", "==", `${communityId}`),
@@ -29,13 +29,13 @@ const fetchPostsByCommunityId = async (communityId: string) => {
   return getDocs(queryPosts);
 };
 
-const formatPost = (postDoc: DocumentSnapshot) =>
+export const formatPost = (postDoc: DocumentSnapshot) =>
   ({
     ...postDoc.data(),
     id: postDoc.id,
   } as Post);
 
-const formatPosts = (postDocs: QuerySnapshot) =>
+export const formatPosts = (postDocs: QuerySnapshot) =>
   postDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Post[];
 
 const fetchPost = {

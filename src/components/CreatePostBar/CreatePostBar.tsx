@@ -1,7 +1,10 @@
 import { TextInput } from "@/components/FormControls";
+import { openAuthModal } from "@/features/auth/authSlice";
+import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { setDirectoryOpen } from "@/features/directory/directorySlice";
+import { useAppDispatch } from "@/store/hooks";
 import { createStyles, Flex, Image, Paper } from "@mantine/core";
 import { useRouter } from "next/router";
-import { FC } from "react";
 import { IoImageOutline } from "react-icons/io5";
 import { TfiLink } from "react-icons/tfi";
 
@@ -38,15 +41,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type CommunityCreatePostBarProps = {};
-
-const CommunityCreatePostBar: FC<CommunityCreatePostBarProps> = () => {
+const CreatePostBar = () => {
   const { classes } = useStyles();
   const router = useRouter();
+  const user = useSignedInUser();
+  const dispatch = useAppDispatch();
 
   const goToSubmit = () => {
     const { communityId } = router.query;
-    if (communityId) router.push(`/r/${communityId}/submit`);
+    !user
+      ? dispatch(openAuthModal("login"))
+      : !communityId
+      ? dispatch(setDirectoryOpen(true))
+      : router.push(`/r/${communityId}/submit`);
   };
 
   return (
@@ -75,4 +82,4 @@ const CommunityCreatePostBar: FC<CommunityCreatePostBarProps> = () => {
     </Paper>
   );
 };
-export default CommunityCreatePostBar;
+export default CreatePostBar;

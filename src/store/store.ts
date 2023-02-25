@@ -1,5 +1,3 @@
-import modalSlice from "@/components/Modal/modalSlice";
-
 import authSlice from "@/features/auth/authSlice";
 import communitySlice from "@/features/communities/communitySlice";
 import directorySlice from "@/features/directory/directorySlice";
@@ -11,7 +9,6 @@ export const makeStore = () =>
   configureStore({
     devTools: process.env.NODE_ENV !== "production",
     reducer: {
-      modalSlice: modalSlice,
       authSlice: authSlice,
       communitySlice: communitySlice,
       postSlice: postsSlice,

@@ -1,1 +1,1 @@
-export * from "./components/Directory";
+export { Directory } from "./components/Directory";

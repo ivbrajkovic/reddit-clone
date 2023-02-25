@@ -56,6 +56,7 @@ export const {
   toggleDirectoryOpen,
   setDirectoryOpen,
   setSelectedDirectoryItem,
+  resetSelectedDirectoryItem,
 } = directorySlice.actions;
 
 export const selectDirectory = (state: RootState) => state.directorySlice;

@@ -4,11 +4,13 @@ import {
 } from "@/features/communities/communitySlice";
 import {
   DirectoryItemProps,
+  resetSelectedDirectoryItem,
   selectDirectory,
   setDirectoryOpen,
   setSelectedDirectoryItem,
 } from "@/features/directory/directorySlice";
 import { useEventCallback } from "@/hooks/useEventCallback";
+import { useRouteChanged } from "@/hooks/useRouteChange";
 import { useAppDispatch } from "@/store/hooks";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -28,16 +30,21 @@ export const useDirectory = () => {
     dispatch(setSelectedDirectoryItem(item)),
   );
 
+  useRouteChanged((e) => e === "/" && dispatch(resetSelectedDirectoryItem()));
+
   useEffect(() => {
-    if (!communityData.creatorId) return;
     const { communityId, imageUrl } = communityData;
+    if (!communityId) {
+      dispatch(resetSelectedDirectoryItem());
+      return;
+    }
     selectDirectoryItem({
       url: `/r/${communityId}`,
       imageUrl,
       icon: "FaReddit",
       iconColor: "lightblue",
     });
-  }, [communityData, selectDirectoryItem]);
+  }, [communityData, dispatch, selectDirectoryItem]);
 
   return {
     communitySnippets,
