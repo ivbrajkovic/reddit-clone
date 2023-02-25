@@ -6,6 +6,7 @@ import { CreatePostFormValues } from "@/features/posts/components/CreatePost/cre
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
 import { useDebounceCallback } from "@/hooks/useDebounceCallback";
+import { RootState } from "@/store/store";
 import { readFiles } from "@/utility/readFiles";
 import { FileWithPath } from "@mantine/dropzone";
 import { User } from "firebase/auth";
@@ -35,6 +36,8 @@ import {
   unless,
 } from "ramda";
 import { useReducer } from "react";
+import { useStore } from "react-redux";
+
 type NewPost = Omit<Post, "id">;
 
 const errorReadingFiles = showNotificationError("Error reading files");
@@ -107,18 +110,19 @@ const uploadFiles =
 const formatNewPost = (
   user: User,
   communityId: string,
+  communityImageUrl: string | null,
   formValues: CreatePostFormValues,
 ) => {
   const creatorDisplayName = formatDisplayName(user);
   const newPost: NewPost = {
-    communityId,
-    creatorId: user.uid,
     creatorDisplayName,
+    creatorId: user.uid,
+    communityId,
+    communityImageUrl,
     title: formValues.title,
     body: formValues.body,
     commentCount: 0,
     voteStatus: 0,
-    communityImageUrl: null,
     imageUrl: null,
     createdAt: serverTimestamp() as Timestamp,
   };
@@ -128,6 +132,7 @@ const formatNewPost = (
 export const useCreatePost = () => {
   const router = useRouter();
   const user = useSignedInUser();
+  const store = useStore();
   const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);
 
@@ -135,9 +140,12 @@ export const useCreatePost = () => {
     ifElse(
       isUser,
       (user) => {
-        const communityId = router.query.communityId as string;
-        const newPost = formatNewPost(user, communityId, formValues);
+        const { communityId, imageUrl } = (store.getState() as RootState)
+          .communitySlice.communityData;
+        const newPost = formatNewPost(user, communityId, imageUrl, formValues);
+
         const uploadFilesByPostId = uploadFiles(formValues.files);
+
         pipe(
           tap(toggleIsLoading),
           getPostDocumentRef,

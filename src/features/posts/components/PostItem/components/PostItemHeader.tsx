@@ -6,6 +6,7 @@ import { Box, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { FC } from "react";
+import { BsDot } from "react-icons/bs";
 
 type PostItemHeaderProps = { isShowCommunityName?: boolean; post: Post };
 
@@ -24,14 +25,30 @@ const PostItemHeader: FC<PostItemHeaderProps> = (props) => {
               imageUrl={props.post.communityImageUrl}
               icon="FaReddit"
               iconColor={isModerator ? "lightcoral" : "lightblue"}
+              height={18}
+              width={18}
+              fontSize={18}
             />
-            <Text component={Link} href={communityUrl} fw="700">
-              {communityUrl}
-            </Text>
+            <Group spacing={0}>
+              <Text
+                component={Link}
+                href={communityUrl}
+                fw="700"
+                sx={{ "&:hover": { textDecoration: "underline" } }}
+              >
+                {communityUrl}
+              </Text>
+              <BsDot fontSize={12} color="gray" />
+              <Text mr="xs">Posted by u/{props.post.creatorDisplayName}</Text>
+              <Text>{formatCreatedAt}</Text>
+            </Group>
           </>
-        ) : null}
-        <Text>Posted by u/{props.post.creatorDisplayName}</Text>
-        <Text>{formatCreatedAt}</Text>
+        ) : (
+          <>
+            <Text>Posted by u/{props.post.creatorDisplayName}</Text>
+            <Text>{formatCreatedAt}</Text>
+          </>
+        )}
       </Group>
       <Text mb={4} fz="12pt" fw={600}>
         {props.post.title}
