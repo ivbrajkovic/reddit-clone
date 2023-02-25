@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { Textarea } from "@/components/FormControls";
 import AuthButtons from "@/components/Navbar/RightContent/AuthButton";
-import { formatDisplayName } from "@/features/auth/utility";
+import { formatDisplayName } from "@/features/auth/utility/utility";
 import { useCreatePostComment } from "@/features/posts/hooks/useCreatePostComment";
 import { Post } from "@/features/posts/types";
 import { Button, Flex, Group, Text } from "@mantine/core";

@@ -22,7 +22,7 @@ const initialCommunityData: Community = {
 
 const initialState: CommunityState = {
   isCommunityCreateModal: false,
-  isCommunityLoader: false,
+  isCommunitySnippetsFetched: false,
   communitySnippets: [],
   communityData: { ...initialCommunityData },
 };
@@ -34,8 +34,8 @@ const communitySlice = createSlice({
     builder
       .addCase("auth/logout", (state) => {
         state.communitySnippets = [];
-        state.isCommunityLoader = false;
         state.isCommunityCreateModal = false;
+        state.isCommunitySnippetsFetched = false;
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
         if (action.payload.communitySlice.communityData.communityId)
@@ -49,12 +49,6 @@ const communitySlice = createSlice({
     },
     closeCommunityCreateModal: (state) => {
       state.isCommunityCreateModal = false;
-    },
-
-    // Community Loader
-
-    toggleCommunityLoader: (state) => {
-      state.isCommunityLoader = !state.isCommunityLoader;
     },
 
     // Community actions
@@ -98,6 +92,7 @@ const communitySlice = createSlice({
       state,
       { payload: communitySnippets }: PayloadAction<CommunitySnippet[]>,
     ) => {
+      state.isCommunitySnippetsFetched = true;
       state.communitySnippets = communitySnippets;
     },
     addCommunitySnippet: (
@@ -120,9 +115,6 @@ const communitySlice = createSlice({
       );
       communitySnippet && Object.assign(communitySnippet, payload);
     },
-    resetCommunitySnippets: (state) => {
-      state.communitySnippets = [];
-    },
   },
 });
 
@@ -134,11 +126,9 @@ export const {
   setCommunityData,
   resetCommunityData,
   updateCommunityData,
-  toggleCommunityLoader,
   setCommunitySnippets,
   addCommunitySnippet,
   updateCommunitySnippet,
-  resetCommunitySnippets,
 } = communitySlice.actions;
 
 export const selectIsCreateCommunityModalOpen = (state: RootState) =>
@@ -147,8 +137,8 @@ export const selectIsCreateCommunityModalOpen = (state: RootState) =>
 export const selectCommunitySnippets = (state: RootState) =>
   state.communitySlice.communitySnippets;
 
-export const selectIsCommunityLoader = (state: RootState) =>
-  state.communitySlice.isCommunityLoader;
+export const selectIsCommunitySnippetsFetched = (state: RootState) =>
+  state.communitySlice.isCommunitySnippetsFetched;
 
 export const selectCommunityData = (state: RootState) =>
   state.communitySlice.communityData;

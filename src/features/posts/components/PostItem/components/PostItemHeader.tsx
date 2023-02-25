@@ -25,9 +25,6 @@ const PostItemHeader: FC<PostItemHeaderProps> = (props) => {
               imageUrl={props.post.communityImageUrl}
               icon="FaReddit"
               iconColor={isModerator ? "lightcoral" : "lightblue"}
-              height={18}
-              width={18}
-              fontSize={18}
             />
             <Group spacing={0}>
               <Text

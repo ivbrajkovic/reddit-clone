@@ -1,46 +1,38 @@
 import { showNotificationError } from "@/common/showNotificationError";
-import {
-  setCommunitySnippets,
-  toggleCommunityLoader,
-} from "@/features/communities/communitySlice";
+import { setCommunitySnippets } from "@/features/communities/communitySlice";
 import { CommunitySnippet } from "@/features/communities/types";
 import { firestore } from "@/firebase/clientApp";
 import { useEventCallback } from "@/hooks/useEventCallback";
 import { useAppDispatch } from "@/store/hooks";
 import { collection, getDocs, QuerySnapshot } from "firebase/firestore";
-import { andThen, otherwise, pipe, tap } from "ramda";
+import { pipe } from "ramda";
 
-const formatSnippetPath = (userId: string) =>
-  `users/${userId}/communitySnippets`;
+export const errorFetchingCommunitySnippets = showNotificationError(
+  "Error getting community snippets",
+);
 
-const getSnippetCollection = (path: string) => collection(firestore, path);
-
-const formatCommunitySnippets = (postDocs: QuerySnapshot) =>
+export const formatCommunitySnippets = (postDocs: QuerySnapshot) =>
   postDocs.docs.map((doc) => ({
     ...doc.data(),
     communityId: doc.id,
   })) as CommunitySnippet[];
 
-const fetchUserCommunitySnippets = pipe(
-  formatSnippetPath,
-  getSnippetCollection,
-  getDocs,
-);
-
-const errorFetchingCommunitySnippets = showNotificationError(
-  "Error getting community snippets",
-);
+export const fetchCommunitySnippets = (userId: string) => {
+  const path = `users/${userId}/communitySnippets`;
+  return getDocs(collection(firestore, path));
+};
 
 export const useFetchCommunitySnippets = () => {
   const dispatch = useAppDispatch();
-  return useEventCallback(async (userId: string) => {
-    const toggleLoader = pipe<[], void, void>(toggleCommunityLoader, dispatch);
-    return pipe(
-      tap(toggleLoader),
-      fetchUserCommunitySnippets,
-      andThen(pipe(formatCommunitySnippets, setCommunitySnippets, dispatch)),
-      otherwise(errorFetchingCommunitySnippets),
-      andThen(toggleLoader),
-    )(userId);
+  return useEventCallback((userId: string) => {
+    const dispatchCommunitySnippets = pipe(
+      formatCommunitySnippets,
+      setCommunitySnippets,
+      dispatch,
+    );
+
+    return fetchCommunitySnippets(userId)
+      .then(dispatchCommunitySnippets)
+      .catch(errorFetchingCommunitySnippets);
   });
 };

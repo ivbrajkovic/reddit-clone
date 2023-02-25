@@ -13,7 +13,7 @@ const {
 export const useFetchPostVotes = () => {
   const dispatch = useDispatch();
 
-  return useEventCallback(async (communityId: string, userId: string) => {
+  return useEventCallback(async (userId: string, communityId: string) => {
     return pipe(
       fetchPostVotesByCommunityIdAndUserId(communityId),
       andThen(pipe(formatPostVotes, setPostVotes, dispatch)),

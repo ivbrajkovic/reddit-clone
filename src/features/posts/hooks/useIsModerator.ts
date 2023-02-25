@@ -1,7 +1,6 @@
-import { auth } from "@/firebase/clientApp";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
 
 export const useIsCreator = (creatorId?: string) => {
-  const [user] = useAuthState(auth);
+  const user = useUser();
   return !!creatorId && user?.uid === creatorId;
 };

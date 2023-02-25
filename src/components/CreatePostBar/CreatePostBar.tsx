@@ -1,6 +1,6 @@
 import { TextInput } from "@/components/FormControls";
 import { openAuthModal } from "@/features/auth/authSlice";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
 import { setDirectoryOpen } from "@/features/directory/directorySlice";
 import { useAppDispatch } from "@/store/hooks";
 import { createStyles, Flex, Image, Paper } from "@mantine/core";
@@ -44,7 +44,7 @@ const useStyles = createStyles((theme) => ({
 const CreatePostBar = () => {
   const { classes } = useStyles();
   const router = useRouter();
-  const user = useSignedInUser();
+  const user = useUser();
   const dispatch = useAppDispatch();
 
   const goToSubmit = () => {

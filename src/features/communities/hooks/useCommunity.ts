@@ -1,9 +1,9 @@
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { isUser } from "@/features/auth/utility";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
+import { isUser } from "@/features/auth/utility/utility";
 import {
   selectCommunityData,
-  selectIsCommunityLoader,
+  selectIsCommunitySnippetsFetched,
 } from "@/features/communities/communitySlice";
 import { useIsUserJoinedInCommunity } from "@/features/communities/hooks/useIsUserJoinedInCommunity";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
@@ -14,7 +14,7 @@ import { ifElse } from "ramda";
 import { useSelector } from "react-redux";
 
 export const useCommunity = () => {
-  const user = useSignedInUser();
+  const user = useUser();
 
   const { openLogin } = useAuthModalHandlers();
 
@@ -23,7 +23,7 @@ export const useCommunity = () => {
   const leaveCommunity = useLeaveCommunity();
 
   const isUserJoinedInCommunity = useIsUserJoinedInCommunity();
-  const isCommunityLoader = useSelector(selectIsCommunityLoader);
+  const isCommunityLoader = useSelector(selectIsCommunitySnippetsFetched);
 
   const joinOrLeaveCommunity = useEventCallback(() => {
     const joinOrLeave = ifElse(
@@ -35,7 +35,7 @@ export const useCommunity = () => {
   });
 
   return {
-    isLoading: isCommunityLoader,
+    isLoading: !isCommunityLoader,
     isUserJoinedInCommunity,
     joinOrLeaveCommunity,
   };

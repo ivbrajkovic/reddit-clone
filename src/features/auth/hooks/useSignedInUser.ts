@@ -1,4 +1,4 @@
-import { auth } from "@/firebase/clientApp";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { selectAuthUser } from "@/features/auth/authSlice";
+import { useSelector } from "react-redux";
 
-export const useSignedInUser = () => useAuthState(auth)[0];
+export const useUser = () => useSelector(selectAuthUser);

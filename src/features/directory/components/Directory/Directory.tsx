@@ -1,5 +1,5 @@
 import UserMenuTarget from "@/components/MenuTarget/MenuTarget";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
 import { useCommunityCreateModal } from "@/features/communities/hooks/useCommunityCreateModal";
 import { CommunitySnippet } from "@/features/communities/types";
 import { DirectoryHeader } from "@/features/directory/components/DirectoryHeader";
@@ -23,7 +23,7 @@ const isModerator = (communitySnippet: CommunitySnippet) =>
 
 const Directory = () => {
   const { classes } = useStyles();
-  const user = useSignedInUser();
+  const user = useUser();
 
   const { openCommunityCreateModal } = useCommunityCreateModal();
   const {

@@ -1,40 +1,66 @@
 import { RootState } from "@/store/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "firebase/auth";
 
-type View = "login" | "signup" | "resetPassword" | null;
+type AuthModalView = "login" | "signup" | "resetPassword" | null;
+
+type AuthModal = {
+  isAuthModalOpen: boolean;
+  authModalView: AuthModalView;
+};
 
 export interface AuthState {
-  isAuthModalOpen: boolean;
-  authModalView: View;
+  isUserFetched: boolean;
+  user: User | null | undefined;
+  modal: AuthModal;
 }
 
 const initialState: AuthState = {
-  isAuthModalOpen: false,
-  authModalView: "login",
+  isUserFetched: false,
+  user: null,
+  modal: {
+    isAuthModalOpen: false,
+    authModalView: null,
+  },
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    openAuthModal: (state, action: PayloadAction<View>) => {
-      state.isAuthModalOpen = true;
-      state.authModalView = action.payload;
+    logout: () => initialState,
+
+    // Auth modal
+
+    openAuthModal: (state, action: PayloadAction<AuthModalView>) => {
+      state.modal.isAuthModalOpen = true;
+      state.modal.authModalView = action.payload;
     },
     closeAuthModal: (state) => {
-      state.isAuthModalOpen = false;
+      state.modal.isAuthModalOpen = false;
     },
-    logout: (state) => {
-      state.isAuthModalOpen = false;
+
+    // Auth user
+
+    setAuthUser: (state, action: PayloadAction<User | null | undefined>) => {
+      state.isUserFetched = true;
+      state.user = action.payload;
     },
   },
 });
 
-export const { openAuthModal, closeAuthModal, logout } = authSlice.actions;
+export const { openAuthModal, closeAuthModal, logout, setAuthUser } =
+  authSlice.actions;
 
 export const selectAuthModalView = (state: RootState) =>
-  state.authSlice.authModalView;
+  state.authSlice.modal.authModalView;
+
 export const selectAuthModalIsOpen = (state: RootState) =>
-  state.authSlice.isAuthModalOpen;
+  state.authSlice.modal.isAuthModalOpen;
+
+export const selectAuthUser = (state: RootState) => state.authSlice.user;
+
+export const selectIsUserFetched = (state: RootState) =>
+  state.authSlice.isUserFetched;
 
 export default authSlice.reducer;

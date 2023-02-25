@@ -1,6 +1,6 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
-import { createUserInFirestore } from "@/features/auth/utility";
+import { createUserInFirestore } from "@/features/auth/utility/utility";
 import { auth } from "@/firebase/clientApp";
 import { Button, Image } from "@mantine/core";
 import { FC } from "react";

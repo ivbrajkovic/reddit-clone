@@ -1,4 +1,5 @@
 import { firestore } from "@/firebase/clientApp";
+import { jsonParseStringify } from "@/utility";
 import { User, UserCredential } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -15,15 +16,12 @@ export const throwIfNotSignedIn = (user?: User | null) =>
 export const getUserIdOrThrow = (user?: User | null) =>
   throwIfNotSignedIn(user).uid;
 
-export const parseUserForFirestore = (user: User) =>
-  JSON.parse(JSON.stringify(user));
-
 export const createUserInFirestore = async (
   userCredential?: UserCredential,
 ) => {
   if (!userCredential) return;
   const userDocRef = doc(firestore, "users", userCredential.user.uid);
-  const parsedUser = parseUserForFirestore(userCredential.user);
+  const parsedUser = jsonParseStringify(userCredential.user);
   await setDoc(userDocRef, parsedUser);
 };
 

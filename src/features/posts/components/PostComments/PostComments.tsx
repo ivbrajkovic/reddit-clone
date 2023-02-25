@@ -1,4 +1,4 @@
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
 import PostCommentInput from "@/features/posts/components/PostComments/components/PostCommentInput";
 import PostCommentItem from "@/features/posts/components/PostComments/components/PostCommentItem";
 import PostCommentLoader from "@/features/posts/components/PostComments/components/PostCommentLoader";
@@ -13,7 +13,7 @@ import { FC, useEffect } from "react";
 type PostCommentsProps = { post: Post };
 
 const PostComments: FC<PostCommentsProps> = (props) => {
-  const user = useSignedInUser();
+  const user = useUser();
   const postComments = useAppSelector(selectPostComments);
   const { isLoading, fetchPostComments } = useFetchPostComments();
   const { loadingCommentId, deletePostComment } = useDeletePostComment();

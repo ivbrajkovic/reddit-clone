@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { isUser } from "@/features/auth/utility";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
+import { isUser } from "@/features/auth/utility/utility";
 import {
   addPostVote,
   deletePostVote,
@@ -113,7 +113,7 @@ const updateVote = async (
 const errorCreatePostVote = showNotificationError("Error creating post vote");
 
 export const useVotePost = () => {
-  const user = useSignedInUser();
+  const user = useUser();
   const dispatch = useAppDispatch();
   const { openLogin } = useAuthModalHandlers();
   const { votes, lookUpVoteIdByPostId } = useAppSelector(selectPostVotes);

@@ -1,7 +1,7 @@
 import { showNotificationError } from "@/common/showNotificationError";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { formatDisplayName, isUser } from "@/features/auth/utility";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
+import { formatDisplayName, isUser } from "@/features/auth/utility/utility";
 import { CreatePostFormValues } from "@/features/posts/components/CreatePost/createPostFormContext";
 import { Post } from "@/features/posts/types";
 import { firestore, storage } from "@/firebase/clientApp";
@@ -131,7 +131,7 @@ const formatNewPost = (
 
 export const useCreatePost = () => {
   const router = useRouter();
-  const user = useSignedInUser();
+  const user = useUser();
   const store = useStore();
   const { openLogin } = useAuthModalHandlers();
   const [isLoading, toggleIsLoading] = useReducer((s) => !s, false);

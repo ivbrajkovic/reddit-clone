@@ -1,4 +1,4 @@
-import { formatDisplayName } from "@/features/auth/utility";
+import { formatDisplayName } from "@/features/auth/utility/utility";
 import {
   addPostComment,
   incrementPostCommentCount,

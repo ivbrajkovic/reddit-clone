@@ -7,7 +7,7 @@ import {
 
 import { useAuthErrorEffect } from "@/features/auth/hooks/useAuthErrorEffect";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { createUserInFirestore } from "@/features/auth/utility";
+import { createUserInFirestore } from "@/features/auth/utility/utility";
 import { auth } from "@/firebase/clientApp";
 import { Anchor, Button, Flex, Text, TextInput } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";

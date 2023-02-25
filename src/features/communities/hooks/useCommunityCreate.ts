@@ -1,5 +1,5 @@
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { getUserIdOrThrow } from "@/features/auth/utility";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
+import { getUserIdOrThrow } from "@/features/auth/utility/utility";
 import { addCommunitySnippet } from "@/features/communities/communitySlice";
 import {
   Community,
@@ -14,7 +14,7 @@ import { pipe, tap } from "ramda";
 import { useReducer } from "react";
 
 export const useCommunityCreate = () => {
-  const user = useSignedInUser();
+  const user = useUser();
   const dispatch = useAppDispatch();
   const [isLoading, toggleLoading] = useReducer((s) => !s, false);
 

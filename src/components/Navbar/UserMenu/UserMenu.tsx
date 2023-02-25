@@ -1,7 +1,7 @@
 import UserMenuTarget from "@/components/MenuTarget/MenuTarget";
 import { useAuthModalHandlers } from "@/features/auth/hooks/useAuthModalHandlers";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { formatDisplayName } from "@/features/auth/utility";
+import { useUser } from "@/features/auth/hooks/useSignedInUser";
+import { formatDisplayName } from "@/features/auth/utility/utility";
 import { useSignOutUser } from "@/hooks/useSignOutUser";
 import {
   Box,
@@ -135,7 +135,7 @@ const UserMenuTargetButton = ({ user }: { user?: User | null }) =>
 
 const UserMenu = () => {
   const { classes } = useStyles();
-  const signedInUser = useSignedInUser();
+  const signedInUser = useUser();
   return (
     <Menu
       shadow="md"
