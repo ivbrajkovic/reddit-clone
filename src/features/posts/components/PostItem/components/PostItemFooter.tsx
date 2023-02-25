@@ -1,5 +1,5 @@
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
 import FooterButton from "@/features/posts/components/PostItem/components/PostItemFooterButton";
+import { useIsCreator } from "@/features/posts/hooks/useIsModerator";
 import { Post } from "@/features/posts/types";
 import { stopPropagation } from "@/utility";
 import { Box, Group, Menu } from "@mantine/core";
@@ -17,7 +17,7 @@ type PostItemFooterProps = {
 };
 
 const PostItemFooter: FC<PostItemFooterProps> = (props) => {
-  const user = useSignedInUser();
+  const isModerator = useIsCreator(props.post.creatorId);
   const handleDeletePost = () => props.onDeletePost(props.post);
 
   return (
@@ -41,7 +41,7 @@ const PostItemFooter: FC<PostItemFooterProps> = (props) => {
           <Menu.Item
             color="red"
             icon={<VscTrash fontSize={20} />}
-            disabled={!(user?.uid === props.post.creatorId)}
+            disabled={!isModerator}
             onClick={handleDeletePost}
           >
             Delete post

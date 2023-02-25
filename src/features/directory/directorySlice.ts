@@ -1,18 +1,9 @@
+import { CommunityLogo } from "@/components/CommunityLogo/CommunityLogo";
 import { RootState } from "@/store/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FaReddit } from "react-icons/fa";
-import { TiHome } from "react-icons/ti";
 
-export const DirectoryItemIconEnum = {
-  Home: TiHome,
-  FaReddit: FaReddit,
-};
-
-export type DirectoryItemProps = {
+export type DirectoryItemProps = CommunityLogo & {
   url: string | null;
-  imageUrl: string | null;
-  icon: keyof typeof DirectoryItemIconEnum;
-  iconColor: string;
 };
 
 export type DirectoryState = {

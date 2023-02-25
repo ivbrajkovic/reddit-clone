@@ -1,13 +1,13 @@
 import PageContent from "@/components/Layout/PageContent";
-import { CommunityAboutWrapper } from "@/features/communities/components/CommunityAbout";
-import { useFetchCommunityEffect } from "@/features/communities/hooks/useFetchCommunityEffect";
+import { CommunityAbout } from "@/features/communities/components/CommunityAbout";
+import { withFetchCommunityData } from "@/features/communities/HOC/withFetchCommunityData";
 import CreatePost from "@/features/posts/components/CreatePost/CreatePost";
 import { Flex, Text } from "@mantine/core";
 import { NextPage } from "next";
 
+const CommunityAboutWithData = withFetchCommunityData(CommunityAbout);
+
 const SubmitPage: NextPage = () => {
-  const { isLoading: isCommunityLoading, communityData } =
-    useFetchCommunityEffect();
   return (
     <PageContent>
       <>
@@ -18,10 +18,7 @@ const SubmitPage: NextPage = () => {
         </Flex>
         <CreatePost />
       </>
-      <CommunityAboutWrapper
-        isLoading={isCommunityLoading}
-        communityData={communityData}
-      />
+      <CommunityAboutWithData />
     </PageContent>
   );
 };

@@ -1,4 +1,4 @@
-import { DirectoryItemIcon } from "@/features/directory/components/DirectoryItemIcon";
+import { CommunityLogo } from "@/components/CommunityLogo";
 import { DirectoryItemProps } from "@/features/directory/directorySlice";
 import { Menu } from "@mantine/core";
 import Link from "next/link";
@@ -17,7 +17,7 @@ const DirectoryItem: FC<DirectoryItemProps & OnClickProp> = ({
   return (
     <Menu.Item
       component={Link}
-      icon={<DirectoryItemIcon {...rest} />}
+      icon={<CommunityLogo {...rest} />}
       href={url ?? "/"}
       onClick={handleClick}
     >

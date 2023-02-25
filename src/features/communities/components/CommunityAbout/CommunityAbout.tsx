@@ -1,7 +1,9 @@
 import { HEADER_HEIGHT } from "@/constants";
-import { useSignedInUser } from "@/features/auth/hooks/useSignedInUser";
-import { selectCommunityData } from "@/features/communities/communitySlice";
 import CommunityAboutAdmin from "@/features/communities/components/CommunityAbout/components/CommunityAboutAdmin";
+import { CommunityAboutLoader } from "@/features/communities/components/CommunityAboutLoader";
+import { CommunityNotFound } from "@/features/communities/components/CommunityNotFound";
+import { Community } from "@/features/communities/types";
+import { useIsCreator } from "@/features/posts/hooks/useIsModerator";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import {
   Box,
@@ -16,9 +18,9 @@ import {
 } from "@mantine/core";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { FC } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { RiCakeLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
 
 const PADDING_TOP = HEADER_HEIGHT + 24;
 
@@ -51,16 +53,24 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const CommunityAbout = () => {
+type CommunityAboutProps = {
+  isLoading?: boolean;
+  communityData: Community;
+};
+
+const CommunityAbout: FC<CommunityAboutProps> = ({
+  isLoading,
+  communityData,
+}) => {
   useRenderCount("CommunityAbout");
 
   const { classes } = useStyles();
-  const user = useSignedInUser();
-  const communityData = useSelector(selectCommunityData);
+  const isModerator = useIsCreator(communityData.creatorId);
 
-  const { communityId, membersCount, createdAt, creatorId, imageUrl } =
-    communityData;
+  if (isLoading) return <CommunityAboutLoader />;
+  if (!communityData) return <CommunityNotFound />;
 
+  const { communityId, membersCount, createdAt, imageUrl } = communityData;
   const membersCountFormatted = membersCount.toLocaleString();
   const createdAtFormatted = dayjs(createdAt.seconds * 1000).format(
     "MMM DD, YYYY",
@@ -108,7 +118,7 @@ const CommunityAbout = () => {
         <Divider />
 
         <CommunityAboutAdmin
-          isVisible={user?.uid === creatorId}
+          isVisible={isModerator}
           imageUrl={imageUrl}
           communityId={communityId as string}
         />

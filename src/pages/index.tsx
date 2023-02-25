@@ -1,5 +1,6 @@
 import { CreatePostBar } from "@/components/CreatePostBar";
 import PageContent from "@/components/Layout/PageContent";
+import { PostList } from "@/features/posts";
 import { setPosts } from "@/features/posts/postsSlice";
 import {
   errorFetchingPost,
@@ -51,6 +52,7 @@ const Home = () => {
     <PageContent>
       <>
         <CreatePostBar />
+        <PostList isHomePage isLoading={isLoading} />
       </>
       <>{/* Recommendations */}</>
     </PageContent>

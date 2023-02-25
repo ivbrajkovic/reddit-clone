@@ -15,16 +15,18 @@ const isEqual = (prevProps: PostItemProps, nextProps: PostItemProps) =>
   prevProps.post.commentCount === nextProps.post.commentCount;
 
 export type PostItemProps = {
+  isHomePage?: boolean;
   post: Post;
   postVote?: PostVote;
 };
 
-const PostItem: FC<PostItemProps> = memo(({ ...props }) => {
+const PostItem: FC<PostItemProps> = memo((props) => {
   const router = useRouter();
-  const { isLoading, deletePost } = useDeletePost();
 
   const isPostPage = Boolean(router.query.postId);
   const { classes } = usePostItemStyles({ isPostPage });
+
+  const { isLoading: isLoadingDelete, deletePost } = useDeletePost();
 
   const onSelectPost = () =>
     router.push(`/r/${props.post.communityId}/comments/${props.post.id}`);
@@ -43,14 +45,17 @@ const PostItem: FC<PostItemProps> = memo(({ ...props }) => {
           </Box>
 
           <Stack pt={8} pl={4} spacing={4} w="100%">
-            <PostItemHeader post={props.post} />
+            <PostItemHeader
+              isShowCommunityName={props.isHomePage}
+              post={props.post}
+            />
             <PostItemBody post={props.post} />
             <PostItemFooter post={props.post} onDeletePost={deletePost} />
           </Stack>
         </Flex>
       </Paper>
       <LoadingOverlay
-        visible={isLoading}
+        visible={isLoadingDelete}
         overlayBlur={2}
         transitionDuration={500}
       />

@@ -1,33 +1,34 @@
 import PageContent from "@/components/Layout/PageContent";
-import { CommunityAboutWrapper } from "@/features/communities/components/CommunityAbout";
-import { useFetchCommunityEffect } from "@/features/communities/hooks/useFetchCommunityEffect";
+import { CommunityAbout } from "@/features/communities/components/CommunityAbout";
+import { withFetchCommunityData } from "@/features/communities/HOC/withFetchCommunityData";
 import { PostComments } from "@/features/posts/components/PostComments";
-import PostItemWrapper from "@/features/posts/components/PostItem/components/PostItemWrapper";
+import { PostItem } from "@/features/posts/components/PostItem";
+import { PostLoader } from "@/features/posts/components/PostLoader";
+import { PostNotFound } from "@/features/posts/components/PostNotFound";
 import { usePostAndPostVote } from "@/features/posts/hooks/usePostAndPostVote";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
 
+const PostWithComments = () => {
+  const { isLoading, post, postVote } = usePostAndPostVote();
+  if (!post) return <PostNotFound />;
+  if (isLoading) return <PostLoader postCount={1} />;
+  return (
+    <>
+      <PostItem post={post} postVote={postVote} />
+      <PostComments post={post} />
+    </>
+  );
+};
+
+const CommunityAboutWithData = withFetchCommunityData(CommunityAbout);
+
 const PostPage: NextPage = () => {
   useRenderCount("PostPage");
-
-  const { isLoading: isPostLoading, post, postVote } = usePostAndPostVote();
-  const { isLoading: isCommunityLoading, communityData } =
-    useFetchCommunityEffect();
-
   return (
     <PageContent>
-      <>
-        <PostItemWrapper
-          isLoading={isPostLoading}
-          post={post}
-          postVote={postVote}
-        />
-        {post ? <PostComments post={post} /> : null}
-      </>
-      <CommunityAboutWrapper
-        isLoading={isCommunityLoading}
-        communityData={communityData}
-      />
+      <PostWithComments />
+      <CommunityAboutWithData />
     </PageContent>
   );
 };
