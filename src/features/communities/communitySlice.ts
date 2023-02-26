@@ -39,9 +39,10 @@ const communitySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase("auth/logout", (state) => {
-        state.communitySnippetsState.communitySnippets = [];
         state.isCommunityCreateModal = false;
         state.communitySnippetsState.isCommunitySnippetsFetched = false;
+        state.communitySnippetsState.communitySnippets = [];
+        state.communitySnippetsState.communitySnippetsIndexLookupById = {};
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
         if (action.payload.communitySlice.communityData.communityId)
