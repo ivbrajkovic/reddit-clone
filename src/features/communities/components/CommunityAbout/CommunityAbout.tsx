@@ -4,7 +4,6 @@ import { CommunityAboutLoader } from "@/features/communities/components/Communit
 import { CommunityNotFound } from "@/features/communities/components/CommunityNotFound";
 import { Community } from "@/features/communities/types";
 import { useIsCreator } from "@/features/posts/hooks/useIsModerator";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import {
   Box,
   Button,
@@ -62,8 +61,6 @@ const CommunityAbout: FC<CommunityAboutProps> = ({
   isLoading,
   communityData,
 }) => {
-  useRenderCount("CommunityAbout");
-
   const { classes } = useStyles();
   const isModerator = useIsCreator(communityData.creatorId);
 

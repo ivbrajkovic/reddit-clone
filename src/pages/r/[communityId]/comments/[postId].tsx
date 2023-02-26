@@ -6,7 +6,6 @@ import { PostItem } from "@/features/posts/components/PostItem";
 import { PostLoader } from "@/features/posts/components/PostLoader";
 import { PostNotFound } from "@/features/posts/components/PostNotFound";
 import { usePostAndPostVote } from "@/features/posts/hooks/usePostAndPostVote";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
 
 const PostWithComments = () => {
@@ -25,7 +24,6 @@ const PostWithComments = () => {
 const CommunityAboutWithData = withFetchCommunityData(CommunityAbout);
 
 const PostPage: NextPage = () => {
-  useRenderCount("PostPage");
   return (
     <PageContent>
       <PostWithComments />

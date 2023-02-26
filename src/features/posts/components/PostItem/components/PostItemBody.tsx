@@ -8,7 +8,7 @@ type PostItemBodyProps = { post: Post };
 const PostItemBody: FC<PostItemBodyProps> = (props) => {
   return (
     <Stack spacing="sm">
-      <Text>{props.post.body}</Text>
+      <Text pr={8}>{props.post.body}</Text>
       {props.post.imageUrl ? (
         <FadeInImage
           mih={400}

@@ -9,7 +9,6 @@ import { withCommunityData } from "@/features/communities/HOC/withCommunityData"
 import { Community } from "@/features/communities/types";
 import { PostList } from "@/features/posts";
 import { withPosts } from "@/features/posts/HOC/withPosts";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { NextPage } from "next";
 export { getServerSideProps } from "@/ssr/communityPageProps";
 
@@ -19,8 +18,6 @@ const CommunityAboutWithCommunityData = withCommunityData(CommunityAbout);
 type CommunityPageProps = { communityData?: Community };
 
 const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
-  useRenderCount("CommunityPage");
-
   if (!communityData) return <CommunityNotFound />;
   return (
     <>

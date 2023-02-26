@@ -116,9 +116,12 @@ const communitySlice = createSlice({
     },
     addCommunitySnippet: (
       state,
-      { payload }: PayloadAction<CommunitySnippet>,
+      { payload: communitySnippet }: PayloadAction<CommunitySnippet>,
     ) => {
-      state.communitySnippetsState.communitySnippets.push(payload);
+      state.communitySnippetsState.communitySnippets.push(communitySnippet);
+      state.communitySnippetsState.communitySnippetsIndexLookupById[
+        communitySnippet.communityId
+      ] = state.communitySnippetsState.communitySnippets.length - 1;
     },
     updateCommunitySnippet: (
       state,

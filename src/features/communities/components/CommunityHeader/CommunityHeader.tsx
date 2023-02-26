@@ -1,6 +1,5 @@
 import { selectCommunityData } from "@/features/communities/communitySlice";
 import { CommunityJoinButton } from "@/features/communities/components/CommunityJoinButton";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { Box, Container, createStyles, Flex, Image, Text } from "@mantine/core";
 import { FaReddit } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -45,8 +44,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const CommunityHeader = () => {
-  useRenderCount("CommunityHeader");
-
   const { classes } = useStyles();
   const communityData = useSelector(selectCommunityData);
 

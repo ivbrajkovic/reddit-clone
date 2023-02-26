@@ -3,7 +3,6 @@ import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
 import { showNotificationError } from "@/common/showNotificationError";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { FC, memo } from "react";
 import { IoClose, IoImageOutline } from "react-icons/io5";
 
@@ -12,7 +11,6 @@ type ImageAndVideoProps = {
 };
 
 const ImageAndVideo: FC<ImageAndVideoProps> = memo(({ onDrop }) => {
-  useRenderCount("ImageAndVideo");
   const theme = useMantineTheme();
 
   const onReject = () =>

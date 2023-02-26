@@ -2,15 +2,12 @@ import { setAuthUser } from "@/features/auth/authSlice";
 import { useFetchCommunitySnippets } from "@/features/communities/hooks/useFetchCommunitySnippets";
 import { useFetchPostVotes } from "@/features/posts/hooks/useFetchPostVotes";
 import { auth } from "@/firebase/clientApp";
-import { useRenderCount } from "@/hooks/useRenderCount";
 import { useAppDispatch } from "@/store/hooks";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export const useUserInitialization = () => {
-  useRenderCount("useUserInitialization");
-
   const router = useRouter();
   const dispatch = useAppDispatch();
 
