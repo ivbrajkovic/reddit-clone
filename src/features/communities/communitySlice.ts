@@ -162,6 +162,9 @@ export const selectIsCommunitySnippetsFetched = (state: RootState) =>
 export const selectCommunitySnippetsState = (state: RootState) =>
   state.communitySlice.communitySnippetsState;
 
+export const selectCommunitySnippetsIndexLookupById = (state: RootState) =>
+  state.communitySlice.communitySnippetsState.communitySnippetsIndexLookupById;
+
 export const selectCommunityData = (state: RootState) =>
   state.communitySlice.communityData;
 

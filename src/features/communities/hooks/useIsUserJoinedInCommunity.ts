@@ -1,16 +1,15 @@
 import {
   selectCommunityData,
-  selectCommunitySnippets,
+  selectCommunitySnippetsIndexLookupById,
 } from "@/features/communities/communitySlice";
 import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
-// TODO: memoize this selector
 const isUserJoinedInCommunitySelector = createSelector(
-  selectCommunitySnippets,
+  selectCommunitySnippetsIndexLookupById,
   selectCommunityData,
-  (snippets, community) =>
-    snippets.some((snippet) => snippet.communityId === community.communityId),
+  (snippetsLookup, community) =>
+    snippetsLookup[community.communityId] !== undefined,
 );
 
 export const useIsUserJoinedInCommunity = () =>

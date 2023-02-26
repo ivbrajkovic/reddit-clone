@@ -1,6 +1,6 @@
 import { CommunityLogo } from "@/components/CommunityLogo";
 import { selectUserStateUser } from "@/features/auth/authSlice";
-import { selectCommunitySnippetsState } from "@/features/communities/communitySlice";
+import { selectCommunitySnippetsIndexLookupById } from "@/features/communities/communitySlice";
 import RecommendationsLoader from "@/features/communities/components/Recommendations/RecommendationsLoader";
 import { useJoinCommunity } from "@/features/communities/hooks/useJoinCommunity";
 import { useLeaveCommunity } from "@/features/communities/hooks/useLeaveCommunity";
@@ -71,8 +71,8 @@ type RecommendationsProps = {};
 const Recommendations: FC<RecommendationsProps> = () => {
   const { classes } = useStyles();
   const user = useSelector(selectUserStateUser);
-  const { communitySnippetsIndexLookupById } = useSelector(
-    selectCommunitySnippetsState,
+  const communitySnippetsIndexLookupById = useSelector(
+    selectCommunitySnippetsIndexLookupById,
   );
 
   const [communities, setCommunities] = useState<Community[]>([]);
@@ -115,7 +115,7 @@ const Recommendations: FC<RecommendationsProps> = () => {
   }, []);
 
   return (
-    <Paper withBorder shadow="lg">
+    <Paper withBorder shadow="lg" sx={{ overflow: "hidden" }}>
       <Group className={classes.header}>Top Communities</Group>
       {isLoading ? (
         <RecommendationsLoader />
@@ -159,6 +159,9 @@ const Recommendations: FC<RecommendationsProps> = () => {
               </Box>
             );
           })}
+          <Group grow px={20} py={10}>
+            <Button h={30}>View All</Button>
+          </Group>
         </>
       )}
     </Paper>

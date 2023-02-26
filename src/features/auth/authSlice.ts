@@ -64,6 +64,9 @@ export const selectAuthModalIsOpen = (state: RootState) =>
 
 export const selectUserState = (state: RootState) => state.authSlice.userState;
 
+export const selectUserStateIsUserFetched = (state: RootState) =>
+  state.authSlice.userState.isUserFetched;
+
 export const selectUserStateUser = (state: RootState) =>
   state.authSlice.userState.user;
 

@@ -1,4 +1,4 @@
-import { Container, Flex, Grid } from "@mantine/core";
+import { Container, Grid, Stack } from "@mantine/core";
 import { FC } from "react";
 
 type PageContentProps = {
@@ -11,12 +11,10 @@ const PageContent: FC<PageContentProps> = ({ children }) => {
     <Container>
       <Grid py="xl">
         <Grid.Col md={8} xs={12}>
-          <Flex direction="column" gap="md">
-            {children[0 as keyof typeof children]}
-          </Flex>
+          <Stack>{children[0 as keyof typeof children]}</Stack>
         </Grid.Col>
         <Grid.Col md={4} xs={0} display={{ base: "none", md: "unset" }}>
-          {children[1 as keyof typeof children]}
+          <Stack>{children[1 as keyof typeof children]}</Stack>
         </Grid.Col>
       </Grid>
     </Container>
