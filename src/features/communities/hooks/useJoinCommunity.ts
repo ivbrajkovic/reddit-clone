@@ -34,7 +34,7 @@ export const useJoinCommunity = () => {
         membersCount: increment(1),
       });
 
-    pipe(
+    return pipe(
       createWritingBatch,
       setCommunitySnippet,
       updateCommunityNumberOfMembers,

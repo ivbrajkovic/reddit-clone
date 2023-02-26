@@ -69,3 +69,13 @@ export const delayFnAsync =
   <R>(fn: () => R, delay: number) =>
   () =>
     new Promise<R>((resolve) => setTimeout(() => resolve(fn()), delay));
+
+// type F = <T>(fn: (...args: T[]) => Promise<QuerySnapshot>, args?: T) => void;
+// const awaitAndDispatchPosts: F = useCallback(
+//   (fn: (args: any) => Promise<QuerySnapshot>, args) => {
+//     fn(args)
+//       .then(pipe(formatPosts, setPosts, dispatch))
+//       .catch(errorFetchingPost);
+//   },
+//   [dispatch],
+// );

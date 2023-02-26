@@ -1,6 +1,7 @@
 import {
   Community,
   CommunitySnippet,
+  CommunitySnippetsState,
   CommunityState,
 } from "@/features/communities/types";
 import { RootState } from "@/store/store";
@@ -20,11 +21,16 @@ const initialCommunityData: Community = {
   membersCount: 0,
 };
 
-const initialState: CommunityState = {
-  isCommunityCreateModal: false,
+const initialCommunitySnippetsState: CommunitySnippetsState = {
   isCommunitySnippetsFetched: false,
   communitySnippets: [],
+  communitySnippetsIndexLookupById: {},
+};
+
+const initialState: CommunityState = {
+  isCommunityCreateModal: false,
   communityData: { ...initialCommunityData },
+  communitySnippetsState: { ...initialCommunitySnippetsState },
 };
 
 const communitySlice = createSlice({
@@ -33,9 +39,9 @@ const communitySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase("auth/logout", (state) => {
-        state.communitySnippets = [];
+        state.communitySnippetsState.communitySnippets = [];
         state.isCommunityCreateModal = false;
-        state.isCommunitySnippetsFetched = false;
+        state.communitySnippetsState.isCommunitySnippetsFetched = false;
       })
       .addCase(HYDRATE, (state, action: AnyAction) => {
         if (action.payload.communitySlice.communityData.communityId)
@@ -57,16 +63,22 @@ const communitySlice = createSlice({
       state,
       { payload: communitySnippet }: PayloadAction<CommunitySnippet>,
     ) => {
-      state.communitySnippets.push(communitySnippet);
+      state.communitySnippetsState.communitySnippets.push(communitySnippet);
+      state.communitySnippetsState.communitySnippetsIndexLookupById[
+        communitySnippet.communityId
+      ] = state.communitySnippetsState.communitySnippets.length - 1;
     },
     leaveCommunity: (
       state,
       { payload: communityId }: PayloadAction<string>,
     ) => {
-      state.communitySnippets = filterByCommunityId(
+      state.communitySnippetsState.communitySnippets = filterByCommunityId(
         communityId,
-        state.communitySnippets,
+        state.communitySnippetsState.communitySnippets,
       );
+      delete state.communitySnippetsState.communitySnippetsIndexLookupById[
+        communityId
+      ];
     },
 
     // Community Data
@@ -90,16 +102,23 @@ const communitySlice = createSlice({
 
     setCommunitySnippets: (
       state,
-      { payload: communitySnippets }: PayloadAction<CommunitySnippet[]>,
+      {
+        payload,
+      }: PayloadAction<
+        Omit<CommunitySnippetsState, "isCommunitySnippetsFetched">
+      >,
     ) => {
-      state.isCommunitySnippetsFetched = true;
-      state.communitySnippets = communitySnippets;
+      state.communitySnippetsState.isCommunitySnippetsFetched = true;
+      state.communitySnippetsState.communitySnippets =
+        payload.communitySnippets;
+      state.communitySnippetsState.communitySnippetsIndexLookupById =
+        payload.communitySnippetsIndexLookupById;
     },
     addCommunitySnippet: (
       state,
       { payload }: PayloadAction<CommunitySnippet>,
     ) => {
-      state.communitySnippets.push(payload);
+      state.communitySnippetsState.communitySnippets.push(payload);
     },
     updateCommunitySnippet: (
       state,
@@ -111,7 +130,7 @@ const communitySlice = createSlice({
     ) => {
       const communitySnippet = findByCommunityId(
         payload.communityId,
-        state.communitySnippets,
+        state.communitySnippetsState.communitySnippets,
       );
       communitySnippet && Object.assign(communitySnippet, payload);
     },
@@ -135,10 +154,13 @@ export const selectIsCreateCommunityModalOpen = (state: RootState) =>
   state.communitySlice.isCommunityCreateModal;
 
 export const selectCommunitySnippets = (state: RootState) =>
-  state.communitySlice.communitySnippets;
+  state.communitySlice.communitySnippetsState.communitySnippets;
 
 export const selectIsCommunitySnippetsFetched = (state: RootState) =>
-  state.communitySlice.isCommunitySnippetsFetched;
+  state.communitySlice.communitySnippetsState.isCommunitySnippetsFetched;
+
+export const selectCommunitySnippetsState = (state: RootState) =>
+  state.communitySlice.communitySnippetsState;
 
 export const selectCommunityData = (state: RootState) =>
   state.communitySlice.communityData;

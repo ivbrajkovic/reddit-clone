@@ -41,7 +41,7 @@ export type PostVotes = {
 };
 
 export type PostState = {
-  initialized: boolean;
+  isPostsFetched: boolean;
   posts: Post[];
   postVotes: PostVotes;
   postComments: PostComment[];

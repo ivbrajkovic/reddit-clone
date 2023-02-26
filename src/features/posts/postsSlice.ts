@@ -16,7 +16,7 @@ const initialPostVotes = {
 };
 
 const initialPostState: PostState = {
-  initialized: false,
+  isPostsFetched: false,
   posts: [],
   postVotes: { ...initialPostVotes },
   postComments: [],
@@ -27,7 +27,7 @@ const postsSlice = createSlice({
   initialState: initialPostState,
   extraReducers: (builder) => {
     builder.addCase("auth/logout", (state) => {
-      state.initialized = false;
+      state.isPostsFetched = false;
       state.postVotes = { ...initialPostVotes };
     });
   },
@@ -36,19 +36,9 @@ const postsSlice = createSlice({
       state.posts.push(payload);
     },
     setPosts: (state, action: PayloadAction<Post[]>) => {
-      state.posts = action.payload; // Merge posts ?
+      state.isPostsFetched = true;
+      state.posts = action.payload;
     },
-    // setPosts: {
-    //   reducer: (state, action: PayloadAction<Post[]>) => {
-    //     state.posts = action.payload;
-    //   },
-    //   prepare: (posts: Post[]) => ({
-    //     payload: posts.map((post) => ({
-    //       ...post,
-    //       createdAt: post.createdAt.toJSON(),
-    //     })),
-    //   }),
-    // },
     deletePost: (state, { payload }: PayloadAction<Post>) => {
       state.posts = state.posts.filter((post) => post.id !== payload.id);
     },
@@ -127,5 +117,8 @@ export const selectPostVotes = (state: RootState) => state.postSlice.postVotes;
 
 export const selectPostComments = (state: RootState) =>
   state.postSlice.postComments;
+
+export const selectIsPostsFetched = (state: RootState) =>
+  state.postSlice.isPostsFetched;
 
 export default postsSlice.reducer;

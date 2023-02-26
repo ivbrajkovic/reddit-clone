@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 
-export type PostListProps = { isLoading: boolean; isHomePage?: boolean };
+export type PostListProps = { isLoading?: boolean; isHomePage?: boolean };
 
 const PostList: FC<PostListProps> = ({ isLoading, isHomePage }) => {
   const posts = useSelector(selectPosts);

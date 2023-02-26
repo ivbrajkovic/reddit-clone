@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 
-const errorFetchingPostVotes = showNotificationError(
+export const errorFetchingPostVotes = showNotificationError(
   "Error fetching post votes",
 );
 
@@ -22,7 +22,7 @@ const fetchPostVotesByCommunityIdAndUserId =
     return getDocs(queryPostVotes);
   };
 
-const formatPostVotes = (postDocs: QuerySnapshot) =>
+export const formatPostVotes = (postDocs: QuerySnapshot) =>
   postDocs.docs.reduce(
     (acc, doc) => {
       const { votes, lookUpVoteIdByPostId } = acc;

@@ -1,118 +1,147 @@
 import { CreatePostBar } from "@/components/CreatePostBar";
 import PageContent from "@/components/Layout/PageContent";
-import { selectAuthUser, selectIsUserFetched } from "@/features/auth/authSlice";
+import { selectUserState } from "@/features/auth/authSlice";
 import { selectIsCommunitySnippetsFetched } from "@/features/communities/communitySlice";
+import { Recommendations } from "@/features/communities/components/Recommendations";
 import { CommunitySnippet } from "@/features/communities/types";
 import { PostList } from "@/features/posts";
-import { setPosts } from "@/features/posts/postsSlice";
+import {
+  selectPosts,
+  setPosts,
+  setPostVotes,
+} from "@/features/posts/postsSlice";
+import { Post } from "@/features/posts/types";
 import {
   errorFetchingPost,
   formatPosts,
 } from "@/features/posts/utility/fetchPost";
+import {
+  errorFetchingPostVotes,
+  formatPostVotes,
+} from "@/features/posts/utility/fetchPostVote";
 import { firestore } from "@/firebase/clientApp";
 import { useAppDispatch } from "@/store/hooks";
 import { RootState } from "@/store/store";
+import { AnyAction, Store } from "@reduxjs/toolkit";
 import {
   collection,
   getDocs,
   limit,
   orderBy,
   query,
-  QuerySnapshot,
   where,
 } from "firebase/firestore";
 import { pipe } from "ramda";
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector, useStore } from "react-redux";
 
-const getMostPopularPosts = () => {
-  const postQuery = query(
+const getCommunitySnippetsFromStore = (store: Store<RootState, AnyAction>) =>
+  store.getState().communitySlice.communitySnippetsState.communitySnippets;
+
+const getCommunityIdsFromSnippets = (snippets: CommunitySnippet[]) =>
+  snippets.map((c) => c.communityId);
+
+const mostPopularPostsQuery = () =>
+  query(
     collection(firestore, "posts"),
     orderBy("voteStatus", "desc"),
     limit(10),
   );
-  return getDocs(postQuery);
-};
 
-const getPostsFromCommunities = (communityIds: string[]) => {
-  const postQuery = query(
+const postsFromCommunitiesQuery = (communityIds: string[]) =>
+  query(
     collection(firestore, "posts"),
     where("communityId", "in", communityIds),
     orderBy("voteStatus", "desc"),
     limit(10),
   );
-  return getDocs(postQuery);
-};
+
+const userPostVotesQuery = (userId: string, postIds: string[]) =>
+  query(
+    collection(firestore, `users/${userId}/postVotes`),
+    where("postId", "in", postIds),
+  );
+
+const fetchMostPopularPosts = pipe(mostPopularPostsQuery, getDocs);
+const fetchPostsFromCommunities = pipe(postsFromCommunitiesQuery, getDocs);
+const fetchUserPostVotes = pipe(userPostVotesQuery, getDocs);
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const store = useStore();
+  const store = useStore<RootState>();
 
-  const user = useSelector(selectAuthUser);
-  const isUserFetched = useSelector(selectIsUserFetched);
+  const { isUserFetched, user } = useSelector(selectUserState);
+  const posts = useSelector(selectPosts);
   const isCommunitySnippetsFetched = useSelector(
     selectIsCommunitySnippetsFetched,
   );
 
-  const [isLoading, toggleLoading] = useReducer((s) => !s, false);
+  const userId = user?.uid;
 
-  type F = <T>(fn: (...args: T[]) => Promise<QuerySnapshot>, args?: T) => void;
-  const awaitAndDispatchPosts: F = useCallback(
-    (fn: (args: any) => Promise<QuerySnapshot>, args) => {
-      toggleLoading();
-      fn(args)
+  // Logged OUT user
+
+  const buildUserLoggedOutHomeFeeds = useCallback(
+    () =>
+      fetchMostPopularPosts()
         .then(pipe(formatPosts, setPosts, dispatch))
-        .catch(errorFetchingPost)
-        .finally(toggleLoading);
+        .catch(errorFetchingPost),
+    [dispatch],
+  );
+
+  useEffect(() => {
+    if (!isUserFetched || userId) return;
+    buildUserLoggedOutHomeFeeds();
+  }, [buildUserLoggedOutHomeFeeds, isUserFetched, userId]);
+
+  // Logged IN user
+
+  const buildUserLoggedInHomeFeeds = useCallback(
+    (communitySnippets: CommunitySnippet[]) => {
+      const communityIds = getCommunityIdsFromSnippets(communitySnippets);
+      fetchPostsFromCommunities(communityIds)
+        .then(pipe(formatPosts, setPosts, dispatch))
+        .catch(errorFetchingPost);
     },
     [dispatch],
   );
 
-  // const buildNoUserHomeFeed = useCallback(() => {
-  //   console.log("buildNoUserHomeFeed **************");
+  useEffect(() => {
+    if (!isCommunitySnippetsFetched) return;
+    const communitySnippets = getCommunitySnippetsFromStore(store);
+    communitySnippets.length
+      ? buildUserLoggedInHomeFeeds(communitySnippets)
+      : buildUserLoggedOutHomeFeeds();
+  }, [
+    buildUserLoggedInHomeFeeds,
+    buildUserLoggedOutHomeFeeds,
+    isCommunitySnippetsFetched,
+    store,
+  ]);
 
-  //   toggleLoading();
-  //   getMostPopularPosts()
-  //     .then(pipe(formatPosts, setPosts, dispatch))
-  //     .catch(errorFetchingPost)
-  //     .finally(toggleLoading);
-  // }, [dispatch]);
+  // Post votes
 
-  const buildUserHomeFeed = useCallback(() => {
-    console.log("buildUserHomeFeed **************");
-
-    const getCommunitySnippetsFromStore = () =>
-      (store.getState() as RootState).communitySlice.communitySnippets;
-
-    const getCommunityIdsFromSnippets = (snippets: CommunitySnippet[]) =>
-      communitySnippets.map((c) => c.communityId);
-
-    const communitySnippets = getCommunitySnippetsFromStore();
-    if (!communitySnippets.length)
-      return awaitAndDispatchPosts(getMostPopularPosts);
-
-    const communityIds = getCommunityIdsFromSnippets(communitySnippets);
-    awaitAndDispatchPosts(getPostsFromCommunities, communityIds);
-  }, [awaitAndDispatchPosts, store]);
+  const buildUserPostVotes = useCallback(
+    (userId: string, posts: Post[]) => {
+      const postIds = posts.map((p) => p.id);
+      fetchUserPostVotes(userId, postIds)
+        .then(pipe(formatPostVotes, setPostVotes, dispatch))
+        .catch(errorFetchingPostVotes);
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
-    isCommunitySnippetsFetched && buildUserHomeFeed();
-  }, [buildUserHomeFeed, isCommunitySnippetsFetched, store]);
-
-  const getUserPostVotes = () => {};
-
-  useEffect(() => {
-    // !user && isUserFetched && buildNoUserHomeFeed();
-    !user && isUserFetched && awaitAndDispatchPosts(getMostPopularPosts);
-  }, [awaitAndDispatchPosts, isUserFetched, user]);
+    if (!userId || !posts.length) return;
+    buildUserPostVotes(userId, posts);
+  }, [buildUserPostVotes, posts, userId]);
 
   return (
     <PageContent>
       <>
         <CreatePostBar />
-        <PostList isHomePage isLoading={isLoading} />
+        <PostList isHomePage isLoading={!isUserFetched} />
       </>
-      <>{/* Recommendations */}</>
+      <Recommendations />
     </PageContent>
   );
 };

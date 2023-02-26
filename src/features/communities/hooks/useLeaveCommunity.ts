@@ -29,7 +29,7 @@ export const useLeaveCommunity = () => {
         membersCount: increment(-1),
       });
 
-    pipe(
+    return pipe(
       createWritingBatch,
       deleteCommunitySnippet,
       updateCommunityNumberOfMembers,

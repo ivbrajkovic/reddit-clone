@@ -10,14 +10,18 @@ type AuthModal = {
 };
 
 export interface AuthState {
-  isUserFetched: boolean;
-  user: User | null | undefined;
+  userState: {
+    isUserFetched: boolean;
+    user: User | null | undefined;
+  };
   modal: AuthModal;
 }
 
 const initialState: AuthState = {
-  isUserFetched: false,
-  user: null,
+  userState: {
+    isUserFetched: false,
+    user: null,
+  },
   modal: {
     isAuthModalOpen: false,
     authModalView: null,
@@ -43,8 +47,8 @@ export const authSlice = createSlice({
     // Auth user
 
     setAuthUser: (state, action: PayloadAction<User | null | undefined>) => {
-      state.isUserFetched = true;
-      state.user = action.payload;
+      state.userState.isUserFetched = true;
+      state.userState.user = action.payload;
     },
   },
 });
@@ -58,9 +62,9 @@ export const selectAuthModalView = (state: RootState) =>
 export const selectAuthModalIsOpen = (state: RootState) =>
   state.authSlice.modal.isAuthModalOpen;
 
-export const selectAuthUser = (state: RootState) => state.authSlice.user;
+export const selectUserState = (state: RootState) => state.authSlice.userState;
 
-export const selectIsUserFetched = (state: RootState) =>
-  state.authSlice.isUserFetched;
+export const selectUserStateUser = (state: RootState) =>
+  state.authSlice.userState.user;
 
 export default authSlice.reducer;

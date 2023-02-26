@@ -26,9 +26,16 @@ export type CommunitySnippet = {
   imageUrl: string | null;
 };
 
-export type CommunityState = {
-  isCommunityCreateModal: boolean;
+export type CommunitySnippetsIndexLookupById = Record<string, number>;
+
+export type CommunitySnippetsState = {
   isCommunitySnippetsFetched: boolean;
   communitySnippets: CommunitySnippet[];
+  communitySnippetsIndexLookupById: CommunitySnippetsIndexLookupById;
+};
+
+export type CommunityState = {
+  isCommunityCreateModal: boolean;
   communityData: Community;
+  communitySnippetsState: CommunitySnippetsState;
 };
