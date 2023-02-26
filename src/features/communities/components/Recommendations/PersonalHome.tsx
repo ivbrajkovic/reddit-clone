@@ -32,10 +32,15 @@ const PersonalHome: FC<PersonalHomeProps> = () => {
         </Group>
         <Stack spacing="xs">
           <Text fz="9pt">Your personal Reddit frontpage, built for you.</Text>
-          <Button h={30} w="100%" bg="red" onClick={onCreatePost}>
+          <Button h={30} w="100%" onClick={onCreatePost}>
             Create Post
           </Button>
-          <Button h={30} w="100%" bg="blue" onClick={openCommunityCreateModal}>
+          <Button
+            h={30}
+            w="100%"
+            variant="outline"
+            onClick={openCommunityCreateModal}
+          >
             Create Community
           </Button>
         </Stack>
