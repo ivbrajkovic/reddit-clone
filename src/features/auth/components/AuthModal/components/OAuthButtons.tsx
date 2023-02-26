@@ -22,6 +22,7 @@ const OAuthButtons: FC<OAuthButtonsProps> = () => {
       <Button
         mb={8}
         w="100%"
+        // @ts-ignore
         variant="oauth"
         leftIcon={
           <Image
@@ -40,6 +41,7 @@ const OAuthButtons: FC<OAuthButtonsProps> = () => {
       <Button
         mb={8}
         w="100%"
+        // @ts-ignore
         variant="oauth"
         disabled={loading}
         loaderProps={{ color: "grey" }}
