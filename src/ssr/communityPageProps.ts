@@ -5,7 +5,7 @@ import fetchCommunity from "@/features/communities/utils/fetchCommunity";
 import { AppStore, storeWrapper } from "@/store/store";
 import { getDoc } from "firebase/firestore";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { andThen, otherwise, pipe } from "ramda";
+import { andThen, otherwise, pipe, tap } from "ramda";
 
 const {
   formatCommunityData,
